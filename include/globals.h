@@ -39,4 +39,5 @@ extern float calibrationWeight;
 #endif
 
 extern volatile bool newData;
+extern const char* APP_VERSION;
 

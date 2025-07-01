@@ -17,6 +17,8 @@ void calibrationInput(lv_event_t * e)
 		calibrationWeight = atof(text);
 		Serial.printf("Calibration Weight %.3f\n", calibrationWeight);
 		calibrationMode = false;
+		lv_textarea_set_text(uic_txtCalWeight, "");
+		lv_obj_add_state(ui_Keyboard1, LV_STATE_DISABLED);
 	}
 }
 
@@ -27,6 +29,7 @@ void calSwitchToggle(lv_event_t * e)
 		
 	} else {
 		calibrationMode = false;
+		lv_textarea_set_text(ui_txtCalWeight, "");
 	}
 
 	replyData.calibrationMode = calibrationMode;
@@ -48,3 +51,12 @@ void backlightControl(lv_event_t * e)
 	ledcWrite(0, backlightVal);  // 50% brightness
 }
 
+void saveSettings(lv_event_t * e)
+{
+	// Your code here
+}
+
+void initReset(lv_event_t * e)
+{
+	ESP.restart();
+}

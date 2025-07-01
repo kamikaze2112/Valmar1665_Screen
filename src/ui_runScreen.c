@@ -223,7 +223,7 @@ lv_obj_set_height( ui_imgGPSFix, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_x( ui_imgGPSFix, 93 );
 lv_obj_set_y( ui_imgGPSFix, -120 );
 lv_obj_set_align( ui_imgGPSFix, LV_ALIGN_CENTER );
-lv_obj_add_flag( ui_imgGPSFix, LV_OBJ_FLAG_HIDDEN | LV_OBJ_FLAG_CLICKABLE );   /// Flags
+lv_obj_add_flag( ui_imgGPSFix, LV_OBJ_FLAG_CLICKABLE );   /// Flags
 lv_obj_remove_flag( ui_imgGPSFix, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
 ui_object_set_themeable_style_property(ui_imgGPSFix, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_IMAGE_RECOLOR, _ui_theme_color_valmarRed);
 ui_object_set_themeable_style_property(ui_imgGPSFix, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_IMAGE_RECOLOR_OPA, _ui_theme_alpha_valmarRed);
@@ -235,7 +235,7 @@ lv_obj_set_x( ui_lblNumSats, 119 );
 lv_obj_set_y( ui_lblNumSats, -121 );
 lv_obj_set_align( ui_lblNumSats, LV_ALIGN_CENTER );
 lv_label_set_text(ui_lblNumSats,"00");
-lv_obj_add_flag( ui_lblNumSats, LV_OBJ_FLAG_HIDDEN );   /// Flags
+lv_obj_set_style_text_align(ui_lblNumSats, LV_TEXT_ALIGN_LEFT, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_text_font(ui_lblNumSats, &ui_font_VeraMono, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 ui_Image4 = lv_image_create(ui_runScreen);

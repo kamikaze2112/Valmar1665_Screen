@@ -45,6 +45,7 @@ LV_IMG_DECLARE( ui_img_639977379);   // assets/Valmar/icons8-satellite-25.png
 LV_IMG_DECLARE( ui_img_232107149);   // assets/Valmar/icons8-clock-20.png
 LV_IMG_DECLARE( ui_img_1811295523);   // assets/Valmar/icons8-settings-50.png
 LV_IMG_DECLARE( ui_img_valmar_back_png);   // assets/Valmar/back.png
+LV_IMG_DECLARE( ui_img_1608339404);   // assets/Valmar/icons8-alert-100.png
 
 // FONTS
 LV_FONT_DECLARE( ui_font_ConsolaMono);

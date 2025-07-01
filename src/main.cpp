@@ -1,7 +1,18 @@
+/*
+
+This is the main program for the Valmar 1665 screen built by Trevor Kidd
+for S5 Farms LTD. No warranty is implied and use is at your own risk. You may
+freely modify, copy, and or distribute this source code as long as this header
+remains intatct. All reference materials and design files can be found on
+github:  https://github.com/kamikaze2112/Valmar1665_Screen
+
+06/2025
+
+*/
+
+
 #include <Arduino.h>
-
 #include "globals.h"
-
 #include <WiFi.h>
 #include <esp_now.h>
 #include "ui.h"
@@ -152,6 +163,8 @@ setupBacklight();
   
   }
 
+  lv_label_set_text(ui_lblVersion, APP_VERSION);
+  
   DBG_PRINTLN("Setup done");
 }
 
@@ -167,6 +180,20 @@ void loop() {
     ledcWrite(BACKLIGHT_CH, brightness);
   }
 }
+
+  // Format gpsSpeed and shaftRPM to 1 decimal place
+  char speedBuf[10];
+  char rpmBuf[10];
+  char rateBuf[10];
+  
+  snprintf(rateBuf, sizeof(rateBuf), "%.1f", receivedData.actualRate);
+  snprintf(speedBuf, sizeof(speedBuf), "%.1f", receivedData.gpsSpeed);
+  snprintf(rpmBuf, sizeof(rpmBuf), "%.1f", receivedData.shaftRPM);
+
+  // Update the LVGL labels
+  lv_label_set_text(ui_lblSpeed, speedBuf);
+  lv_label_set_text(ui_lblShaftRPM, rpmBuf);
+  lv_label_set_text(ui_lblRate, rateBuf);
 
   lv_task_handler(); /* let the GUI do its work */
 
@@ -187,7 +214,7 @@ void loop() {
   if (newData) {
     newData = false;
 
-    /*DBG_PRINTLN("=== Received Data ===");
+    DBG_PRINTLN("=== Received Data ===");
     DBG_PRINT("Fix: "); DBG_PRINTLN(receivedData.fixStatus);
     DBG_PRINT("Sats: "); DBG_PRINTLN(receivedData.numSats);
     DBG_PRINT("Speed: "); DBG_PRINTLN(receivedData.gpsSpeed);
@@ -196,7 +223,7 @@ void loop() {
     DBG_PRINT("WorkSwitch: "); DBG_PRINTLN(receivedData.workSwitch);
     DBG_PRINT("Motor: "); DBG_PRINTLN(receivedData.motorActive);
     DBG_PRINT("RPM: "); DBG_PRINTLN(receivedData.shaftRPM);
-    DBG_PRINT("Error: "); DBG_PRINTLN(receivedData.errorCode); */
+    DBG_PRINT("Error: "); DBG_PRINTLN(receivedData.errorCode);
 
     char timeStr[9];  // "HH:MM:SS" + null terminator
     snprintf(timeStr, sizeof(timeStr), "%02d:%02d:%02d", receivedData.gpsHour, receivedData.gpsMinute, receivedData.gpsSecond);

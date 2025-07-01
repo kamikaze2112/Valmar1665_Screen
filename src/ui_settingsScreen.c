@@ -5,15 +5,23 @@
 
 #include "ui.h"
 
+lv_obj_t *uic_btnResetNo;
+lv_obj_t *uic_btnResetYes;
+lv_obj_t *uic_panelReset;
+lv_obj_t *uic_btnReset;
+lv_obj_t *uic_lblVersion;
 lv_obj_t *uic_arcBacklight;
 lv_obj_t *uic_settingsScreen;
-lv_obj_t *ui_settingsScreen = NULL;lv_obj_t *ui_btnCalibrate3 = NULL;lv_obj_t *ui_arcBacklight = NULL;
+lv_obj_t *ui_settingsScreen = NULL;lv_obj_t *ui_btnCalibrate3 = NULL;lv_obj_t *ui_arcBacklight = NULL;lv_obj_t *ui_Label9 = NULL;lv_obj_t *ui_Label10 = NULL;lv_obj_t *ui_lblVersion = NULL;lv_obj_t *ui_btnReset = NULL;lv_obj_t *ui_Label11 = NULL;lv_obj_t *ui_panelReset = NULL;lv_obj_t *ui_Label12 = NULL;lv_obj_t *ui_Image5 = NULL;lv_obj_t *ui_btnResetYes = NULL;lv_obj_t *ui_Label13 = NULL;lv_obj_t *ui_btnResetNo = NULL;lv_obj_t *ui_Label2 = NULL;
 // event funtions
 void ui_event_btnCalibrate3( lv_event_t * e) {
     lv_event_code_t event_code = lv_event_get_code(e);
 
 if ( event_code == LV_EVENT_PRESSED) {
       _ui_screen_change( &ui_runScreen, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_runScreen_screen_init);
+}
+if ( event_code == LV_EVENT_PRESSED) {
+      saveSettings( e );
 }
 }
 
@@ -22,6 +30,30 @@ void ui_event_arcBacklight( lv_event_t * e) {
 
 if ( event_code == LV_EVENT_VALUE_CHANGED) {
       backlightControl( e );
+}
+}
+
+void ui_event_btnReset( lv_event_t * e) {
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+if ( event_code == LV_EVENT_PRESSED) {
+      _ui_flag_modify( ui_panelReset, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+}
+}
+
+void ui_event_btnResetYes( lv_event_t * e) {
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+if ( event_code == LV_EVENT_PRESSED) {
+      initReset( e );
+}
+}
+
+void ui_event_btnResetNo( lv_event_t * e) {
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+if ( event_code == LV_EVENT_PRESSED) {
+      _ui_flag_modify( ui_panelReset, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
 }
 }
 
@@ -60,10 +92,131 @@ lv_obj_set_align( ui_arcBacklight, LV_ALIGN_CENTER );
 lv_arc_set_range(ui_arcBacklight, 10,255);
 lv_arc_set_value(ui_arcBacklight, 200);
 
+ui_object_set_themeable_style_property(ui_arcBacklight, LV_PART_INDICATOR| LV_STATE_DEFAULT, LV_STYLE_ARC_COLOR, _ui_theme_color_valmarRed);
+ui_object_set_themeable_style_property(ui_arcBacklight, LV_PART_INDICATOR| LV_STATE_DEFAULT, LV_STYLE_ARC_OPA, _ui_theme_alpha_valmarRed);
+
+ui_object_set_themeable_style_property(ui_arcBacklight, LV_PART_KNOB| LV_STATE_DEFAULT, LV_STYLE_BG_COLOR, _ui_theme_color_valmarRed);
+ui_object_set_themeable_style_property(ui_arcBacklight, LV_PART_KNOB| LV_STATE_DEFAULT, LV_STYLE_BG_OPA, _ui_theme_alpha_valmarRed);
+
+ui_Label9 = lv_label_create(ui_arcBacklight);
+lv_obj_set_width( ui_Label9, LV_SIZE_CONTENT);  /// 1
+lv_obj_set_height( ui_Label9, LV_SIZE_CONTENT);   /// 1
+lv_obj_set_x( ui_Label9, 0 );
+lv_obj_set_y( ui_Label9, -15 );
+lv_obj_set_align( ui_Label9, LV_ALIGN_CENTER );
+lv_label_set_text(ui_Label9,"BRIGHTNESS");
+
+ui_Label10 = lv_label_create(ui_settingsScreen);
+lv_obj_set_width( ui_Label10, LV_SIZE_CONTENT);  /// 1
+lv_obj_set_height( ui_Label10, LV_SIZE_CONTENT);   /// 1
+lv_obj_set_x( ui_Label10, 120 );
+lv_obj_set_y( ui_Label10, 120 );
+lv_obj_set_align( ui_Label10, LV_ALIGN_CENTER );
+lv_label_set_text(ui_Label10,"Controller Ver:");
+
+ui_lblVersion = lv_label_create(ui_settingsScreen);
+lv_obj_set_width( ui_lblVersion, LV_SIZE_CONTENT);  /// 1
+lv_obj_set_height( ui_lblVersion, LV_SIZE_CONTENT);   /// 1
+lv_obj_set_x( ui_lblVersion, 200 );
+lv_obj_set_y( ui_lblVersion, 120 );
+lv_obj_set_align( ui_lblVersion, LV_ALIGN_CENTER );
+lv_label_set_text(ui_lblVersion,"0.0.0");
+
+ui_btnReset = lv_button_create(ui_settingsScreen);
+lv_obj_set_width( ui_btnReset, 100);
+lv_obj_set_height( ui_btnReset, 50);
+lv_obj_set_x( ui_btnReset, 180 );
+lv_obj_set_y( ui_btnReset, -100 );
+lv_obj_set_align( ui_btnReset, LV_ALIGN_CENTER );
+lv_obj_add_flag( ui_btnReset, LV_OBJ_FLAG_SCROLL_ON_FOCUS );   /// Flags
+lv_obj_remove_flag( ui_btnReset, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
+ui_object_set_themeable_style_property(ui_btnReset, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_COLOR, _ui_theme_color_valmarRed);
+ui_object_set_themeable_style_property(ui_btnReset, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_OPA, _ui_theme_alpha_valmarRed);
+ui_object_set_themeable_style_property(ui_btnReset, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_COLOR, _ui_theme_color_spinboxOuline);
+ui_object_set_themeable_style_property(ui_btnReset, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_OPA, _ui_theme_alpha_spinboxOuline);
+lv_obj_set_style_border_width(ui_btnReset, 2, LV_PART_MAIN| LV_STATE_DEFAULT);
+
+ui_Label11 = lv_label_create(ui_btnReset);
+lv_obj_set_width( ui_Label11, LV_SIZE_CONTENT);  /// 1
+lv_obj_set_height( ui_Label11, LV_SIZE_CONTENT);   /// 1
+lv_obj_set_align( ui_Label11, LV_ALIGN_CENTER );
+lv_label_set_text(ui_Label11,"RESET");
+
+ui_panelReset = lv_obj_create(ui_settingsScreen);
+lv_obj_set_width( ui_panelReset, 480);
+lv_obj_set_height( ui_panelReset, 272);
+lv_obj_set_align( ui_panelReset, LV_ALIGN_CENTER );
+lv_obj_add_flag( ui_panelReset, LV_OBJ_FLAG_HIDDEN );   /// Flags
+lv_obj_remove_flag( ui_panelReset, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
+ui_object_set_themeable_style_property(ui_panelReset, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_COLOR, _ui_theme_color_valmarRed);
+ui_object_set_themeable_style_property(ui_panelReset, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_OPA, _ui_theme_alpha_valmarRed);
+ui_object_set_themeable_style_property(ui_panelReset, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_COLOR, _ui_theme_color_spinboxOuline);
+ui_object_set_themeable_style_property(ui_panelReset, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_OPA, _ui_theme_alpha_spinboxOuline);
+lv_obj_set_style_border_width(ui_panelReset, 10, LV_PART_MAIN| LV_STATE_DEFAULT);
+
+ui_Label12 = lv_label_create(ui_panelReset);
+lv_obj_set_width( ui_Label12, LV_SIZE_CONTENT);  /// 1
+lv_obj_set_height( ui_Label12, LV_SIZE_CONTENT);   /// 1
+lv_obj_set_align( ui_Label12, LV_ALIGN_CENTER );
+lv_label_set_text(ui_Label12,"Are you sure you want to reset to defaults?\nThis will erase all saved settings including calibration\nand can not be undone.");
+lv_obj_set_style_text_align(ui_Label12, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN| LV_STATE_DEFAULT);
+
+ui_Image5 = lv_image_create(ui_panelReset);
+lv_image_set_src(ui_Image5, &ui_img_1608339404);
+lv_obj_set_width( ui_Image5, LV_SIZE_CONTENT);  /// 1
+lv_obj_set_height( ui_Image5, LV_SIZE_CONTENT);   /// 1
+lv_obj_set_x( ui_Image5, 0 );
+lv_obj_set_y( ui_Image5, -75 );
+lv_obj_set_align( ui_Image5, LV_ALIGN_CENTER );
+lv_obj_add_flag( ui_Image5, LV_OBJ_FLAG_CLICKABLE );   /// Flags
+lv_obj_remove_flag( ui_Image5, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
+
+ui_btnResetYes = lv_button_create(ui_panelReset);
+lv_obj_set_width( ui_btnResetYes, 100);
+lv_obj_set_height( ui_btnResetYes, 50);
+lv_obj_set_x( ui_btnResetYes, 75 );
+lv_obj_set_y( ui_btnResetYes, 75 );
+lv_obj_set_align( ui_btnResetYes, LV_ALIGN_CENTER );
+lv_obj_add_flag( ui_btnResetYes, LV_OBJ_FLAG_SCROLL_ON_FOCUS );   /// Flags
+lv_obj_remove_flag( ui_btnResetYes, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
+ui_object_set_themeable_style_property(ui_btnResetYes, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_COLOR, _ui_theme_color_spinboxOuline);
+ui_object_set_themeable_style_property(ui_btnResetYes, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_OPA, _ui_theme_alpha_spinboxOuline);
+
+ui_Label13 = lv_label_create(ui_btnResetYes);
+lv_obj_set_width( ui_Label13, LV_SIZE_CONTENT);  /// 1
+lv_obj_set_height( ui_Label13, LV_SIZE_CONTENT);   /// 1
+lv_obj_set_align( ui_Label13, LV_ALIGN_CENTER );
+lv_label_set_text(ui_Label13,"YES");
+
+ui_btnResetNo = lv_button_create(ui_panelReset);
+lv_obj_set_width( ui_btnResetNo, 100);
+lv_obj_set_height( ui_btnResetNo, 50);
+lv_obj_set_x( ui_btnResetNo, -75 );
+lv_obj_set_y( ui_btnResetNo, 75 );
+lv_obj_set_align( ui_btnResetNo, LV_ALIGN_CENTER );
+lv_obj_add_flag( ui_btnResetNo, LV_OBJ_FLAG_SCROLL_ON_FOCUS );   /// Flags
+lv_obj_remove_flag( ui_btnResetNo, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
+ui_object_set_themeable_style_property(ui_btnResetNo, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_COLOR, _ui_theme_color_spinboxOuline);
+ui_object_set_themeable_style_property(ui_btnResetNo, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_OPA, _ui_theme_alpha_spinboxOuline);
+
+ui_Label2 = lv_label_create(ui_btnResetNo);
+lv_obj_set_width( ui_Label2, LV_SIZE_CONTENT);  /// 1
+lv_obj_set_height( ui_Label2, LV_SIZE_CONTENT);   /// 1
+lv_obj_set_align( ui_Label2, LV_ALIGN_CENTER );
+lv_label_set_text(ui_Label2,"NO");
+
 lv_obj_add_event_cb(ui_btnCalibrate3, ui_event_btnCalibrate3, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_arcBacklight, ui_event_arcBacklight, LV_EVENT_ALL, NULL);
+lv_obj_add_event_cb(ui_btnReset, ui_event_btnReset, LV_EVENT_ALL, NULL);
+lv_obj_add_event_cb(ui_btnResetYes, ui_event_btnResetYes, LV_EVENT_ALL, NULL);
+lv_obj_add_event_cb(ui_btnResetNo, ui_event_btnResetNo, LV_EVENT_ALL, NULL);
 uic_settingsScreen = ui_settingsScreen;
 uic_arcBacklight = ui_arcBacklight;
+uic_lblVersion = ui_lblVersion;
+uic_btnReset = ui_btnReset;
+uic_panelReset = ui_panelReset;
+uic_btnResetYes = ui_btnResetYes;
+uic_btnResetNo = ui_btnResetNo;
 
 }
 
@@ -77,5 +230,22 @@ ui_settingsScreen= NULL;
 ui_btnCalibrate3= NULL;
 uic_arcBacklight= NULL;
 ui_arcBacklight= NULL;
+ui_Label9= NULL;
+ui_Label10= NULL;
+uic_lblVersion= NULL;
+ui_lblVersion= NULL;
+uic_btnReset= NULL;
+ui_btnReset= NULL;
+ui_Label11= NULL;
+uic_panelReset= NULL;
+ui_panelReset= NULL;
+ui_Label12= NULL;
+ui_Image5= NULL;
+uic_btnResetYes= NULL;
+ui_btnResetYes= NULL;
+ui_Label13= NULL;
+uic_btnResetNo= NULL;
+ui_btnResetNo= NULL;
+ui_Label2= NULL;
 
 }

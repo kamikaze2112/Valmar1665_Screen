@@ -18,9 +18,29 @@ extern void ui_event_btnCalibrate3( lv_event_t * e);
 extern lv_obj_t *ui_btnCalibrate3;
 extern void ui_event_arcBacklight( lv_event_t * e);
 extern lv_obj_t *ui_arcBacklight;
+extern lv_obj_t *ui_Label9;
+extern lv_obj_t *ui_Label10;
+extern lv_obj_t *ui_lblVersion;
+extern void ui_event_btnReset( lv_event_t * e);
+extern lv_obj_t *ui_btnReset;
+extern lv_obj_t *ui_Label11;
+extern lv_obj_t *ui_panelReset;
+extern lv_obj_t *ui_Label12;
+extern lv_obj_t *ui_Image5;
+extern void ui_event_btnResetYes( lv_event_t * e);
+extern lv_obj_t *ui_btnResetYes;
+extern lv_obj_t *ui_Label13;
+extern void ui_event_btnResetNo( lv_event_t * e);
+extern lv_obj_t *ui_btnResetNo;
+extern lv_obj_t *ui_Label2;
 // CUSTOM VARIABLES
 extern lv_obj_t *uic_settingsScreen;
 extern lv_obj_t *uic_arcBacklight;
+extern lv_obj_t *uic_lblVersion;
+extern lv_obj_t *uic_btnReset;
+extern lv_obj_t *uic_panelReset;
+extern lv_obj_t *uic_btnResetYes;
+extern lv_obj_t *uic_btnResetNo;
 
 #ifdef __cplusplus
 } /*extern "C"*/

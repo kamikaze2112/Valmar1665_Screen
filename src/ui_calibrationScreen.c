@@ -29,10 +29,16 @@ if ( event_code == LV_EVENT_PRESSED) {
 }
 
 void ui_event_swCalibrate( lv_event_t * e) {
-    lv_event_code_t event_code = lv_event_get_code(e);
+    lv_event_code_t event_code = lv_event_get_code(e);lv_obj_t * target = lv_event_get_target(e);
 
 if ( event_code == LV_EVENT_VALUE_CHANGED) {
       calSwitchToggle( e );
+}
+if ( event_code == LV_EVENT_VALUE_CHANGED &&  lv_obj_has_state(target,LV_STATE_CHECKED)  ) {
+      _ui_state_modify( ui_Keyboard1, LV_STATE_DISABLED, _UI_MODIFY_STATE_REMOVE);
+}
+if ( event_code == LV_EVENT_VALUE_CHANGED &&  !lv_obj_has_state(target,LV_STATE_CHECKED)  ) {
+      _ui_state_modify( ui_Keyboard1, LV_STATE_DISABLED, _UI_MODIFY_STATE_ADD);
 }
 }
 
@@ -52,6 +58,7 @@ lv_obj_set_height( ui_Keyboard1, 151);
 lv_obj_set_x( ui_Keyboard1, 0 );
 lv_obj_set_y( ui_Keyboard1, 33 );
 lv_obj_set_align( ui_Keyboard1, LV_ALIGN_CENTER );
+lv_obj_add_state( ui_Keyboard1, LV_STATE_DISABLED );     /// States
 lv_obj_set_style_bg_color(ui_Keyboard1, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_bg_opa(ui_Keyboard1, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 
@@ -86,6 +93,7 @@ lv_obj_set_y( ui_txtCalWeight, -82 );
 lv_obj_set_align( ui_txtCalWeight, LV_ALIGN_CENTER );
 lv_textarea_set_placeholder_text(ui_txtCalWeight,"lbs");
 lv_textarea_set_one_line(ui_txtCalWeight,true);
+lv_obj_set_style_text_align(ui_txtCalWeight, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_text_font(ui_txtCalWeight, &lv_font_montserrat_48, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_bg_color(ui_txtCalWeight, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_bg_opa(ui_txtCalWeight, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
