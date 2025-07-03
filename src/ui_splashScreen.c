@@ -21,7 +21,7 @@ void ui_splashScreen_screen_init(void)
 {
 ui_splashScreen = lv_obj_create(NULL);
 lv_obj_remove_flag( ui_splashScreen, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
-lv_obj_set_style_bg_image_src( ui_splashScreen, &ui_img_valmar_valmar_png, LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_bg_image_src( ui_splashScreen, &ui_img_valmar_valmar2_png, LV_PART_MAIN | LV_STATE_DEFAULT );
 
 lv_obj_add_event_cb(ui_splashScreen, ui_event_splashScreen, LV_EVENT_ALL, NULL);
 

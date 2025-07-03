@@ -194,6 +194,7 @@ void loop() {
   lv_label_set_text(ui_lblSpeed, speedBuf);
   lv_label_set_text(ui_lblShaftRPM, rpmBuf);
   lv_label_set_text(ui_lblRate, rateBuf);
+  lv_label_set_text(ui_lblRPM, rpmBuf);
 
   lv_task_handler(); /* let the GUI do its work */
 

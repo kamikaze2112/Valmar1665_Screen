@@ -60,3 +60,24 @@ void initReset(lv_event_t * e)
 {
 	ESP.restart();
 }
+
+void motorTest(lv_event_t * e)
+{
+	if (lv_obj_has_state(ui_swMotorTest, LV_STATE_CHECKED)) {
+		motorTestSwitch = true;	
+	} else {
+		motorTestSwitch = false;
+	}
+
+	DBG_PRINT("motorTestSwitch: ");
+    DBG_PRINTLN(motorTestSwitch);
+
+}
+
+void motoeTestUpdatePWM(lv_event_t * e)
+{
+	motorTestPWM = lv_arc_get_value(ui_arcMotorPWM);
+
+	DBG_PRINT("motorTestPWM: ");
+    DBG_PRINTLN(motorTestPWM);
+}

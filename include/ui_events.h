@@ -13,9 +13,10 @@ extern "C" {
 void rateChange(lv_event_t * e);
 void calibrationInput(lv_event_t * e);
 void calSwitchToggle(lv_event_t * e);
-void saveSettings(lv_event_t * e);
-void backlightControl(lv_event_t * e);
 void initReset(lv_event_t * e);
+void backlightControl(lv_event_t * e);
+void motoeTestUpdatePWM(lv_event_t * e);
+void motorTest(lv_event_t * e);
 
 #ifdef __cplusplus
 } /*extern "C"*/

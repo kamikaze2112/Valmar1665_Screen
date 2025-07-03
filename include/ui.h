@@ -32,6 +32,7 @@ extern "C" {
 #include "ui_runScreen.h"
 #include "ui_calibrationScreen.h"
 #include "ui_settingsScreen.h"
+#include "ui_infoScreen.h"
 
 ///////////////////// VARIABLES ////////////////////
 
@@ -39,18 +40,19 @@ extern "C" {
 extern lv_obj_t *ui____initial_actions0;
 
 // IMAGES AND IMAGE SETS
-LV_IMG_DECLARE( ui_img_valmar_valmar_png);   // assets/Valmar/valmar.png
+LV_IMG_DECLARE( ui_img_valmar_valmar2_png);   // assets/Valmar/valmar2.png
 LV_IMG_DECLARE( ui_img_valmar_cal_png);   // assets/Valmar/cal.png
+LV_IMG_DECLARE( ui_img_1811295523);   // assets/Valmar/icons8-settings-50.png
+LV_IMG_DECLARE( ui_img_787606558);   // assets/Valmar/icons8-information-50.png
 LV_IMG_DECLARE( ui_img_639977379);   // assets/Valmar/icons8-satellite-25.png
 LV_IMG_DECLARE( ui_img_232107149);   // assets/Valmar/icons8-clock-20.png
-LV_IMG_DECLARE( ui_img_1811295523);   // assets/Valmar/icons8-settings-50.png
 LV_IMG_DECLARE( ui_img_valmar_back_png);   // assets/Valmar/back.png
 LV_IMG_DECLARE( ui_img_1608339404);   // assets/Valmar/icons8-alert-100.png
 
 // FONTS
 LV_FONT_DECLARE( ui_font_ConsolaMono);
-LV_FONT_DECLARE( ui_font_VeraMono);
 LV_FONT_DECLARE( ui_font_ConsolaMono30);
+LV_FONT_DECLARE( ui_font_VeraMono);
 
 // UI INIT
 void ui_init(void);

@@ -21,7 +21,9 @@ void onDataRecv(const uint8_t *mac, const uint8_t *incoming, int len) {
     replyData.calibrationMode = calibrationMode;
     replyData.seedingRate = seedingRate;
     replyData.calibrationWeight = calibrationWeight;
-
+    replyData.motorTestSwitch = motorTestSwitch;
+    replyData.motorTestPWM = motorTestPWM;
+    
     esp_now_send(mac, (uint8_t*)&replyData, sizeof(replyData));
   }
 }

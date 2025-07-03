@@ -33,6 +33,7 @@ ui_splashScreen_screen_init();
 ui_runScreen_screen_init();
 ui_calibrationScreen_screen_init();
 ui_settingsScreen_screen_init();
+ui_infoScreen_screen_init();
 ui____initial_actions0 = lv_obj_create(NULL);
 lv_disp_load_scr( ui_splashScreen);
 }
@@ -42,4 +43,5 @@ void ui_destroy( void )
 ui_runScreen_screen_destroy();
 ui_calibrationScreen_screen_destroy();
 ui_settingsScreen_screen_destroy();
+ui_infoScreen_screen_destroy();
 }

@@ -6,6 +6,8 @@ struct IncomingData {
   bool calibrationMode;
   float seedingRate;
   float calibrationWeight;
+  bool motorTestSwitch;
+  int motorTestPWM;
 } __attribute__((packed));
 
 struct OutgoingData {

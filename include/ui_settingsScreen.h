@@ -14,6 +14,15 @@ extern "C" {
 extern void ui_settingsScreen_screen_init(void);
 extern void ui_settingsScreen_screen_destroy(void);
 extern lv_obj_t *ui_settingsScreen;
+extern lv_obj_t *ui_panelReset;
+extern lv_obj_t *ui_Label12;
+extern lv_obj_t *ui_Image5;
+extern void ui_event_btnResetYes( lv_event_t * e);
+extern lv_obj_t *ui_btnResetYes;
+extern lv_obj_t *ui_Label13;
+extern void ui_event_btnResetNo( lv_event_t * e);
+extern lv_obj_t *ui_btnResetNo;
+extern lv_obj_t *ui_Label2;
 extern void ui_event_btnCalibrate3( lv_event_t * e);
 extern lv_obj_t *ui_btnCalibrate3;
 extern void ui_event_arcBacklight( lv_event_t * e);
@@ -24,23 +33,27 @@ extern lv_obj_t *ui_lblVersion;
 extern void ui_event_btnReset( lv_event_t * e);
 extern lv_obj_t *ui_btnReset;
 extern lv_obj_t *ui_Label11;
-extern lv_obj_t *ui_panelReset;
-extern lv_obj_t *ui_Label12;
-extern lv_obj_t *ui_Image5;
-extern void ui_event_btnResetYes( lv_event_t * e);
-extern lv_obj_t *ui_btnResetYes;
-extern lv_obj_t *ui_Label13;
-extern void ui_event_btnResetNo( lv_event_t * e);
-extern lv_obj_t *ui_btnResetNo;
-extern lv_obj_t *ui_Label2;
+extern void ui_event_arcMotorPWM( lv_event_t * e);
+extern lv_obj_t *ui_arcMotorPWM;
+extern lv_obj_t *ui_Label14;
+extern void ui_event_swMotorTest( lv_event_t * e);
+extern lv_obj_t *ui_swMotorTest;
+extern lv_obj_t *ui_lblPWM;
+extern lv_obj_t *ui_lblRPM;
+extern lv_obj_t *ui_Label15;
+extern lv_obj_t *ui_Label16;
 // CUSTOM VARIABLES
 extern lv_obj_t *uic_settingsScreen;
-extern lv_obj_t *uic_arcBacklight;
-extern lv_obj_t *uic_lblVersion;
-extern lv_obj_t *uic_btnReset;
 extern lv_obj_t *uic_panelReset;
 extern lv_obj_t *uic_btnResetYes;
 extern lv_obj_t *uic_btnResetNo;
+extern lv_obj_t *uic_arcBacklight;
+extern lv_obj_t *uic_lblVersion;
+extern lv_obj_t *uic_btnReset;
+extern lv_obj_t *uic_arcMotorPWM;
+extern lv_obj_t *uic_swMotorTest;
+extern lv_obj_t *uic_lblPWM;
+extern lv_obj_t *uic_lblRPM;
 
 #ifdef __cplusplus
 } /*extern "C"*/

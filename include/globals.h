@@ -24,6 +24,8 @@ extern lv_color_t *disp_draw_buf;
 extern bool calibrationMode;
 extern float seedingRate;
 extern float calibrationWeight;
+extern bool motorTestSwitch;
+extern int motorTestPWM;
 
 #define DEBUG_MODE 1 // toggle 1 for on, and 0 for off
 
