@@ -23,6 +23,8 @@ void onDataRecv(const uint8_t *mac, const uint8_t *incoming, int len) {
     replyData.calibrationWeight = calibrationWeight;
     replyData.motorTestSwitch = motorTestSwitch;
     replyData.motorTestPWM = motorTestPWM;
+    replyData.speedTestSwitch = speedTestSwitch;
+    replyData.speedTestSpeed = speedTestSpeed;
     
     esp_now_send(mac, (uint8_t*)&replyData, sizeof(replyData));
   }

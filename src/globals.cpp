@@ -2,7 +2,7 @@
 
 // APP VERSION
 
-const char* APP_VERSION = "1.1.0";
+const char* APP_VERSION = "1.3.0";
 
 // Define the actual variables here
 TAMC_GT911 touchController(TOUCH_SDA, TOUCH_SCL, TOUCH_INT, TOUCH_RST, TOUCH_WIDTH, TOUCH_HEIGHT);
@@ -18,5 +18,7 @@ float seedingRate = 0.0f;
 float calibrationWeight = 0.0f;
 bool motorTestSwitch = false;
 int motorTestPWM = 10;
+bool speedTestSwitch = false;
+float speedTestSpeed = 0.0f;
 
 volatile bool newData = false;

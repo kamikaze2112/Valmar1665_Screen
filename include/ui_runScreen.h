@@ -42,7 +42,7 @@ extern lv_obj_t *ui_Container4;
 extern lv_obj_t *ui_Container5;
 extern lv_obj_t *ui_Container6;
 extern lv_obj_t *ui_Container7;
-extern lv_obj_t *ui_Label6;
+extern lv_obj_t *ui_lblMPHBox;
 extern lv_obj_t *ui_Label7;
 extern lv_obj_t *ui_Label8;
 extern lv_obj_t *ui_lblSpeed;
@@ -51,6 +51,18 @@ extern lv_obj_t *ui_lblRate;
 extern lv_obj_t *ui_Container8;
 extern lv_obj_t *ui_Label1;
 extern lv_obj_t *ui_workLED;
+extern lv_obj_t *ui_panelWarning;
+extern lv_obj_t *ui_Image1;
+extern lv_obj_t *ui_Label6;
+extern void ui_event_btnOK( lv_event_t * e);
+extern lv_obj_t *ui_btnOK;
+extern lv_obj_t *ui_Label20;
+extern lv_obj_t *ui_panelStop;
+extern lv_obj_t *ui_Image2;
+extern lv_obj_t *ui_Label22;
+extern void ui_event_btnOK1( lv_event_t * e);
+extern lv_obj_t *ui_btnOK1;
+extern lv_obj_t *ui_Label23;
 // CUSTOM VARIABLES
 extern lv_obj_t *uic_runScreen;
 extern lv_obj_t *uic_lblTime;
@@ -60,10 +72,14 @@ extern lv_obj_t *uic_btnSettings;
 extern lv_obj_t *uic_btnInfo;
 extern lv_obj_t *uic_imgGPSFix;
 extern lv_obj_t *uic_lblNumSats;
+extern lv_obj_t *uic_lblMPHBox;
 extern lv_obj_t *uic_lblSpeed;
 extern lv_obj_t *uic_lblShaftRPM;
 extern lv_obj_t *uic_lblRate;
 extern lv_obj_t *uic_workLED;
+extern lv_obj_t *uic_panelWarning;
+extern lv_obj_t *uic_btnOK;
+extern lv_obj_t *uic_panelStop;
 
 #ifdef __cplusplus
 } /*extern "C"*/

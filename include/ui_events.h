@@ -11,12 +11,16 @@ extern "C" {
 #endif
 
 void rateChange(lv_event_t * e);
+void warningAcknowledge(lv_event_t * e);
+void stopAcknowlege(lv_event_t * e);
 void calibrationInput(lv_event_t * e);
 void calSwitchToggle(lv_event_t * e);
-void initReset(lv_event_t * e);
 void backlightControl(lv_event_t * e);
-void motoeTestUpdatePWM(lv_event_t * e);
+void motorTestUpdatePWM(lv_event_t * e);
 void motorTest(lv_event_t * e);
+void speedTestUpdateSpeed(lv_event_t * e);
+void speedTest(lv_event_t * e);
+void initReset(lv_event_t * e);
 
 #ifdef __cplusplus
 } /*extern "C"*/

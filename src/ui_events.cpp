@@ -74,10 +74,40 @@ void motorTest(lv_event_t * e)
 
 }
 
-void motoeTestUpdatePWM(lv_event_t * e)
+void motorTestUpdatePWM(lv_event_t * e)
 {
 	motorTestPWM = lv_arc_get_value(ui_arcMotorPWM);
 
 	DBG_PRINT("motorTestPWM: ");
     DBG_PRINTLN(motorTestPWM);
+}
+
+void speedTestUpdateSpeed(lv_event_t * e)
+{
+	speedTestSpeed = lv_arc_get_value(ui_arcTestSpeed) / 10.0f;
+
+	char testSpeedBuf[10];
+  
+  	snprintf(testSpeedBuf, sizeof(testSpeedBuf), "%.1f", speedTestSpeed);
+
+	lv_label_set_text(ui_lblTestSpeed, testSpeedBuf);
+
+	DBG_PRINT("speedTestSpeed: ");
+    DBG_PRINTLN(speedTestSpeed);
+}
+
+void speedTest(lv_event_t * e)
+{
+	if (lv_obj_has_state(ui_swSpeedTest, LV_STATE_CHECKED)) {
+		speedTestSwitch = true;
+		speedTestSpeed = lv_arc_get_value(ui_arcTestSpeed) / 10.0f;
+		lv_label_set_text(ui_lblMPHBox, "!! MPH !!");	
+	} else {
+		speedTestSwitch = false;
+		lv_label_set_text(ui_lblMPHBox, "MPH");
+
+	}
+
+	DBG_PRINT("speedTestSwitch: ");
+    DBG_PRINTLN(speedTestSwitch);
 }

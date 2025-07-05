@@ -196,6 +196,12 @@ void loop() {
   lv_label_set_text(ui_lblRate, rateBuf);
   lv_label_set_text(ui_lblRPM, rpmBuf);
 
+  // If in speed test mode, update the MPH label
+
+  if (speedTestSwitch) {
+
+  }
+  
   lv_task_handler(); /* let the GUI do its work */
 
 #ifdef DIRECT_MODE

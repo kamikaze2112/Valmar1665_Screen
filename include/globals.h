@@ -26,6 +26,8 @@ extern float seedingRate;
 extern float calibrationWeight;
 extern bool motorTestSwitch;
 extern int motorTestPWM;
+extern bool speedTestSwitch;
+extern float speedTestSpeed;
 
 #define DEBUG_MODE 1 // toggle 1 for on, and 0 for off
 
