@@ -20,5 +20,6 @@ bool motorTestSwitch = false;
 int motorTestPWM = 10;
 bool speedTestSwitch = false;
 float speedTestSpeed = 0.0f;
+float actualRate = 0.0f;
 
 volatile bool newData = false;

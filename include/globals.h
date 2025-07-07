@@ -28,6 +28,7 @@ extern bool motorTestSwitch;
 extern int motorTestPWM;
 extern bool speedTestSwitch;
 extern float speedTestSpeed;
+extern float actualRate;
 
 #define DEBUG_MODE 1 // toggle 1 for on, and 0 for off
 

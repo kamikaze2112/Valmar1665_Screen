@@ -111,3 +111,10 @@ void speedTest(lv_event_t * e)
 	DBG_PRINT("speedTestSwitch: ");
     DBG_PRINTLN(speedTestSwitch);
 }
+
+void warningAcknowledge(lv_event_t * e) {
+
+}
+void stopAcknowlege(lv_event_t * e) {
+	
+}

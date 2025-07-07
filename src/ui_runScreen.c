@@ -120,8 +120,8 @@ lv_obj_set_x( ui_Container1, 0 );
 lv_obj_set_y( ui_Container1, -110 );
 lv_obj_set_align( ui_Container1, LV_ALIGN_CENTER );
 lv_obj_remove_flag( ui_Container1, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE );    /// Flags
-lv_obj_set_style_bg_color(ui_Container1, lv_color_hex(0x9C3029), LV_PART_MAIN | LV_STATE_DEFAULT );
-lv_obj_set_style_bg_opa(ui_Container1, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+ui_object_set_themeable_style_property(ui_Container1, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_COLOR, _ui_theme_color_valmarRed);
+ui_object_set_themeable_style_property(ui_Container1, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_OPA, _ui_theme_alpha_valmarRed);
 
 ui_lblTime = lv_label_create(ui_runScreen);
 lv_obj_set_width( ui_lblTime, LV_SIZE_CONTENT);  /// 5
