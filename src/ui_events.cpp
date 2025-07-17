@@ -47,7 +47,7 @@ void rateChange(lv_event_t * e)
 
 void backlightControl(lv_event_t * e)
 {
-	int backlightVal = lv_arc_get_value(ui_sldBrightness);
+	int backlightVal = lv_slider_get_value(ui_sldBrightness);
 	ledcWrite(0, backlightVal);  // 50% brightness
 }
 

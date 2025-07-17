@@ -7,9 +7,18 @@
 
 lv_obj_t *uic_swCalibrate;
 lv_obj_t *uic_txtCalWeight;
-lv_obj_t *uic_calibrationScreen;
-lv_obj_t *ui_calibrationScreen = NULL;lv_obj_t *ui_Keyboard1 = NULL;lv_obj_t *ui_btnCalibrate2 = NULL;lv_obj_t *ui_txtCalWeight = NULL;lv_obj_t *ui_swCalibrate = NULL;
+lv_obj_t *uic_btnPage2;
+lv_obj_t *uic_calibrationScreen1;
+lv_obj_t *ui_calibrationScreen1 = NULL;lv_obj_t *ui_Label26 = NULL;lv_obj_t *ui_btnPage2 = NULL;lv_obj_t *ui_Keyboard1 = NULL;lv_obj_t *ui_btnCalibrate2 = NULL;lv_obj_t *ui_txtCalWeight = NULL;lv_obj_t *ui_swCalibrate = NULL;
 // event funtions
+void ui_event_btnPage2( lv_event_t * e) {
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+if ( event_code == LV_EVENT_PRESSED) {
+      _ui_screen_change( &ui_calibrationScreen2, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_calibrationScreen2_screen_init);
+}
+}
+
 void ui_event_Keyboard1( lv_event_t * e) {
     lv_event_code_t event_code = lv_event_get_code(e);
 
@@ -41,14 +50,40 @@ if ( event_code == LV_EVENT_VALUE_CHANGED) {
 
 // build funtions
 
-void ui_calibrationScreen_screen_init(void)
+void ui_calibrationScreen1_screen_init(void)
 {
-ui_calibrationScreen = lv_obj_create(NULL);
-lv_obj_remove_flag( ui_calibrationScreen, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
-lv_obj_set_style_bg_color(ui_calibrationScreen, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
-lv_obj_set_style_bg_opa(ui_calibrationScreen, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+ui_calibrationScreen1 = lv_obj_create(NULL);
+lv_obj_remove_flag( ui_calibrationScreen1, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
+lv_obj_set_style_bg_color(ui_calibrationScreen1, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_bg_opa(ui_calibrationScreen1, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 
-ui_Keyboard1 = lv_keyboard_create(ui_calibrationScreen);
+ui_Label26 = lv_label_create(ui_calibrationScreen1);
+lv_obj_set_width( ui_Label26, LV_SIZE_CONTENT);  /// 1
+lv_obj_set_height( ui_Label26, LV_SIZE_CONTENT);   /// 1
+lv_obj_set_x( ui_Label26, 0 );
+lv_obj_set_y( ui_Label26, 40 );
+lv_obj_set_align( ui_Label26, LV_ALIGN_CENTER );
+lv_label_set_text(ui_Label26,"CALIBRATION MODE\n\nTurn switch on to initiate.\nUse calibration button to dispense seed.\nEnter weight above in pounds.\nUse decimal format.\nex: 2lb 8oz enter 2.5lbs");
+lv_obj_set_style_text_align(ui_Label26, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN| LV_STATE_DEFAULT);
+
+ui_btnPage2 = lv_button_create(ui_calibrationScreen1);
+lv_obj_set_width( ui_btnPage2, 50);
+lv_obj_set_height( ui_btnPage2, 50);
+lv_obj_set_x( ui_btnPage2, -186 );
+lv_obj_set_y( ui_btnPage2, -25 );
+lv_obj_set_align( ui_btnPage2, LV_ALIGN_CENTER );
+lv_obj_add_flag( ui_btnPage2, LV_OBJ_FLAG_SCROLL_ON_FOCUS );   /// Flags
+lv_obj_remove_flag( ui_btnPage2, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
+lv_obj_set_style_bg_color(ui_btnPage2, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_bg_opa(ui_btnPage2, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_bg_image_src( ui_btnPage2, &ui_img_1504963450, LV_PART_MAIN | LV_STATE_DEFAULT );
+ui_object_set_themeable_style_property(ui_btnPage2, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_IMAGE_RECOLOR, _ui_theme_color_valmarRed);
+ui_object_set_themeable_style_property(ui_btnPage2, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_IMAGE_RECOLOR_OPA, _ui_theme_alpha_valmarRed);
+ui_object_set_themeable_style_property(ui_btnPage2, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_COLOR, _ui_theme_color_spinboxOuline);
+ui_object_set_themeable_style_property(ui_btnPage2, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_OPA, _ui_theme_alpha_spinboxOuline);
+lv_obj_set_style_border_width(ui_btnPage2, 2, LV_PART_MAIN| LV_STATE_DEFAULT);
+
+ui_Keyboard1 = lv_keyboard_create(ui_calibrationScreen1);
 lv_keyboard_set_mode(ui_Keyboard1,LV_KEYBOARD_MODE_NUMBER);
 lv_obj_set_width( ui_Keyboard1, 442);
 lv_obj_set_height( ui_Keyboard1, 151);
@@ -65,7 +100,7 @@ ui_object_set_themeable_style_property(ui_Keyboard1, LV_PART_ITEMS| LV_STATE_DEF
 ui_object_set_themeable_style_property(ui_Keyboard1, LV_PART_ITEMS| LV_STATE_DEFAULT, LV_STYLE_BORDER_OPA, _ui_theme_alpha_spinboxOuline);
 lv_obj_set_style_border_width(ui_Keyboard1, 3, LV_PART_ITEMS| LV_STATE_DEFAULT);
 
-ui_btnCalibrate2 = lv_button_create(ui_calibrationScreen);
+ui_btnCalibrate2 = lv_button_create(ui_calibrationScreen1);
 lv_obj_set_width( ui_btnCalibrate2, 50);
 lv_obj_set_height( ui_btnCalibrate2, 50);
 lv_obj_set_x( ui_btnCalibrate2, -186 );
@@ -82,10 +117,10 @@ ui_object_set_themeable_style_property(ui_btnCalibrate2, LV_PART_MAIN| LV_STATE_
 ui_object_set_themeable_style_property(ui_btnCalibrate2, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_OPA, _ui_theme_alpha_spinboxOuline);
 lv_obj_set_style_border_width(ui_btnCalibrate2, 2, LV_PART_MAIN| LV_STATE_DEFAULT);
 
-ui_txtCalWeight = lv_textarea_create(ui_calibrationScreen);
+ui_txtCalWeight = lv_textarea_create(ui_calibrationScreen1);
 lv_obj_set_width( ui_txtCalWeight, 216);
 lv_obj_set_height( ui_txtCalWeight, LV_SIZE_CONTENT);   /// 76
-lv_obj_set_x( ui_txtCalWeight, -14 );
+lv_obj_set_x( ui_txtCalWeight, 0 );
 lv_obj_set_y( ui_txtCalWeight, -82 );
 lv_obj_set_align( ui_txtCalWeight, LV_ALIGN_CENTER );
 lv_textarea_set_placeholder_text(ui_txtCalWeight,"LBS");
@@ -96,33 +131,38 @@ lv_obj_set_style_text_font(ui_txtCalWeight, &lv_font_montserrat_48, LV_PART_MAIN
 lv_obj_set_style_bg_color(ui_txtCalWeight, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_bg_opa(ui_txtCalWeight, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 
-ui_swCalibrate = lv_switch_create(ui_calibrationScreen);
+ui_swCalibrate = lv_switch_create(ui_calibrationScreen1);
 lv_obj_set_width( ui_swCalibrate, 100);
 lv_obj_set_height( ui_swCalibrate, 50);
-lv_obj_set_x( ui_swCalibrate, 156 );
+lv_obj_set_x( ui_swCalibrate, 175 );
 lv_obj_set_y( ui_swCalibrate, -85 );
 lv_obj_set_align( ui_swCalibrate, LV_ALIGN_CENTER );
 
 ui_object_set_themeable_style_property(ui_swCalibrate, LV_PART_INDICATOR| LV_STATE_CHECKED, LV_STYLE_BG_COLOR, _ui_theme_color_valmarRed);
 ui_object_set_themeable_style_property(ui_swCalibrate, LV_PART_INDICATOR| LV_STATE_CHECKED, LV_STYLE_BG_OPA, _ui_theme_alpha_valmarRed);
 
+lv_obj_add_event_cb(ui_btnPage2, ui_event_btnPage2, LV_EVENT_ALL, NULL);
 lv_keyboard_set_textarea(ui_Keyboard1,ui_txtCalWeight);
 lv_obj_add_event_cb(ui_Keyboard1, ui_event_Keyboard1, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_btnCalibrate2, ui_event_btnCalibrate2, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_swCalibrate, ui_event_swCalibrate, LV_EVENT_ALL, NULL);
-uic_calibrationScreen = ui_calibrationScreen;
+uic_calibrationScreen1 = ui_calibrationScreen1;
+uic_btnPage2 = ui_btnPage2;
 uic_txtCalWeight = ui_txtCalWeight;
 uic_swCalibrate = ui_swCalibrate;
 
 }
 
-void ui_calibrationScreen_screen_destroy(void)
+void ui_calibrationScreen1_screen_destroy(void)
 {
-   if (ui_calibrationScreen) lv_obj_del(ui_calibrationScreen);
+   if (ui_calibrationScreen1) lv_obj_del(ui_calibrationScreen1);
 
 // NULL screen variables
-uic_calibrationScreen= NULL;
-ui_calibrationScreen= NULL;
+uic_calibrationScreen1= NULL;
+ui_calibrationScreen1= NULL;
+ui_Label26= NULL;
+uic_btnPage2= NULL;
+ui_btnPage2= NULL;
 ui_Keyboard1= NULL;
 ui_btnCalibrate2= NULL;
 uic_txtCalWeight= NULL;

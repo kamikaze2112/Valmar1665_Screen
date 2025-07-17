@@ -31,10 +31,10 @@ lv_theme_t *theme = lv_theme_default_init(dispp, lv_palette_main(LV_PALETTE_BLUE
 lv_disp_set_theme(dispp, theme);
 ui_splashScreen_screen_init();
 ui_runScreen_screen_init();
-ui_calibrationScreen_screen_init();
-ui_settingsScreen2_screen_init();
-ui_infoScreen_screen_init();
+ui_calibrationScreen1_screen_init();
 ui_settingsScreen1_screen_init();
+ui_infoScreen_screen_init();
+ui_calibrationScreen2_screen_init();
 ui____initial_actions0 = lv_obj_create(NULL);
 lv_disp_load_scr( ui_splashScreen);
 }
@@ -42,8 +42,8 @@ lv_disp_load_scr( ui_splashScreen);
 void ui_destroy( void )
 {ui_splashScreen_screen_destroy();
 ui_runScreen_screen_destroy();
-ui_calibrationScreen_screen_destroy();
-ui_settingsScreen2_screen_destroy();
-ui_infoScreen_screen_destroy();
+ui_calibrationScreen1_screen_destroy();
 ui_settingsScreen1_screen_destroy();
+ui_infoScreen_screen_destroy();
+ui_calibrationScreen2_screen_destroy();
 }

@@ -3,17 +3,20 @@
 // LVGL version: 9.2.2
 // Project name: Valmar_Screen
 
-#ifndef UI_CALIBRATIONSCREEN_H
-#define UI_CALIBRATIONSCREEN_H
+#ifndef UI_CALIBRATIONSCREEN1_H
+#define UI_CALIBRATIONSCREEN1_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// SCREEN: ui_calibrationScreen
-extern void ui_calibrationScreen_screen_init(void);
-extern void ui_calibrationScreen_screen_destroy(void);
-extern lv_obj_t *ui_calibrationScreen;
+// SCREEN: ui_calibrationScreen1
+extern void ui_calibrationScreen1_screen_init(void);
+extern void ui_calibrationScreen1_screen_destroy(void);
+extern lv_obj_t *ui_calibrationScreen1;
+extern lv_obj_t *ui_Label26;
+extern void ui_event_btnPage2( lv_event_t * e);
+extern lv_obj_t *ui_btnPage2;
 extern void ui_event_Keyboard1( lv_event_t * e);
 extern lv_obj_t *ui_Keyboard1;
 extern void ui_event_btnCalibrate2( lv_event_t * e);
@@ -22,7 +25,8 @@ extern lv_obj_t *ui_txtCalWeight;
 extern void ui_event_swCalibrate( lv_event_t * e);
 extern lv_obj_t *ui_swCalibrate;
 // CUSTOM VARIABLES
-extern lv_obj_t *uic_calibrationScreen;
+extern lv_obj_t *uic_calibrationScreen1;
+extern lv_obj_t *uic_btnPage2;
 extern lv_obj_t *uic_txtCalWeight;
 extern lv_obj_t *uic_swCalibrate;
 

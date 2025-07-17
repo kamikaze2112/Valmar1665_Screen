@@ -201,8 +201,6 @@ gfx->fillScreen(RGB565_BLACK);
 gfx->flush(); // Force immediate update (if needed)
 
 // THEN turn on backlight
-//pinMode(GFX_BL, OUTPUT);
-//digitalWrite(GFX_BL, HIGH);
 
 setupBacklight();
 
@@ -260,10 +258,6 @@ setupBacklight();
 
   xTaskCreatePinnedToCore(i2sTask, "I2S Task", 4096, NULL, 1, &i2sTaskHandle, 1);
 
-  toneStage = 1;
-  startTone(1760.0f);     // first tone
-  toneStartMillis = millis();
-
   DBG_PRINTLN("Setup done");
 }
 
@@ -271,13 +265,13 @@ void loop() {
 
   unsigned long elapsed = millis() - toneStartMillis;
 
-  if (toneStage == 1 && elapsed >= 200) {  // after 500 ms first tone
-    startTone(2640.0f);                     // second tone (a 5th above)
+  if (toneStage == 1 && elapsed >= 100) {  // after 100 ms first tone
+    startTone(2640.0f);                    // second tone (a 5th above)
     toneStartMillis = millis();
     toneStage = 2;
-  } else if (toneStage == 2 && elapsed >= 50) {  // after 500 ms second tone
+  } else if (toneStage == 2 && elapsed >= 50) {  // after 50 ms second tone
     stopTone();
-    toneStage = 3;  // done playing both tones
+    toneStage = 3;                               // done playing both tones
   }
 
   if (backlightFading) {
@@ -285,6 +279,9 @@ void loop() {
   if (elapsed >= backlightFadeDuration) {
     ledcWrite(BACKLIGHT_CH, 255);  // Final brightness
     backlightFading = false;
+    toneStage = 1;
+    startTone(1760.0f);     // first tone
+    toneStartMillis = millis();
   } else {
     int brightness = map(elapsed, 0, backlightFadeDuration, 0, 255);
     ledcWrite(BACKLIGHT_CH, brightness);
