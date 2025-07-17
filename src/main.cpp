@@ -26,6 +26,97 @@ unsigned long backlightStartTime = 0;
 bool backlightFading = true;
 const int backlightFadeDuration = 1000;  // 1 second
 
+// ***** AUIDO STUFF *****
+
+#include "driver/i2s.h"
+#include <math.h>
+
+#define SAMPLE_RATE 44100
+#define I2S_NUM I2S_NUM_0
+#define I2S_BCLK 42
+#define I2S_LRCLK 2
+#define I2S_DOUT 41
+
+#define BUFFER_SIZE 1024  // number of samples per buffer
+
+volatile bool playing = false;
+float toneFreq = 0;
+float phase = 0;
+float phaseIncrement = 0;
+int16_t buffer1[BUFFER_SIZE];
+int16_t buffer2[BUFFER_SIZE];
+volatile bool buf1Ready = false;
+volatile bool buf2Ready = false;
+unsigned long toneStartMillis = 0;
+int toneStage = 0;  // 0 = no tone, 1 = first tone, 2 = second tone, 3 = done
+
+TaskHandle_t i2sTaskHandle = NULL;
+
+void setupI2S() {
+  i2s_config_t i2s_config = {
+    .mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_TX),
+    .sample_rate = SAMPLE_RATE,
+    .bits_per_sample = I2S_BITS_PER_SAMPLE_16BIT,
+    .channel_format = I2S_CHANNEL_FMT_ONLY_LEFT,
+    .communication_format = (i2s_comm_format_t)(I2S_COMM_FORMAT_STAND_MSB),
+    .intr_alloc_flags = ESP_INTR_FLAG_LEVEL1,
+    .dma_buf_count = 8,
+    .dma_buf_len = 128,
+    .use_apll = false
+  };
+
+  i2s_pin_config_t pin_config = {
+    .bck_io_num = I2S_BCLK,
+    .ws_io_num = I2S_LRCLK,
+    .data_out_num = I2S_DOUT,
+    .data_in_num = I2S_PIN_NO_CHANGE
+  };
+
+  i2s_driver_install(I2S_NUM, &i2s_config, 0, NULL);
+  i2s_set_pin(I2S_NUM, &pin_config);
+}
+
+void generateToneBuffer(int16_t* buf, int len) {
+  for (int i = 0; i < len; i++) {
+    buf[i] = (int16_t)(sin(phase) * 12000);
+    phase += phaseIncrement;
+    if (phase > 2 * PI) phase -= 2 * PI;
+  }
+}
+
+void i2sTask(void* parameter) {
+  size_t bytes_written;
+  while (1) {
+    if (playing) {
+      // Fill buffer1
+      generateToneBuffer(buffer1, BUFFER_SIZE);
+      i2s_write(I2S_NUM, buffer1, BUFFER_SIZE * sizeof(int16_t), &bytes_written, portMAX_DELAY);
+
+      // Fill buffer2
+      generateToneBuffer(buffer2, BUFFER_SIZE);
+      i2s_write(I2S_NUM, buffer2, BUFFER_SIZE * sizeof(int16_t), &bytes_written, portMAX_DELAY);
+    } else {
+      // If not playing, send zeros (silence)
+      memset(buffer1, 0, BUFFER_SIZE * sizeof(int16_t));
+      i2s_write(I2S_NUM, buffer1, BUFFER_SIZE * sizeof(int16_t), &bytes_written, portMAX_DELAY);
+      vTaskDelay(10 / portTICK_PERIOD_MS);
+    }
+  }
+}
+
+void startTone(float freq) {
+  toneFreq = freq;
+  phaseIncrement = 2 * PI * freq / SAMPLE_RATE;
+  phase = 0;
+  playing = true;
+}
+
+void stopTone() {
+  playing = false;
+}
+
+// ***** AUDIO STUFF *****
+
 
 // LVGL calls this function to print log information
 void my_print(lv_log_level_t level, const char *buf)
@@ -164,11 +255,30 @@ setupBacklight();
   }
 
   lv_label_set_text(ui_lblVersion, APP_VERSION);
-  
+
+  setupI2S();
+
+  xTaskCreatePinnedToCore(i2sTask, "I2S Task", 4096, NULL, 1, &i2sTaskHandle, 1);
+
+  toneStage = 1;
+  startTone(1760.0f);     // first tone
+  toneStartMillis = millis();
+
   DBG_PRINTLN("Setup done");
 }
 
 void loop() {
+
+  unsigned long elapsed = millis() - toneStartMillis;
+
+  if (toneStage == 1 && elapsed >= 100) {  // after 500 ms first tone
+    startTone(2640.0f);                     // second tone (a 5th above)
+    toneStartMillis = millis();
+    toneStage = 2;
+  } else if (toneStage == 2 && elapsed >= 50) {  // after 500 ms second tone
+    stopTone();
+    toneStage = 3;  // done playing both tones
+  }
 
   if (backlightFading) {
   unsigned long elapsed = millis() - backlightStartTime;
@@ -236,7 +346,7 @@ void loop() {
     snprintf(timeStr, sizeof(timeStr), "%02d:%02d:%02d", receivedData.gpsHour, receivedData.gpsMinute, receivedData.gpsSecond);
     lv_label_set_text(ui_lblTime, timeStr);
 
-    if (receivedData.fixStatus == 1) {
+    if (receivedData.fixStatus != 0) {
 
       lv_obj_clear_flag(ui_imgGPSFix, LV_OBJ_FLAG_HIDDEN);
       lv_obj_clear_flag(ui_lblNumSats, LV_OBJ_FLAG_HIDDEN);
