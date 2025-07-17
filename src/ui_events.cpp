@@ -47,7 +47,7 @@ void rateChange(lv_event_t * e)
 
 void backlightControl(lv_event_t * e)
 {
-	int backlightVal = lv_arc_get_value(ui_arcBacklight);
+	int backlightVal = lv_arc_get_value(ui_sldBrightness);
 	ledcWrite(0, backlightVal);  // 50% brightness
 }
 
@@ -117,4 +117,9 @@ void warningAcknowledge(lv_event_t * e) {
 }
 void stopAcknowlege(lv_event_t * e) {
 	
+}
+
+void seedPerRevManualSet(lv_event_t * e)
+{
+	// Your code here
 }

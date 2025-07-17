@@ -271,7 +271,7 @@ void loop() {
 
   unsigned long elapsed = millis() - toneStartMillis;
 
-  if (toneStage == 1 && elapsed >= 100) {  // after 500 ms first tone
+  if (toneStage == 1 && elapsed >= 200) {  // after 500 ms first tone
     startTone(2640.0f);                     // second tone (a 5th above)
     toneStartMillis = millis();
     toneStage = 2;
