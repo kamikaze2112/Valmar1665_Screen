@@ -16,11 +16,18 @@ lv_obj_t *uic_lblPWM;
 lv_obj_t *uic_swMotorTest;
 lv_obj_t *uic_arcMotorPWM;
 lv_obj_t *uic_btnReset;
-lv_obj_t *uic_lblVersion;
 lv_obj_t *uic_sldBrightness;
 lv_obj_t *uic_settingsScreen1;
-lv_obj_t *ui_settingsScreen1 = NULL;lv_obj_t *ui_sldBrightness = NULL;lv_obj_t *ui_Label25 = NULL;lv_obj_t *ui_btnCalibrate3 = NULL;lv_obj_t *ui_Label10 = NULL;lv_obj_t *ui_lblVersion = NULL;lv_obj_t *ui_btnReset = NULL;lv_obj_t *ui_Label11 = NULL;lv_obj_t *ui_arcMotorPWM = NULL;lv_obj_t *ui_Label14 = NULL;lv_obj_t *ui_swMotorTest = NULL;lv_obj_t *ui_lblPWM = NULL;lv_obj_t *ui_lblRPM = NULL;lv_obj_t *ui_Label15 = NULL;lv_obj_t *ui_Label16 = NULL;lv_obj_t *ui_arcTestSpeed = NULL;lv_obj_t *ui_Label19 = NULL;lv_obj_t *ui_swSpeedTest = NULL;lv_obj_t *ui_lblTestSpeed = NULL;lv_obj_t *ui_Label21 = NULL;lv_obj_t *ui_panelReset = NULL;lv_obj_t *ui_Label12 = NULL;lv_obj_t *ui_Image5 = NULL;lv_obj_t *ui_btnResetYes = NULL;lv_obj_t *ui_Label13 = NULL;lv_obj_t *ui_btnResetNo = NULL;lv_obj_t *ui_Label2 = NULL;
+lv_obj_t *ui_settingsScreen1 = NULL;lv_obj_t *ui_btnPage3 = NULL;lv_obj_t *ui_sldBrightness = NULL;lv_obj_t *ui_Label25 = NULL;lv_obj_t *ui_btnCalibrate3 = NULL;lv_obj_t *ui_btnReset = NULL;lv_obj_t *ui_Label11 = NULL;lv_obj_t *ui_arcMotorPWM = NULL;lv_obj_t *ui_Label14 = NULL;lv_obj_t *ui_swMotorTest = NULL;lv_obj_t *ui_lblPWM = NULL;lv_obj_t *ui_lblRPM = NULL;lv_obj_t *ui_Label15 = NULL;lv_obj_t *ui_Label16 = NULL;lv_obj_t *ui_arcTestSpeed = NULL;lv_obj_t *ui_Label19 = NULL;lv_obj_t *ui_swSpeedTest = NULL;lv_obj_t *ui_lblTestSpeed = NULL;lv_obj_t *ui_Label21 = NULL;lv_obj_t *ui_panelReset = NULL;lv_obj_t *ui_Label12 = NULL;lv_obj_t *ui_Image5 = NULL;lv_obj_t *ui_btnResetYes = NULL;lv_obj_t *ui_Label13 = NULL;lv_obj_t *ui_btnResetNo = NULL;lv_obj_t *ui_Label2 = NULL;
 // event funtions
+void ui_event_btnPage3( lv_event_t * e) {
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+if ( event_code == LV_EVENT_PRESSED) {
+      _ui_screen_change( &ui_settingsScreen2, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_settingsScreen2_screen_init);
+}
+}
+
 void ui_event_sldBrightness( lv_event_t * e) {
     lv_event_code_t event_code = lv_event_get_code(e);
 
@@ -103,6 +110,23 @@ lv_obj_remove_flag( ui_settingsScreen1, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
 lv_obj_set_style_bg_color(ui_settingsScreen1, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_bg_opa(ui_settingsScreen1, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 
+ui_btnPage3 = lv_button_create(ui_settingsScreen1);
+lv_obj_set_width( ui_btnPage3, 50);
+lv_obj_set_height( ui_btnPage3, 50);
+lv_obj_set_x( ui_btnPage3, -186 );
+lv_obj_set_y( ui_btnPage3, -25 );
+lv_obj_set_align( ui_btnPage3, LV_ALIGN_CENTER );
+lv_obj_add_flag( ui_btnPage3, LV_OBJ_FLAG_SCROLL_ON_FOCUS );   /// Flags
+lv_obj_remove_flag( ui_btnPage3, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
+lv_obj_set_style_bg_color(ui_btnPage3, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_bg_opa(ui_btnPage3, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_bg_image_src( ui_btnPage3, &ui_img_1504963450, LV_PART_MAIN | LV_STATE_DEFAULT );
+ui_object_set_themeable_style_property(ui_btnPage3, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_IMAGE_RECOLOR, _ui_theme_color_valmarRed);
+ui_object_set_themeable_style_property(ui_btnPage3, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_IMAGE_RECOLOR_OPA, _ui_theme_alpha_valmarRed);
+ui_object_set_themeable_style_property(ui_btnPage3, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_COLOR, _ui_theme_color_spinboxOuline);
+ui_object_set_themeable_style_property(ui_btnPage3, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_OPA, _ui_theme_alpha_spinboxOuline);
+lv_obj_set_style_border_width(ui_btnPage3, 2, LV_PART_MAIN| LV_STATE_DEFAULT);
+
 ui_sldBrightness = lv_slider_create(ui_settingsScreen1);
 lv_slider_set_range(ui_sldBrightness, 10,255);
 lv_slider_set_value( ui_sldBrightness, 200, LV_ANIM_OFF);
@@ -148,22 +172,6 @@ ui_object_set_themeable_style_property(ui_btnCalibrate3, LV_PART_MAIN| LV_STATE_
 ui_object_set_themeable_style_property(ui_btnCalibrate3, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_COLOR, _ui_theme_color_spinboxOuline);
 ui_object_set_themeable_style_property(ui_btnCalibrate3, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_OPA, _ui_theme_alpha_spinboxOuline);
 lv_obj_set_style_border_width(ui_btnCalibrate3, 2, LV_PART_MAIN| LV_STATE_DEFAULT);
-
-ui_Label10 = lv_label_create(ui_settingsScreen1);
-lv_obj_set_width( ui_Label10, LV_SIZE_CONTENT);  /// 1
-lv_obj_set_height( ui_Label10, LV_SIZE_CONTENT);   /// 1
-lv_obj_set_x( ui_Label10, 120 );
-lv_obj_set_y( ui_Label10, 120 );
-lv_obj_set_align( ui_Label10, LV_ALIGN_CENTER );
-lv_label_set_text(ui_Label10,"Controller Ver:");
-
-ui_lblVersion = lv_label_create(ui_settingsScreen1);
-lv_obj_set_width( ui_lblVersion, LV_SIZE_CONTENT);  /// 1
-lv_obj_set_height( ui_lblVersion, LV_SIZE_CONTENT);   /// 1
-lv_obj_set_x( ui_lblVersion, 200 );
-lv_obj_set_y( ui_lblVersion, 120 );
-lv_obj_set_align( ui_lblVersion, LV_ALIGN_CENTER );
-lv_label_set_text(ui_lblVersion,"0.0.0");
 
 ui_btnReset = lv_button_create(ui_settingsScreen1);
 lv_obj_set_width( ui_btnReset, 100);
@@ -370,6 +378,7 @@ lv_obj_set_height( ui_Label2, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_align( ui_Label2, LV_ALIGN_CENTER );
 lv_label_set_text(ui_Label2,"NO");
 
+lv_obj_add_event_cb(ui_btnPage3, ui_event_btnPage3, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_sldBrightness, ui_event_sldBrightness, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_btnCalibrate3, ui_event_btnCalibrate3, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_btnReset, ui_event_btnReset, LV_EVENT_ALL, NULL);
@@ -381,7 +390,6 @@ lv_obj_add_event_cb(ui_btnResetYes, ui_event_btnResetYes, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_btnResetNo, ui_event_btnResetNo, LV_EVENT_ALL, NULL);
 uic_settingsScreen1 = ui_settingsScreen1;
 uic_sldBrightness = ui_sldBrightness;
-uic_lblVersion = ui_lblVersion;
 uic_btnReset = ui_btnReset;
 uic_arcMotorPWM = ui_arcMotorPWM;
 uic_swMotorTest = ui_swMotorTest;
@@ -403,13 +411,11 @@ void ui_settingsScreen1_screen_destroy(void)
 // NULL screen variables
 uic_settingsScreen1= NULL;
 ui_settingsScreen1= NULL;
+ui_btnPage3= NULL;
 uic_sldBrightness= NULL;
 ui_sldBrightness= NULL;
 ui_Label25= NULL;
 ui_btnCalibrate3= NULL;
-ui_Label10= NULL;
-uic_lblVersion= NULL;
-ui_lblVersion= NULL;
 uic_btnReset= NULL;
 ui_btnReset= NULL;
 ui_Label11= NULL;

@@ -82,9 +82,9 @@ ui_Label9 = lv_label_create(ui_calibrationScreen2);
 lv_obj_set_width( ui_Label9, LV_SIZE_CONTENT);  /// 1
 lv_obj_set_height( ui_Label9, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_x( ui_Label9, 0 );
-lv_obj_set_y( ui_Label9, 40 );
+lv_obj_set_y( ui_Label9, 30 );
 lv_obj_set_align( ui_Label9, LV_ALIGN_CENTER );
-lv_label_set_text(ui_Label9,"seedPerRev\n\nIf calibrated previously you can enter\nthe seedPerRev in the box above.\n\nNOTE: This will overwrite the current\ncalibration values.");
+lv_label_set_text(ui_Label9,"If calibrated previously you can enter\nthe seedPerRev in the box above.\n\nNOTE: This will overwrite the current\ncalibration values.");
 lv_obj_set_style_text_align(ui_Label9, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 ui_btnCalibrate5 = lv_button_create(ui_calibrationScreen2);

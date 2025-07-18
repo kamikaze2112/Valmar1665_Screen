@@ -252,7 +252,7 @@ setupBacklight();
   
   }
 
-  lv_label_set_text(ui_lblVersion, APP_VERSION);
+  lv_label_set_text(ui_lblVersion1, APP_VERSION);
 
   setupI2S();
 

@@ -14,13 +14,13 @@ extern "C" {
 extern void ui_settingsScreen1_screen_init(void);
 extern void ui_settingsScreen1_screen_destroy(void);
 extern lv_obj_t *ui_settingsScreen1;
+extern void ui_event_btnPage3( lv_event_t * e);
+extern lv_obj_t *ui_btnPage3;
 extern void ui_event_sldBrightness( lv_event_t * e);
 extern lv_obj_t *ui_sldBrightness;
 extern lv_obj_t *ui_Label25;
 extern void ui_event_btnCalibrate3( lv_event_t * e);
 extern lv_obj_t *ui_btnCalibrate3;
-extern lv_obj_t *ui_Label10;
-extern lv_obj_t *ui_lblVersion;
 extern void ui_event_btnReset( lv_event_t * e);
 extern lv_obj_t *ui_btnReset;
 extern lv_obj_t *ui_Label11;
@@ -52,7 +52,6 @@ extern lv_obj_t *ui_Label2;
 // CUSTOM VARIABLES
 extern lv_obj_t *uic_settingsScreen1;
 extern lv_obj_t *uic_sldBrightness;
-extern lv_obj_t *uic_lblVersion;
 extern lv_obj_t *uic_btnReset;
 extern lv_obj_t *uic_arcMotorPWM;
 extern lv_obj_t *uic_swMotorTest;

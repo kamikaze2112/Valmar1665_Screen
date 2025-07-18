@@ -34,6 +34,7 @@ extern "C" {
 #include "ui_settingsScreen1.h"
 #include "ui_infoScreen.h"
 #include "ui_calibrationScreen2.h"
+#include "ui_settingsScreen2.h"
 
 ///////////////////// VARIABLES ////////////////////
 

@@ -22,6 +22,9 @@ void speedTestUpdateSpeed(lv_event_t * e);
 void speedTest(lv_event_t * e);
 void initReset(lv_event_t * e);
 void seedPerRevManualSet(lv_event_t * e);
+void pairController(lv_event_t * e);
+void screenFirmware(lv_event_t * e);
+void controllerFirmware(lv_event_t * e);
 
 #ifdef __cplusplus
 } /*extern "C"*/

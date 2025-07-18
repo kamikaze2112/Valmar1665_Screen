@@ -123,3 +123,18 @@ void seedPerRevManualSet(lv_event_t * e)
 {
 	// Your code here
 }
+
+void pairController(lv_event_t * e)
+{
+	// Your code here
+}
+
+void screenFirmware(lv_event_t * e)
+{
+	// Your code here
+}
+
+void controllerFirmware(lv_event_t * e)
+{
+	// Your code here
+}
