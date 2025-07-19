@@ -12,7 +12,8 @@ OutgoingData receivedData = {};
 IncomingData replyData = {};
 
 // === Receive callback ===
-void onDataRecv(const uint8_t *mac, const uint8_t *incoming, int len) {
+  void onDataRecv(const uint8_t *mac, const uint8_t *incoming, int len) {
+
   if (len == sizeof(OutgoingData)) {
     memcpy(&receivedData, incoming, sizeof(receivedData));
     newData = true;  // Flag for main loop

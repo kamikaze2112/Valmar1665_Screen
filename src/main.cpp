@@ -169,10 +169,10 @@ uint8_t senderMac[] = { 0xD8, 0x3B, 0xDA, 0xA3, 0x7A, 0xEC };
 void setupBacklight() {
   ledcSetup(BACKLIGHT_CH, BACKLIGHT_FREQ, BACKLIGHT_RES);
   ledcAttachPin(GFX_BL, BACKLIGHT_CH);
-
   ledcWrite(BACKLIGHT_CH, 0);  // Start at 0 brightness
   backlightStartTime = millis();
   backlightFading = true;
+
 }
 
 void setup() {
@@ -274,8 +274,12 @@ void loop() {
     toneStage = 3;                               // done playing both tones
   }
 
+
+
   if (backlightFading) {
+
   unsigned long elapsed = millis() - backlightStartTime;
+
   if (elapsed >= backlightFadeDuration) {
     ledcWrite(BACKLIGHT_CH, 255);  // Final brightness
     backlightFading = false;
