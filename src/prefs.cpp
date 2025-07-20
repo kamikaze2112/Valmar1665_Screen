@@ -7,6 +7,21 @@
 Preferences prefs;
 
 bool prefsValid = false;
+bool commsValid = false;
+
+void loadComms() {
+
+}
+
+void saveComms() {
+
+
+}
+
+void clearComms() {
+
+
+}
 
 void loadPrefs() {
 

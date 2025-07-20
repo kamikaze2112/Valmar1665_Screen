@@ -3,39 +3,103 @@
 #include "globals.h"
 #include "comms.h"
 #include "ui.h"
+#include "prefs.h"
 
-// Replace with your slave MAC address
-uint8_t slaveMac[] = { 0xD8, 0x3B, 0xDA, 0xA3, 0x7A, 0xEC };
+uint8_t broadcastAddress[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+uint8_t controllerAddress[6];
+
+bool controllerPaired = false;
+bool pairingMode = false;
+int pairRequests = 0;
+
+static esp_now_peer_info_t peerInfo;
 
 // === Data holders ===
-OutgoingData receivedData = {};
-IncomingData replyData = {};
+IncomingData incomingData = {};
+OutgoingData outgoingData = {};
 
-// === Receive callback ===
-  void onDataRecv(const uint8_t *mac, const uint8_t *incoming, int len) {
 
-  if (len == sizeof(OutgoingData)) {
-    memcpy(&receivedData, incoming, sizeof(receivedData));
-    newData = true;  // Flag for main loop
-
-    // Use live values from globals
-    replyData.calibrationMode = calibrationMode;
-    replyData.seedingRate = seedingRate;
-    replyData.calibrationWeight = calibrationWeight;
-    replyData.motorTestSwitch = motorTestSwitch;
-    replyData.motorTestPWM = motorTestPWM;
-    replyData.speedTestSwitch = speedTestSwitch;
-    replyData.speedTestSpeed = speedTestSpeed;
-    
-    esp_now_send(mac, (uint8_t*)&replyData, sizeof(replyData));
+void printMac(const uint8_t *mac) {
+  for (int i = 0; i < 6; i++) {
+    if (mac[i] < 0x10) Serial.print("0"); // Leading zero if needed
+        Serial.print(mac[i], HEX);
+    if (i < 5) Serial.print(":");
   }
+  Serial.println();
 }
 
 
+void addPeer(const uint8_t mac[6]) {
+
+  memcpy(peerInfo.peer_addr, mac, 6);
+    peerInfo.channel = 0;
+    peerInfo.encrypt = false;
+
+    if (esp_now_add_peer(&peerInfo) != ESP_OK) {
+        Serial.print("Failed to add peer: ");
+    } else {
+        Serial.print("Peer added: ");
+
+        if (mac == broadcastAddress) {
+            controllerPaired = false;
+        } else {
+              controllerPaired = true;
+        }
+    }
+    printMac(mac);
+}
+
+// === Receive callback ===
+  void onDataRecv(const uint8_t *mac, const uint8_t *incoming, int len) {
+  
+  PacketType type = static_cast<PacketType>(incoming[0]);
+
+  if (type == PACKET_TYPE_PAIR_ACK) {
+      memcpy(controllerAddress, mac, 6);
+
+      Serial.print("Pairing ACK received from: ");
+      printMac(controllerAddress);
+      
+      // Remove broadcast peer if needed
+      esp_now_del_peer(broadcastAddress);
+
+      // Add paired controller as a peer
+      memcpy(peerInfo.peer_addr, controllerAddress, 6);
+      peerInfo.channel = 0;
+      peerInfo.encrypt = false;
+
+      if (esp_now_add_peer(&peerInfo) != ESP_OK) {
+          Serial.println("Failed to add controller as peer");
+      } else {
+          Serial.println("Controller added as peer");
+          pairingMode = false;
+          controllerPaired = true;
+          lv_obj_clear_state(ui_btnPairing, LV_STATE_DISABLED);
+      }
+
+  } else if (type == PACKET_TYPE_DATA) {
+      if (len == sizeof(IncomingData)) {
+          memcpy(&incomingData, incoming, min(len, (int)sizeof(IncomingData)));
+          newData = true;  // Flag for main loop
+
+          // Use live values from globals
+          outgoingData.calibrationMode = calibrationMode;
+          outgoingData.seedingRate = seedingRate;
+          outgoingData.calibrationWeight = calibrationWeight;
+          outgoingData.motorTestSwitch = motorTestSwitch;
+          outgoingData.motorTestPWM = motorTestPWM;
+          outgoingData.speedTestSwitch = speedTestSwitch;
+          outgoingData.speedTestSpeed = speedTestSpeed;
+          
+          esp_now_send(mac, (uint8_t*)&outgoingData, sizeof(outgoingData));
+      }
+  }
+}
+
 // === Send callback ===
 void onDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
-  DBG_PRINT("Reply send status: ");
-  DBG_PRINTLN(status == ESP_NOW_SEND_SUCCESS ? "Success" : "Fail");
+/*   DBG_PRINT("Reply send status: ");
+  DBG_PRINTLN(status == ESP_NOW_SEND_SUCCESS ? "Success" : "Fail"); */
 }
 
 // === Setup comms ===
@@ -51,27 +115,31 @@ void setupComms() {
   esp_now_register_recv_cb(onDataRecv);
   esp_now_register_send_cb(onDataSent);
 
-  // Add slave as peer
-  esp_now_peer_info_t peerInfo = {};
-  memcpy(peerInfo.peer_addr, slaveMac, 6);
-  peerInfo.channel = 0;
-  peerInfo.encrypt = false;
+  if (commsValid) {
+      addPeer(controllerAddress);
 
-  if (!esp_now_is_peer_exist(slaveMac)) {
-    if (esp_now_add_peer(&peerInfo) != ESP_OK) {
-      DBG_PRINTLN("Failed to add slave peer");
+    } else {
+      addPeer(broadcastAddress);
+
     }
-  }
-
-  DBG_PRINTLN("ESP-NOW Controller Ready");
 }
 
-void printReplyData() {
-  DBG_PRINTLN("=== Reply Data ===");
-  DBG_PRINT("Calibration Mode: ");
-  DBG_PRINTLN(replyData.calibrationMode);
-  DBG_PRINT("Seeding Rate: ");
-  DBG_PRINTLN(replyData.seedingRate);
-  DBG_PRINT("Calibration Weight: ");
-  DBG_PRINTLN(replyData.calibrationWeight);
+void sendPairingRequest() {
+    if (pairRequests < 50) {
+        Serial.print(pairRequests);
+        Serial.print(" : ");  
+        Serial.print("Sending Pairing request to: ");
+        printMac(broadcastAddress);
+        struct {
+            PacketType type = PACKET_TYPE_PAIR_SEND;
+        } pairingRequest;
+
+        esp_now_send(broadcastAddress, (uint8_t*)&pairingRequest, sizeof(pairingRequest));
+        pairRequests++;
+    } else {
+        Serial.println("Pairing failed after 50 attempts.  Is controller in pairing mode?");
+        pairRequests = 0;
+        pairingMode = false;
+        lv_obj_clear_state(ui_btnPairing, LV_STATE_DISABLED);
+    }
 }

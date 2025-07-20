@@ -21,10 +21,19 @@ github:  https://github.com/kamikaze2112/Valmar1665_Screen
                              // Install "Dev Device Pins" with the Library Manager (last tested on v0.0.2)
 #include "ui.h"
 #include "comms.h"
+#include "nonBlockingTimer.h"
+
+NonBlockingTimer timer;
+
+void debugPrint() {
+
+}
 
 unsigned long backlightStartTime = 0;
 bool backlightFading = true;
 const int backlightFadeDuration = 1000;  // 1 second
+unsigned long lastPairingTime = 0;
+
 
 // ***** AUIDO STUFF *****
 
@@ -178,6 +187,9 @@ void setupBacklight() {
 void setup() {
   Serial.begin(115200);
   delay(1000);
+
+  timer.set(debugPrint, 1000);
+
   setupComms();
   
   DBG_PRINTLN("Arduino_GFX LVGL_Arduino_v9 example ");
@@ -263,6 +275,8 @@ setupBacklight();
 
 void loop() {
 
+  timer.update();
+
   unsigned long elapsed = millis() - toneStartMillis;
 
   if (toneStage == 1 && elapsed >= 100) {  // after 100 ms first tone
@@ -274,8 +288,6 @@ void loop() {
     toneStage = 3;                               // done playing both tones
   }
 
-
-
   if (backlightFading) {
 
   unsigned long elapsed = millis() - backlightStartTime;
@@ -283,9 +295,9 @@ void loop() {
   if (elapsed >= backlightFadeDuration) {
     ledcWrite(BACKLIGHT_CH, 255);  // Final brightness
     backlightFading = false;
-    toneStage = 1;
-    startTone(1760.0f);     // first tone
-    toneStartMillis = millis();
+    //toneStage = 1;
+    //startTone(1760.0f);     // first tone
+    //toneStartMillis = millis();
   } else {
     int brightness = map(elapsed, 0, backlightFadeDuration, 0, 255);
     ledcWrite(BACKLIGHT_CH, brightness);
@@ -297,9 +309,9 @@ void loop() {
   char rpmBuf[10];
   char rateBuf[10];
   
-  snprintf(rateBuf, sizeof(rateBuf), "%.1f", receivedData.actualRate);
-  snprintf(speedBuf, sizeof(speedBuf), "%.1f", receivedData.gpsSpeed);
-  snprintf(rpmBuf, sizeof(rpmBuf), "%.1f", receivedData.shaftRPM);
+  snprintf(rateBuf, sizeof(rateBuf), "%.1f", incomingData.actualRate);
+  snprintf(speedBuf, sizeof(speedBuf), "%.1f", incomingData.gpsSpeed);
+  snprintf(rpmBuf, sizeof(rpmBuf), "%.1f", incomingData.shaftRPM);
 
   // Update the LVGL labels
   lv_label_set_text(ui_lblSpeed, speedBuf);
@@ -333,27 +345,27 @@ void loop() {
     newData = false;
 
     DBG_PRINTLN("=== Received Data ===");
-    DBG_PRINT("Fix: "); DBG_PRINTLN(receivedData.fixStatus);
-    DBG_PRINT("Sats: "); DBG_PRINTLN(receivedData.numSats);
-    DBG_PRINT("Speed: "); DBG_PRINTLN(receivedData.gpsSpeed);
-    Serial.printf("Time: %02d:%02d:%02d\n", receivedData.gpsHour, receivedData.gpsMinute, receivedData.gpsSecond);
-    DBG_PRINT("Revs: "); DBG_PRINTLN(receivedData.calibrationRevs);
-    DBG_PRINT("WorkSwitch: "); DBG_PRINTLN(receivedData.workSwitch);
-    DBG_PRINT("Motor: "); DBG_PRINTLN(receivedData.motorActive);
-    DBG_PRINT("RPM: "); DBG_PRINTLN(receivedData.shaftRPM);
-    DBG_PRINT("Error: "); DBG_PRINTLN(receivedData.errorCode);
+    DBG_PRINT("Fix: "); DBG_PRINTLN(incomingData.fixStatus);
+    DBG_PRINT("Sats: "); DBG_PRINTLN(incomingData.numSats);
+    DBG_PRINT("Speed: "); DBG_PRINTLN(incomingData.gpsSpeed);
+    Serial.printf("Time: %02d:%02d:%02d\n", incomingData.gpsHour, incomingData.gpsMinute, incomingData.gpsSecond);
+    DBG_PRINT("Revs: "); DBG_PRINTLN(incomingData.calibrationRevs);
+    DBG_PRINT("WorkSwitch: "); DBG_PRINTLN(incomingData.workSwitch);
+    DBG_PRINT("Motor: "); DBG_PRINTLN(incomingData.motorActive);
+    DBG_PRINT("RPM: "); DBG_PRINTLN(incomingData.shaftRPM);
+    DBG_PRINT("Error: "); DBG_PRINTLN(incomingData.errorCode);
 
     char timeStr[9];  // "HH:MM:SS" + null terminator
-    snprintf(timeStr, sizeof(timeStr), "%02d:%02d:%02d", receivedData.gpsHour, receivedData.gpsMinute, receivedData.gpsSecond);
+    snprintf(timeStr, sizeof(timeStr), "%02d:%02d:%02d", incomingData.gpsHour, incomingData.gpsMinute, incomingData.gpsSecond);
     lv_label_set_text(ui_lblTime, timeStr);
 
-    if (receivedData.fixStatus != 0) {
+    if (incomingData.fixStatus != 0) {
 
       lv_obj_clear_flag(ui_imgGPSFix, LV_OBJ_FLAG_HIDDEN);
       lv_obj_clear_flag(ui_lblNumSats, LV_OBJ_FLAG_HIDDEN);
 
       char satsBuf[10];  // Make sure this buffer stays in scope as long as you need numSats
-      snprintf(satsBuf, sizeof(satsBuf), "%d", receivedData.numSats);
+      snprintf(satsBuf, sizeof(satsBuf), "%d", incomingData.numSats);
       const char* numSats = satsBuf;
       lv_label_set_text(ui_lblNumSats, numSats);
     } else {
@@ -362,13 +374,20 @@ void loop() {
       lv_obj_add_flag(ui_lblNumSats, LV_OBJ_FLAG_HIDDEN);
     }
 
-    printReplyData();
-
+      lv_label_set_text(ui_lblVersion, incomingData.controllerVersion);
   }
   
-  if (receivedData.workSwitch) {
+  if (incomingData.workSwitch) {
     lv_obj_add_state(ui_workLED, LV_STATE_USER_1);
   } else {
     lv_obj_clear_state(ui_workLED, LV_STATE_USER_1);
+  }
+
+  if (pairingMode) {
+      unsigned long now = millis();
+      if (now - lastPairingTime >= 500) {
+          lastPairingTime = now;
+          sendPairingRequest();  // broadcast pairing request
+      }
   }
 }

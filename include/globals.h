@@ -20,6 +20,8 @@ extern uint32_t bufSize;
 extern lv_display_t *disp;
 extern lv_color_t *disp_draw_buf;
 
+extern uint8_t screenAddress[6];
+extern uint8_t broadcastAddress[6];
 
 extern bool calibrationMode;
 extern float seedingRate;
@@ -29,6 +31,9 @@ extern int motorTestPWM;
 extern bool speedTestSwitch;
 extern float speedTestSpeed;
 extern float actualRate;
+extern bool pairingMode;
+extern bool controllerPaired;
+
 
 #define DEBUG_MODE 1 // toggle 1 for on, and 0 for off
 

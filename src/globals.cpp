@@ -2,7 +2,7 @@
 
 // APP VERSION
 
-const char* APP_VERSION = "1.5.0";
+const char* APP_VERSION = "1.6.0";
 
 // Define the actual variables here
 TAMC_GT911 touchController(TOUCH_SDA, TOUCH_SCL, TOUCH_INT, TOUCH_RST, TOUCH_WIDTH, TOUCH_HEIGHT);

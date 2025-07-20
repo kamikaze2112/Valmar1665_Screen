@@ -7,7 +7,7 @@
 #include "ui.h"
 #include "comms.h"
 
-extern IncomingData replyData;
+//extern IncomingData outgoingData;
 
 void calibrationInput(lv_event_t * e)
 {
@@ -32,7 +32,7 @@ void calSwitchToggle(lv_event_t * e)
 		lv_textarea_set_text(ui_txtCalWeight, "");
 	}
 
-	replyData.calibrationMode = calibrationMode;
+	outgoingData.calibrationMode = calibrationMode;
 	DBG_PRINT("Calibration mode toggled to: ");
     DBG_PRINTLN(calibrationMode ? "ON" : "OFF");
 }
@@ -126,7 +126,7 @@ void seedPerRevManualSet(lv_event_t * e)
 
 void pairController(lv_event_t * e)
 {
-	// Your code here
+	pairingMode = true;
 }
 
 void screenFirmware(lv_event_t * e)

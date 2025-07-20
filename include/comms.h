@@ -2,7 +2,16 @@
 #include <Arduino.h>
 
 // === Structures ===
-struct IncomingData {
+
+// Define packet types
+enum PacketType : uint8_t {
+    PACKET_TYPE_DATA = 0,
+    PACKET_TYPE_PAIR_SEND = 1,
+    PACKET_TYPE_PAIR_ACK = 2
+};
+
+struct OutgoingData {
+  PacketType type = PACKET_TYPE_DATA;
   bool calibrationMode;
   float seedingRate;
   float calibrationWeight;
@@ -12,7 +21,8 @@ struct IncomingData {
   float speedTestSpeed;
 } __attribute__((packed));
 
-struct OutgoingData {
+struct IncomingData {
+  PacketType type = PACKET_TYPE_DATA;
   int fixStatus;
   int numSats;
   float gpsSpeed;
@@ -25,15 +35,20 @@ struct OutgoingData {
   double shaftRPM;
   int errorCode;
   float actualRate;
+  char controllerVersion[12];
 } __attribute__((packed));
 
 // === Extern declarations ===
-extern OutgoingData receivedData;
-extern IncomingData replyData;
+extern IncomingData incomingData;
+extern OutgoingData outgoingData;
 extern volatile bool newData;
 extern bool calibrationMode;
 
 // === Functions ===
 void setupComms();
 
-void printReplyData();
+void printMac(const uint8_t *mac);
+
+void addPeer(const uint8_t mac[6]);
+
+void sendPairingRequest();
