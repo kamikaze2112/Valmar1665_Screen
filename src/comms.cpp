@@ -5,8 +5,8 @@
 #include "ui.h"
 #include "prefs.h"
 
-uint8_t broadcastAddress[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 uint8_t controllerAddress[6];
+uint8_t broadcastAddress[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
 bool controllerPaired = false;
 bool pairingMode = false;
@@ -74,6 +74,7 @@ void addPeer(const uint8_t mac[6]) {
           Serial.println("Controller added as peer");
           pairingMode = false;
           controllerPaired = true;
+          saveComms();
           lv_obj_clear_state(ui_btnPairing, LV_STATE_DISABLED);
       }
 

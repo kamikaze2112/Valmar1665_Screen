@@ -5,13 +5,14 @@
 
 #include "ui.h"
 
-lv_obj_t *uic_btnLock;
+lv_obj_t *uic_swSetSeed;
 lv_obj_t *uic_txtSeedPerRev;
+lv_obj_t *uic_kbCal2;
 lv_obj_t *uic_btnPage;
 lv_obj_t *uic_calibrationScreen2;
-lv_obj_t *ui_calibrationScreen2 = NULL;lv_obj_t *ui_Label9 = NULL;lv_obj_t *ui_btnCalibrate5 = NULL;lv_obj_t *ui_btnPage = NULL;lv_obj_t *ui_Keyboard3 = NULL;lv_obj_t *ui_txtSeedPerRev = NULL;lv_obj_t *ui_btnUnlock = NULL;lv_obj_t *ui_btnLock = NULL;
+lv_obj_t *ui_calibrationScreen2 = NULL;lv_obj_t *ui_Label9 = NULL;lv_obj_t *ui_btnBack4 = NULL;lv_obj_t *ui_btnPage = NULL;lv_obj_t *ui_kbCal2 = NULL;lv_obj_t *ui_txtSeedPerRev = NULL;lv_obj_t *ui_swSetSeed = NULL;
 // event funtions
-void ui_event_btnCalibrate5( lv_event_t * e) {
+void ui_event_btnBack4( lv_event_t * e) {
     lv_event_code_t event_code = lv_event_get_code(e);
 
 if ( event_code == LV_EVENT_PRESSED) {
@@ -27,15 +28,14 @@ if ( event_code == LV_EVENT_PRESSED) {
 }
 }
 
-void ui_event_Keyboard3( lv_event_t * e) {
+void ui_event_kbCal2( lv_event_t * e) {
     lv_event_code_t event_code = lv_event_get_code(e);
 
 if ( event_code == LV_EVENT_READY) {
       seedPerRevManualSet( e );
-      _ui_flag_modify( ui_Keyboard3, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
-      _ui_flag_modify( ui_btnLock, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
-      _ui_flag_modify( ui_btnUnlock, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+      _ui_flag_modify( ui_kbCal2, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
       _ui_state_modify( ui_txtSeedPerRev, LV_STATE_DISABLED, _UI_MODIFY_STATE_ADD);
+      _ui_state_modify( ui_swSetSeed, LV_STATE_CHECKED, _UI_MODIFY_STATE_REMOVE);
 }
 }
 
@@ -47,25 +47,13 @@ if ( event_code == LV_EVENT_CLICKED) {
 }
 }
 
-void ui_event_btnUnlock( lv_event_t * e) {
+void ui_event_swSetSeed( lv_event_t * e) {
     lv_event_code_t event_code = lv_event_get_code(e);
 
-if ( event_code == LV_EVENT_CLICKED) {
-      _ui_state_modify( ui_txtSeedPerRev, LV_STATE_DISABLED, _UI_MODIFY_STATE_REMOVE);
-      _ui_flag_modify( ui_btnUnlock, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
-      _ui_flag_modify( ui_btnLock, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
-      _ui_flag_modify( ui_Keyboard3, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
-}
-}
-
-void ui_event_btnLock( lv_event_t * e) {
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-if ( event_code == LV_EVENT_CLICKED) {
-      _ui_state_modify( ui_txtSeedPerRev, LV_STATE_DISABLED, _UI_MODIFY_STATE_ADD);
-      _ui_flag_modify( ui_btnUnlock, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
-      _ui_flag_modify( ui_btnLock, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
-      _ui_flag_modify( ui_Keyboard3, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+if ( event_code == LV_EVENT_VALUE_CHANGED) {
+      seedSwitchToggle( e );
+      _ui_flag_modify( ui_kbCal2, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_TOGGLE);
+      _ui_state_modify( ui_txtSeedPerRev, LV_STATE_DISABLED, _UI_MODIFY_STATE_TOGGLE);
 }
 }
 
@@ -87,22 +75,22 @@ lv_obj_set_align( ui_Label9, LV_ALIGN_CENTER );
 lv_label_set_text(ui_Label9,"If calibrated previously you can enter\nthe seedPerRev in the box above.\n\nNOTE: This will overwrite the current\ncalibration values.");
 lv_obj_set_style_text_align(ui_Label9, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN| LV_STATE_DEFAULT);
 
-ui_btnCalibrate5 = lv_button_create(ui_calibrationScreen2);
-lv_obj_set_width( ui_btnCalibrate5, 50);
-lv_obj_set_height( ui_btnCalibrate5, 50);
-lv_obj_set_x( ui_btnCalibrate5, -186 );
-lv_obj_set_y( ui_btnCalibrate5, -80 );
-lv_obj_set_align( ui_btnCalibrate5, LV_ALIGN_CENTER );
-lv_obj_add_flag( ui_btnCalibrate5, LV_OBJ_FLAG_SCROLL_ON_FOCUS );   /// Flags
-lv_obj_remove_flag( ui_btnCalibrate5, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
-lv_obj_set_style_bg_color(ui_btnCalibrate5, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
-lv_obj_set_style_bg_opa(ui_btnCalibrate5, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
-lv_obj_set_style_bg_image_src( ui_btnCalibrate5, &ui_img_valmar_back_png, LV_PART_MAIN | LV_STATE_DEFAULT );
-ui_object_set_themeable_style_property(ui_btnCalibrate5, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_IMAGE_RECOLOR, _ui_theme_color_valmarRed);
-ui_object_set_themeable_style_property(ui_btnCalibrate5, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_IMAGE_RECOLOR_OPA, _ui_theme_alpha_valmarRed);
-ui_object_set_themeable_style_property(ui_btnCalibrate5, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_COLOR, _ui_theme_color_spinboxOuline);
-ui_object_set_themeable_style_property(ui_btnCalibrate5, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_OPA, _ui_theme_alpha_spinboxOuline);
-lv_obj_set_style_border_width(ui_btnCalibrate5, 2, LV_PART_MAIN| LV_STATE_DEFAULT);
+ui_btnBack4 = lv_button_create(ui_calibrationScreen2);
+lv_obj_set_width( ui_btnBack4, 50);
+lv_obj_set_height( ui_btnBack4, 50);
+lv_obj_set_x( ui_btnBack4, -186 );
+lv_obj_set_y( ui_btnBack4, -80 );
+lv_obj_set_align( ui_btnBack4, LV_ALIGN_CENTER );
+lv_obj_add_flag( ui_btnBack4, LV_OBJ_FLAG_SCROLL_ON_FOCUS );   /// Flags
+lv_obj_remove_flag( ui_btnBack4, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
+lv_obj_set_style_bg_color(ui_btnBack4, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_bg_opa(ui_btnBack4, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_bg_image_src( ui_btnBack4, &ui_img_valmar_back_png, LV_PART_MAIN | LV_STATE_DEFAULT );
+ui_object_set_themeable_style_property(ui_btnBack4, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_IMAGE_RECOLOR, _ui_theme_color_ValmarRed);
+ui_object_set_themeable_style_property(ui_btnBack4, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_IMAGE_RECOLOR_OPA, _ui_theme_alpha_ValmarRed);
+lv_obj_set_style_border_color(ui_btnBack4, lv_color_hex(0x293031), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_border_opa(ui_btnBack4, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_border_width(ui_btnBack4, 2, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 ui_btnPage = lv_button_create(ui_calibrationScreen2);
 lv_obj_set_width( ui_btnPage, 50);
@@ -115,28 +103,28 @@ lv_obj_remove_flag( ui_btnPage, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
 lv_obj_set_style_bg_color(ui_btnPage, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_bg_opa(ui_btnPage, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_bg_image_src( ui_btnPage, &ui_img_1504963450, LV_PART_MAIN | LV_STATE_DEFAULT );
-ui_object_set_themeable_style_property(ui_btnPage, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_IMAGE_RECOLOR, _ui_theme_color_valmarRed);
-ui_object_set_themeable_style_property(ui_btnPage, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_IMAGE_RECOLOR_OPA, _ui_theme_alpha_valmarRed);
-ui_object_set_themeable_style_property(ui_btnPage, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_COLOR, _ui_theme_color_spinboxOuline);
-ui_object_set_themeable_style_property(ui_btnPage, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_OPA, _ui_theme_alpha_spinboxOuline);
+ui_object_set_themeable_style_property(ui_btnPage, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_IMAGE_RECOLOR, _ui_theme_color_ValmarRed);
+ui_object_set_themeable_style_property(ui_btnPage, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_IMAGE_RECOLOR_OPA, _ui_theme_alpha_ValmarRed);
+lv_obj_set_style_border_color(ui_btnPage, lv_color_hex(0x293031), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_border_opa(ui_btnPage, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_border_width(ui_btnPage, 2, LV_PART_MAIN| LV_STATE_DEFAULT);
 
-ui_Keyboard3 = lv_keyboard_create(ui_calibrationScreen2);
-lv_keyboard_set_mode(ui_Keyboard3,LV_KEYBOARD_MODE_NUMBER);
-lv_obj_set_width( ui_Keyboard3, 442);
-lv_obj_set_height( ui_Keyboard3, 151);
-lv_obj_set_x( ui_Keyboard3, 0 );
-lv_obj_set_y( ui_Keyboard3, 33 );
-lv_obj_set_align( ui_Keyboard3, LV_ALIGN_CENTER );
-lv_obj_add_flag( ui_Keyboard3, LV_OBJ_FLAG_HIDDEN );   /// Flags
-lv_obj_set_style_bg_color(ui_Keyboard3, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
-lv_obj_set_style_bg_opa(ui_Keyboard3, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+ui_kbCal2 = lv_keyboard_create(ui_calibrationScreen2);
+lv_keyboard_set_mode(ui_kbCal2,LV_KEYBOARD_MODE_USER_1);
+lv_obj_set_width( ui_kbCal2, 442);
+lv_obj_set_height( ui_kbCal2, 151);
+lv_obj_set_x( ui_kbCal2, 0 );
+lv_obj_set_y( ui_kbCal2, 33 );
+lv_obj_set_align( ui_kbCal2, LV_ALIGN_CENTER );
+lv_obj_add_flag( ui_kbCal2, LV_OBJ_FLAG_HIDDEN );   /// Flags
+lv_obj_set_style_bg_color(ui_kbCal2, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_bg_opa(ui_kbCal2, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 
-ui_object_set_themeable_style_property(ui_Keyboard3, LV_PART_ITEMS| LV_STATE_DEFAULT, LV_STYLE_BG_COLOR, _ui_theme_color_valmarRed);
-ui_object_set_themeable_style_property(ui_Keyboard3, LV_PART_ITEMS| LV_STATE_DEFAULT, LV_STYLE_BG_OPA, _ui_theme_alpha_valmarRed);
-ui_object_set_themeable_style_property(ui_Keyboard3, LV_PART_ITEMS| LV_STATE_DEFAULT, LV_STYLE_BORDER_COLOR, _ui_theme_color_spinboxOuline);
-ui_object_set_themeable_style_property(ui_Keyboard3, LV_PART_ITEMS| LV_STATE_DEFAULT, LV_STYLE_BORDER_OPA, _ui_theme_alpha_spinboxOuline);
-lv_obj_set_style_border_width(ui_Keyboard3, 3, LV_PART_ITEMS| LV_STATE_DEFAULT);
+ui_object_set_themeable_style_property(ui_kbCal2, LV_PART_ITEMS| LV_STATE_DEFAULT, LV_STYLE_BG_COLOR, _ui_theme_color_ValmarRed);
+ui_object_set_themeable_style_property(ui_kbCal2, LV_PART_ITEMS| LV_STATE_DEFAULT, LV_STYLE_BG_OPA, _ui_theme_alpha_ValmarRed);
+lv_obj_set_style_border_color(ui_kbCal2, lv_color_hex(0x293031), LV_PART_ITEMS | LV_STATE_DEFAULT );
+lv_obj_set_style_border_opa(ui_kbCal2, 255, LV_PART_ITEMS| LV_STATE_DEFAULT);
+lv_obj_set_style_border_width(ui_kbCal2, 3, LV_PART_ITEMS| LV_STATE_DEFAULT);
 
 ui_txtSeedPerRev = lv_textarea_create(ui_calibrationScreen2);
 lv_obj_set_width( ui_txtSeedPerRev, 216);
@@ -156,51 +144,27 @@ lv_obj_set_style_bg_opa(ui_txtSeedPerRev, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_text_align(ui_txtSeedPerRev, LV_TEXT_ALIGN_CENTER, LV_PART_TEXTAREA_PLACEHOLDER| LV_STATE_DEFAULT);
 lv_obj_set_style_text_font(ui_txtSeedPerRev, &lv_font_montserrat_38, LV_PART_TEXTAREA_PLACEHOLDER| LV_STATE_DEFAULT);
 
-ui_btnUnlock = lv_button_create(ui_calibrationScreen2);
-lv_obj_set_width( ui_btnUnlock, 50);
-lv_obj_set_height( ui_btnUnlock, 50);
-lv_obj_set_x( ui_btnUnlock, 170 );
-lv_obj_set_y( ui_btnUnlock, -80 );
-lv_obj_set_align( ui_btnUnlock, LV_ALIGN_CENTER );
-lv_obj_add_flag( ui_btnUnlock, LV_OBJ_FLAG_SCROLL_ON_FOCUS );   /// Flags
-lv_obj_remove_flag( ui_btnUnlock, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
-lv_obj_set_style_bg_color(ui_btnUnlock, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
-lv_obj_set_style_bg_opa(ui_btnUnlock, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
-lv_obj_set_style_bg_image_src( ui_btnUnlock, &ui_img_624051001, LV_PART_MAIN | LV_STATE_DEFAULT );
-ui_object_set_themeable_style_property(ui_btnUnlock, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_IMAGE_RECOLOR, _ui_theme_color_valmarRed);
-ui_object_set_themeable_style_property(ui_btnUnlock, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_IMAGE_RECOLOR_OPA, _ui_theme_alpha_valmarRed);
-ui_object_set_themeable_style_property(ui_btnUnlock, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_COLOR, _ui_theme_color_spinboxOuline);
-ui_object_set_themeable_style_property(ui_btnUnlock, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_OPA, _ui_theme_alpha_spinboxOuline);
-lv_obj_set_style_border_width(ui_btnUnlock, 2, LV_PART_MAIN| LV_STATE_DEFAULT);
+ui_swSetSeed = lv_switch_create(ui_calibrationScreen2);
+lv_obj_set_width( ui_swSetSeed, 100);
+lv_obj_set_height( ui_swSetSeed, 50);
+lv_obj_set_x( ui_swSetSeed, 175 );
+lv_obj_set_y( ui_swSetSeed, -85 );
+lv_obj_set_align( ui_swSetSeed, LV_ALIGN_CENTER );
 
-ui_btnLock = lv_button_create(ui_calibrationScreen2);
-lv_obj_set_width( ui_btnLock, 50);
-lv_obj_set_height( ui_btnLock, 50);
-lv_obj_set_x( ui_btnLock, 170 );
-lv_obj_set_y( ui_btnLock, -80 );
-lv_obj_set_align( ui_btnLock, LV_ALIGN_CENTER );
-lv_obj_add_flag( ui_btnLock, LV_OBJ_FLAG_HIDDEN | LV_OBJ_FLAG_SCROLL_ON_FOCUS );   /// Flags
-lv_obj_remove_flag( ui_btnLock, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
-lv_obj_set_style_bg_color(ui_btnLock, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
-lv_obj_set_style_bg_opa(ui_btnLock, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
-lv_obj_set_style_bg_image_src( ui_btnLock, &ui_img_508761420, LV_PART_MAIN | LV_STATE_DEFAULT );
-ui_object_set_themeable_style_property(ui_btnLock, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_IMAGE_RECOLOR, _ui_theme_color_valmarRed);
-ui_object_set_themeable_style_property(ui_btnLock, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_IMAGE_RECOLOR_OPA, _ui_theme_alpha_valmarRed);
-ui_object_set_themeable_style_property(ui_btnLock, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_COLOR, _ui_theme_color_spinboxOuline);
-ui_object_set_themeable_style_property(ui_btnLock, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_OPA, _ui_theme_alpha_spinboxOuline);
-lv_obj_set_style_border_width(ui_btnLock, 2, LV_PART_MAIN| LV_STATE_DEFAULT);
+ui_object_set_themeable_style_property(ui_swSetSeed, LV_PART_INDICATOR| LV_STATE_CHECKED, LV_STYLE_BG_COLOR, _ui_theme_color_ValmarRed);
+ui_object_set_themeable_style_property(ui_swSetSeed, LV_PART_INDICATOR| LV_STATE_CHECKED, LV_STYLE_BG_OPA, _ui_theme_alpha_ValmarRed);
 
-lv_obj_add_event_cb(ui_btnCalibrate5, ui_event_btnCalibrate5, LV_EVENT_ALL, NULL);
+lv_obj_add_event_cb(ui_btnBack4, ui_event_btnBack4, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_btnPage, ui_event_btnPage, LV_EVENT_ALL, NULL);
-lv_keyboard_set_textarea(ui_Keyboard3,ui_txtSeedPerRev);
-lv_obj_add_event_cb(ui_Keyboard3, ui_event_Keyboard3, LV_EVENT_ALL, NULL);
+lv_keyboard_set_textarea(ui_kbCal2,ui_txtSeedPerRev);
+lv_obj_add_event_cb(ui_kbCal2, ui_event_kbCal2, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_txtSeedPerRev, ui_event_txtSeedPerRev, LV_EVENT_ALL, NULL);
-lv_obj_add_event_cb(ui_btnUnlock, ui_event_btnUnlock, LV_EVENT_ALL, NULL);
-lv_obj_add_event_cb(ui_btnLock, ui_event_btnLock, LV_EVENT_ALL, NULL);
+lv_obj_add_event_cb(ui_swSetSeed, ui_event_swSetSeed, LV_EVENT_ALL, NULL);
 uic_calibrationScreen2 = ui_calibrationScreen2;
 uic_btnPage = ui_btnPage;
+uic_kbCal2 = ui_kbCal2;
 uic_txtSeedPerRev = ui_txtSeedPerRev;
-uic_btnLock = ui_btnLock;
+uic_swSetSeed = ui_swSetSeed;
 
 }
 
@@ -212,14 +176,14 @@ void ui_calibrationScreen2_screen_destroy(void)
 uic_calibrationScreen2= NULL;
 ui_calibrationScreen2= NULL;
 ui_Label9= NULL;
-ui_btnCalibrate5= NULL;
+ui_btnBack4= NULL;
 uic_btnPage= NULL;
 ui_btnPage= NULL;
-ui_Keyboard3= NULL;
+uic_kbCal2= NULL;
+ui_kbCal2= NULL;
 uic_txtSeedPerRev= NULL;
 ui_txtSeedPerRev= NULL;
-ui_btnUnlock= NULL;
-uic_btnLock= NULL;
-ui_btnLock= NULL;
+uic_swSetSeed= NULL;
+ui_swSetSeed= NULL;
 
 }

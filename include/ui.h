@@ -31,10 +31,10 @@ extern "C" {
 #include "ui_splashScreen.h"
 #include "ui_runScreen.h"
 #include "ui_calibrationScreen1.h"
-#include "ui_settingsScreen1.h"
-#include "ui_infoScreen.h"
 #include "ui_calibrationScreen2.h"
+#include "ui_settingsScreen1.h"
 #include "ui_settingsScreen2.h"
+#include "ui_settingsScreen3.h"
 
 ///////////////////// VARIABLES ////////////////////
 
@@ -45,15 +45,14 @@ extern lv_obj_t *ui____initial_actions0;
 LV_IMG_DECLARE( ui_img_valmar_valmar2_png);   // assets/Valmar/valmar2.png
 LV_IMG_DECLARE( ui_img_valmar_cal_png);   // assets/Valmar/cal.png
 LV_IMG_DECLARE( ui_img_1811295523);   // assets/Valmar/icons8-settings-50.png
-LV_IMG_DECLARE( ui_img_787606558);   // assets/Valmar/icons8-information-50.png
+LV_IMG_DECLARE( ui_img_333094844);   // assets/Valmar/icons8-config-50.png
 LV_IMG_DECLARE( ui_img_639977379);   // assets/Valmar/icons8-satellite-25.png
 LV_IMG_DECLARE( ui_img_232107149);   // assets/Valmar/icons8-clock-20.png
 LV_IMG_DECLARE( ui_img_1608339404);   // assets/Valmar/icons8-alert-100.png
 LV_IMG_DECLARE( ui_img_valmar_stop_png);   // assets/Valmar/stop.png
 LV_IMG_DECLARE( ui_img_1504963450);   // assets/Valmar/icons8-page-50_edit.png
 LV_IMG_DECLARE( ui_img_valmar_back_png);   // assets/Valmar/back.png
-LV_IMG_DECLARE( ui_img_624051001);   // assets/Valmar/icons8-lock-52.png
-LV_IMG_DECLARE( ui_img_508761420);   // assets/Valmar/icons8-unlock-52.png
+LV_IMG_DECLARE( ui_img_valmar_save_png);   // assets/Valmar/save.png
 
 // FONTS
 LV_FONT_DECLARE( ui_font_ConsolaMono);

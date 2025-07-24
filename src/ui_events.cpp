@@ -6,6 +6,8 @@
 #include "globals.h"
 #include "ui.h"
 #include "comms.h"
+#include "prefs.h"
+#include <cstdlib>
 
 //extern IncomingData outgoingData;
 
@@ -18,7 +20,7 @@ void calibrationInput(lv_event_t * e)
 		Serial.printf("Calibration Weight %.3f\n", calibrationWeight);
 		calibrationMode = false;
 		lv_textarea_set_text(uic_txtCalWeight, "");
-		lv_obj_add_state(ui_Keyboard1, LV_STATE_DISABLED);
+		lv_obj_add_state(ui_kbCal1, LV_STATE_DISABLED);
 	}
 }
 
@@ -50,12 +52,6 @@ void backlightControl(lv_event_t * e)
 	int backlightVal = lv_slider_get_value(ui_sldBrightness);
 	ledcWrite(0, backlightVal);  // 50% brightness
 }
-
-void saveSettings(lv_event_t * e)
-{
-	// Your code here
-}
-
 void initReset(lv_event_t * e)
 {
 	ESP.restart();
@@ -119,9 +115,22 @@ void stopAcknowlege(lv_event_t * e) {
 	
 }
 
-void seedPerRevManualSet(lv_event_t * e)
-{
-	// Your code here
+void seedSwitchToggle(lv_event_t * e) {
+	
+}
+
+
+void seedPerRevManualSet(lv_event_t * e) {
+
+	const char* text = lv_textarea_get_text(ui_txtSeedPerRev);
+	char* endPtr;
+	seedPerRev = strtof(text, &endPtr);
+
+	if (endPtr == text) {
+    	// Conversion failed — not a valid float
+    	Serial.println("Invalid float entered!");
+    	//seedPerRev = 0.0;  // or some fallback value
+	}
 }
 
 void pairController(lv_event_t * e)
@@ -138,3 +147,9 @@ void controllerFirmware(lv_event_t * e)
 {
 	// Your code here
 }
+
+void saveSettings(lv_event_t * e)
+{
+	savePrefs();
+}
+

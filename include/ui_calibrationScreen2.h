@@ -15,23 +15,22 @@ extern void ui_calibrationScreen2_screen_init(void);
 extern void ui_calibrationScreen2_screen_destroy(void);
 extern lv_obj_t *ui_calibrationScreen2;
 extern lv_obj_t *ui_Label9;
-extern void ui_event_btnCalibrate5( lv_event_t * e);
-extern lv_obj_t *ui_btnCalibrate5;
+extern void ui_event_btnBack4( lv_event_t * e);
+extern lv_obj_t *ui_btnBack4;
 extern void ui_event_btnPage( lv_event_t * e);
 extern lv_obj_t *ui_btnPage;
-extern void ui_event_Keyboard3( lv_event_t * e);
-extern lv_obj_t *ui_Keyboard3;
+extern void ui_event_kbCal2( lv_event_t * e);
+extern lv_obj_t *ui_kbCal2;
 extern void ui_event_txtSeedPerRev( lv_event_t * e);
 extern lv_obj_t *ui_txtSeedPerRev;
-extern void ui_event_btnUnlock( lv_event_t * e);
-extern lv_obj_t *ui_btnUnlock;
-extern void ui_event_btnLock( lv_event_t * e);
-extern lv_obj_t *ui_btnLock;
+extern void ui_event_swSetSeed( lv_event_t * e);
+extern lv_obj_t *ui_swSetSeed;
 // CUSTOM VARIABLES
 extern lv_obj_t *uic_calibrationScreen2;
 extern lv_obj_t *uic_btnPage;
+extern lv_obj_t *uic_kbCal2;
 extern lv_obj_t *uic_txtSeedPerRev;
-extern lv_obj_t *uic_btnLock;
+extern lv_obj_t *uic_swSetSeed;
 
 #ifdef __cplusplus
 } /*extern "C"*/

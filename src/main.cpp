@@ -21,6 +21,7 @@ github:  https://github.com/kamikaze2112/Valmar1665_Screen
                              // Install "Dev Device Pins" with the Library Manager (last tested on v0.0.2)
 #include "ui.h"
 #include "comms.h"
+#include "prefs.h"
 #include "nonBlockingTimer.h"
 
 NonBlockingTimer timer;
@@ -33,6 +34,8 @@ unsigned long backlightStartTime = 0;
 bool backlightFading = true;
 const int backlightFadeDuration = 1000;  // 1 second
 unsigned long lastPairingTime = 0;
+float seedPerRev = 0.00f;
+
 
 
 // ***** AUIDO STUFF *****
@@ -186,9 +189,17 @@ void setupBacklight() {
 
 void setup() {
   Serial.begin(115200);
-  delay(1000);
+  int i = 0;
+
+  while (i < 10) {
+    i++; 
+    delay(200);
+      DBG_PRINTLN(i);
+  }
 
   timer.set(debugPrint, 1000);
+
+  loadComms();
 
   setupComms();
   
@@ -344,7 +355,7 @@ void loop() {
   if (newData) {
     newData = false;
 
-    DBG_PRINTLN("=== Received Data ===");
+/*     DBG_PRINTLN("=== Received Data ===");
     DBG_PRINT("Fix: "); DBG_PRINTLN(incomingData.fixStatus);
     DBG_PRINT("Sats: "); DBG_PRINTLN(incomingData.numSats);
     DBG_PRINT("Speed: "); DBG_PRINTLN(incomingData.gpsSpeed);
@@ -353,7 +364,7 @@ void loop() {
     DBG_PRINT("WorkSwitch: "); DBG_PRINTLN(incomingData.workSwitch);
     DBG_PRINT("Motor: "); DBG_PRINTLN(incomingData.motorActive);
     DBG_PRINT("RPM: "); DBG_PRINTLN(incomingData.shaftRPM);
-    DBG_PRINT("Error: "); DBG_PRINTLN(incomingData.errorCode);
+    DBG_PRINT("Error: "); DBG_PRINTLN(incomingData.errorCode); */
 
     char timeStr[9];  // "HH:MM:SS" + null terminator
     snprintf(timeStr, sizeof(timeStr), "%02d:%02d:%02d", incomingData.gpsHour, incomingData.gpsMinute, incomingData.gpsSecond);
@@ -390,4 +401,5 @@ void loop() {
           sendPairingRequest();  // broadcast pairing request
       }
   }
+
 }

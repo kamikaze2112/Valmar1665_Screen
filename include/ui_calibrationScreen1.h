@@ -17,16 +17,17 @@ extern lv_obj_t *ui_calibrationScreen1;
 extern lv_obj_t *ui_Label26;
 extern void ui_event_btnPage2( lv_event_t * e);
 extern lv_obj_t *ui_btnPage2;
-extern void ui_event_Keyboard1( lv_event_t * e);
-extern lv_obj_t *ui_Keyboard1;
-extern void ui_event_btnCalibrate2( lv_event_t * e);
-extern lv_obj_t *ui_btnCalibrate2;
+extern void ui_event_kbCal1( lv_event_t * e);
+extern lv_obj_t *ui_kbCal1;
+extern void ui_event_btnBack5( lv_event_t * e);
+extern lv_obj_t *ui_btnBack5;
 extern lv_obj_t *ui_txtCalWeight;
 extern void ui_event_swCalibrate( lv_event_t * e);
 extern lv_obj_t *ui_swCalibrate;
 // CUSTOM VARIABLES
 extern lv_obj_t *uic_calibrationScreen1;
 extern lv_obj_t *uic_btnPage2;
+extern lv_obj_t *uic_kbCal1;
 extern lv_obj_t *uic_txtCalWeight;
 extern lv_obj_t *uic_swCalibrate;
 

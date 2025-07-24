@@ -7,9 +7,10 @@
 
 lv_obj_t *uic_swCalibrate;
 lv_obj_t *uic_txtCalWeight;
+lv_obj_t *uic_kbCal1;
 lv_obj_t *uic_btnPage2;
 lv_obj_t *uic_calibrationScreen1;
-lv_obj_t *ui_calibrationScreen1 = NULL;lv_obj_t *ui_Label26 = NULL;lv_obj_t *ui_btnPage2 = NULL;lv_obj_t *ui_Keyboard1 = NULL;lv_obj_t *ui_btnCalibrate2 = NULL;lv_obj_t *ui_txtCalWeight = NULL;lv_obj_t *ui_swCalibrate = NULL;
+lv_obj_t *ui_calibrationScreen1 = NULL;lv_obj_t *ui_Label26 = NULL;lv_obj_t *ui_btnPage2 = NULL;lv_obj_t *ui_kbCal1 = NULL;lv_obj_t *ui_btnBack5 = NULL;lv_obj_t *ui_txtCalWeight = NULL;lv_obj_t *ui_swCalibrate = NULL;
 // event funtions
 void ui_event_btnPage2( lv_event_t * e) {
     lv_event_code_t event_code = lv_event_get_code(e);
@@ -19,18 +20,19 @@ if ( event_code == LV_EVENT_PRESSED) {
 }
 }
 
-void ui_event_Keyboard1( lv_event_t * e) {
+void ui_event_kbCal1( lv_event_t * e) {
     lv_event_code_t event_code = lv_event_get_code(e);
 
 if ( event_code == LV_EVENT_READY) {
       calibrationInput( e );
       _ui_state_modify( ui_swCalibrate, LV_STATE_CHECKED, _UI_MODIFY_STATE_REMOVE);
       _ui_screen_change( &ui_runScreen, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_runScreen_screen_init);
-      _ui_flag_modify( ui_Keyboard1, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+      _ui_flag_modify( ui_kbCal1, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+      _ui_state_modify( ui_txtCalWeight, LV_STATE_DISABLED, _UI_MODIFY_STATE_ADD);
 }
 }
 
-void ui_event_btnCalibrate2( lv_event_t * e) {
+void ui_event_btnBack5( lv_event_t * e) {
     lv_event_code_t event_code = lv_event_get_code(e);
 
 if ( event_code == LV_EVENT_PRESSED) {
@@ -43,7 +45,7 @@ void ui_event_swCalibrate( lv_event_t * e) {
 
 if ( event_code == LV_EVENT_VALUE_CHANGED) {
       calSwitchToggle( e );
-      _ui_flag_modify( ui_Keyboard1, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_TOGGLE);
+      _ui_flag_modify( ui_kbCal1, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_TOGGLE);
       _ui_state_modify( ui_txtCalWeight, LV_STATE_DISABLED, _UI_MODIFY_STATE_TOGGLE);
 }
 }
@@ -61,9 +63,9 @@ ui_Label26 = lv_label_create(ui_calibrationScreen1);
 lv_obj_set_width( ui_Label26, LV_SIZE_CONTENT);  /// 1
 lv_obj_set_height( ui_Label26, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_x( ui_Label26, 0 );
-lv_obj_set_y( ui_Label26, 40 );
+lv_obj_set_y( ui_Label26, 45 );
 lv_obj_set_align( ui_Label26, LV_ALIGN_CENTER );
-lv_label_set_text(ui_Label26,"CALIBRATION MODE\n\nTurn switch on to initiate.\nUse calibration button to dispense seed.\nEnter weight above in pounds.\nUse decimal format.\nex: 2lb 8oz enter 2.5lbs");
+lv_label_set_text(ui_Label26,"CALIBRATION MODE\n\nTurn switch on to initiate.\nUse calibration button to dispense seed.\nEnter weight above in pounds.\n\nENTER 1 RUN SEED WEIGHT ONLY!\n\nUse decimal format.\nex: 2lb 8oz enter 2.5lbs");
 lv_obj_set_style_text_align(ui_Label26, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 ui_btnPage2 = lv_button_create(ui_calibrationScreen1);
@@ -77,45 +79,45 @@ lv_obj_remove_flag( ui_btnPage2, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
 lv_obj_set_style_bg_color(ui_btnPage2, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_bg_opa(ui_btnPage2, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_bg_image_src( ui_btnPage2, &ui_img_1504963450, LV_PART_MAIN | LV_STATE_DEFAULT );
-ui_object_set_themeable_style_property(ui_btnPage2, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_IMAGE_RECOLOR, _ui_theme_color_valmarRed);
-ui_object_set_themeable_style_property(ui_btnPage2, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_IMAGE_RECOLOR_OPA, _ui_theme_alpha_valmarRed);
-ui_object_set_themeable_style_property(ui_btnPage2, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_COLOR, _ui_theme_color_spinboxOuline);
-ui_object_set_themeable_style_property(ui_btnPage2, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_OPA, _ui_theme_alpha_spinboxOuline);
+ui_object_set_themeable_style_property(ui_btnPage2, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_IMAGE_RECOLOR, _ui_theme_color_ValmarRed);
+ui_object_set_themeable_style_property(ui_btnPage2, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_IMAGE_RECOLOR_OPA, _ui_theme_alpha_ValmarRed);
+lv_obj_set_style_border_color(ui_btnPage2, lv_color_hex(0x293031), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_border_opa(ui_btnPage2, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_border_width(ui_btnPage2, 2, LV_PART_MAIN| LV_STATE_DEFAULT);
 
-ui_Keyboard1 = lv_keyboard_create(ui_calibrationScreen1);
-lv_keyboard_set_mode(ui_Keyboard1,LV_KEYBOARD_MODE_NUMBER);
-lv_obj_set_width( ui_Keyboard1, 442);
-lv_obj_set_height( ui_Keyboard1, 151);
-lv_obj_set_x( ui_Keyboard1, 0 );
-lv_obj_set_y( ui_Keyboard1, 33 );
-lv_obj_set_align( ui_Keyboard1, LV_ALIGN_CENTER );
-lv_obj_add_flag( ui_Keyboard1, LV_OBJ_FLAG_HIDDEN );   /// Flags
-lv_obj_set_style_bg_color(ui_Keyboard1, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
-lv_obj_set_style_bg_opa(ui_Keyboard1, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+ui_kbCal1 = lv_keyboard_create(ui_calibrationScreen1);
+lv_keyboard_set_mode(ui_kbCal1,LV_KEYBOARD_MODE_USER_1);
+lv_obj_set_width( ui_kbCal1, 442);
+lv_obj_set_height( ui_kbCal1, 151);
+lv_obj_set_x( ui_kbCal1, 0 );
+lv_obj_set_y( ui_kbCal1, 33 );
+lv_obj_set_align( ui_kbCal1, LV_ALIGN_CENTER );
+lv_obj_add_flag( ui_kbCal1, LV_OBJ_FLAG_HIDDEN );   /// Flags
+lv_obj_set_style_bg_color(ui_kbCal1, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_bg_opa(ui_kbCal1, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 
-ui_object_set_themeable_style_property(ui_Keyboard1, LV_PART_ITEMS| LV_STATE_DEFAULT, LV_STYLE_BG_COLOR, _ui_theme_color_valmarRed);
-ui_object_set_themeable_style_property(ui_Keyboard1, LV_PART_ITEMS| LV_STATE_DEFAULT, LV_STYLE_BG_OPA, _ui_theme_alpha_valmarRed);
-ui_object_set_themeable_style_property(ui_Keyboard1, LV_PART_ITEMS| LV_STATE_DEFAULT, LV_STYLE_BORDER_COLOR, _ui_theme_color_spinboxOuline);
-ui_object_set_themeable_style_property(ui_Keyboard1, LV_PART_ITEMS| LV_STATE_DEFAULT, LV_STYLE_BORDER_OPA, _ui_theme_alpha_spinboxOuline);
-lv_obj_set_style_border_width(ui_Keyboard1, 3, LV_PART_ITEMS| LV_STATE_DEFAULT);
+ui_object_set_themeable_style_property(ui_kbCal1, LV_PART_ITEMS| LV_STATE_DEFAULT, LV_STYLE_BG_COLOR, _ui_theme_color_ValmarRed);
+ui_object_set_themeable_style_property(ui_kbCal1, LV_PART_ITEMS| LV_STATE_DEFAULT, LV_STYLE_BG_OPA, _ui_theme_alpha_ValmarRed);
+lv_obj_set_style_border_color(ui_kbCal1, lv_color_hex(0x293031), LV_PART_ITEMS | LV_STATE_DEFAULT );
+lv_obj_set_style_border_opa(ui_kbCal1, 255, LV_PART_ITEMS| LV_STATE_DEFAULT);
+lv_obj_set_style_border_width(ui_kbCal1, 3, LV_PART_ITEMS| LV_STATE_DEFAULT);
 
-ui_btnCalibrate2 = lv_button_create(ui_calibrationScreen1);
-lv_obj_set_width( ui_btnCalibrate2, 50);
-lv_obj_set_height( ui_btnCalibrate2, 50);
-lv_obj_set_x( ui_btnCalibrate2, -186 );
-lv_obj_set_y( ui_btnCalibrate2, -80 );
-lv_obj_set_align( ui_btnCalibrate2, LV_ALIGN_CENTER );
-lv_obj_add_flag( ui_btnCalibrate2, LV_OBJ_FLAG_SCROLL_ON_FOCUS );   /// Flags
-lv_obj_remove_flag( ui_btnCalibrate2, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
-lv_obj_set_style_bg_color(ui_btnCalibrate2, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
-lv_obj_set_style_bg_opa(ui_btnCalibrate2, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
-lv_obj_set_style_bg_image_src( ui_btnCalibrate2, &ui_img_valmar_back_png, LV_PART_MAIN | LV_STATE_DEFAULT );
-ui_object_set_themeable_style_property(ui_btnCalibrate2, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_IMAGE_RECOLOR, _ui_theme_color_valmarRed);
-ui_object_set_themeable_style_property(ui_btnCalibrate2, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_IMAGE_RECOLOR_OPA, _ui_theme_alpha_valmarRed);
-ui_object_set_themeable_style_property(ui_btnCalibrate2, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_COLOR, _ui_theme_color_spinboxOuline);
-ui_object_set_themeable_style_property(ui_btnCalibrate2, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_OPA, _ui_theme_alpha_spinboxOuline);
-lv_obj_set_style_border_width(ui_btnCalibrate2, 2, LV_PART_MAIN| LV_STATE_DEFAULT);
+ui_btnBack5 = lv_button_create(ui_calibrationScreen1);
+lv_obj_set_width( ui_btnBack5, 50);
+lv_obj_set_height( ui_btnBack5, 50);
+lv_obj_set_x( ui_btnBack5, -186 );
+lv_obj_set_y( ui_btnBack5, -80 );
+lv_obj_set_align( ui_btnBack5, LV_ALIGN_CENTER );
+lv_obj_add_flag( ui_btnBack5, LV_OBJ_FLAG_SCROLL_ON_FOCUS );   /// Flags
+lv_obj_remove_flag( ui_btnBack5, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
+lv_obj_set_style_bg_color(ui_btnBack5, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_bg_opa(ui_btnBack5, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_bg_image_src( ui_btnBack5, &ui_img_valmar_back_png, LV_PART_MAIN | LV_STATE_DEFAULT );
+ui_object_set_themeable_style_property(ui_btnBack5, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_IMAGE_RECOLOR, _ui_theme_color_ValmarRed);
+ui_object_set_themeable_style_property(ui_btnBack5, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_IMAGE_RECOLOR_OPA, _ui_theme_alpha_ValmarRed);
+lv_obj_set_style_border_color(ui_btnBack5, lv_color_hex(0x293031), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_border_opa(ui_btnBack5, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_border_width(ui_btnBack5, 2, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 ui_txtCalWeight = lv_textarea_create(ui_calibrationScreen1);
 lv_obj_set_width( ui_txtCalWeight, 216);
@@ -138,16 +140,17 @@ lv_obj_set_x( ui_swCalibrate, 175 );
 lv_obj_set_y( ui_swCalibrate, -85 );
 lv_obj_set_align( ui_swCalibrate, LV_ALIGN_CENTER );
 
-ui_object_set_themeable_style_property(ui_swCalibrate, LV_PART_INDICATOR| LV_STATE_CHECKED, LV_STYLE_BG_COLOR, _ui_theme_color_valmarRed);
-ui_object_set_themeable_style_property(ui_swCalibrate, LV_PART_INDICATOR| LV_STATE_CHECKED, LV_STYLE_BG_OPA, _ui_theme_alpha_valmarRed);
+ui_object_set_themeable_style_property(ui_swCalibrate, LV_PART_INDICATOR| LV_STATE_CHECKED, LV_STYLE_BG_COLOR, _ui_theme_color_ValmarRed);
+ui_object_set_themeable_style_property(ui_swCalibrate, LV_PART_INDICATOR| LV_STATE_CHECKED, LV_STYLE_BG_OPA, _ui_theme_alpha_ValmarRed);
 
 lv_obj_add_event_cb(ui_btnPage2, ui_event_btnPage2, LV_EVENT_ALL, NULL);
-lv_keyboard_set_textarea(ui_Keyboard1,ui_txtCalWeight);
-lv_obj_add_event_cb(ui_Keyboard1, ui_event_Keyboard1, LV_EVENT_ALL, NULL);
-lv_obj_add_event_cb(ui_btnCalibrate2, ui_event_btnCalibrate2, LV_EVENT_ALL, NULL);
+lv_keyboard_set_textarea(ui_kbCal1,ui_txtCalWeight);
+lv_obj_add_event_cb(ui_kbCal1, ui_event_kbCal1, LV_EVENT_ALL, NULL);
+lv_obj_add_event_cb(ui_btnBack5, ui_event_btnBack5, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_swCalibrate, ui_event_swCalibrate, LV_EVENT_ALL, NULL);
 uic_calibrationScreen1 = ui_calibrationScreen1;
 uic_btnPage2 = ui_btnPage2;
+uic_kbCal1 = ui_kbCal1;
 uic_txtCalWeight = ui_txtCalWeight;
 uic_swCalibrate = ui_swCalibrate;
 
@@ -163,8 +166,9 @@ ui_calibrationScreen1= NULL;
 ui_Label26= NULL;
 uic_btnPage2= NULL;
 ui_btnPage2= NULL;
-ui_Keyboard1= NULL;
-ui_btnCalibrate2= NULL;
+uic_kbCal1= NULL;
+ui_kbCal1= NULL;
+ui_btnBack5= NULL;
 uic_txtCalWeight= NULL;
 ui_txtCalWeight= NULL;
 uic_swCalibrate= NULL;

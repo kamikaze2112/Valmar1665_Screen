@@ -21,5 +21,6 @@ int motorTestPWM = 10;
 bool speedTestSwitch = false;
 float speedTestSpeed = 0.0f;
 float actualRate = 0.0f;
-
+float workingWidth = 60.0f;
+int numberOfRuns = 8;
 volatile bool newData = false;
