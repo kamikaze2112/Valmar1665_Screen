@@ -30,6 +30,10 @@ if ( event_code == LV_EVENT_READY) {
       _ui_flag_modify( ui_kbCal1, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
       _ui_state_modify( ui_txtCalWeight, LV_STATE_DISABLED, _UI_MODIFY_STATE_ADD);
 }
+if ( event_code == LV_EVENT_CANCEL) {
+      _ui_state_modify( ui_swCalibrate, LV_STATE_CHECKED, _UI_MODIFY_STATE_REMOVE);
+      _ui_flag_modify( ui_kbCal1, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+}
 }
 
 void ui_event_btnBack5( lv_event_t * e) {

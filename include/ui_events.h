@@ -11,12 +11,15 @@ extern "C" {
 #endif
 
 void rateChange(lv_event_t * e);
+void settingsSnapshot(lv_event_t * e);
 void warningAcknowledge(lv_event_t * e);
 void stopAcknowlege(lv_event_t * e);
 void calibrationInput(lv_event_t * e);
 void calSwitchToggle(lv_event_t * e);
 void seedPerRevManualSet(lv_event_t * e);
+void resetTextArea(lv_event_t * e);
 void seedSwitchToggle(lv_event_t * e);
+void compareSettingsToSnapshot(lv_event_t * e);
 void saveSettings(lv_event_t * e);
 void backlightControl(lv_event_t * e);
 void motorTestUpdatePWM(lv_event_t * e);

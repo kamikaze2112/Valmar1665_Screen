@@ -46,6 +46,8 @@ extern lv_obj_t *ui_Label13;
 extern void ui_event_btnResetNo( lv_event_t * e);
 extern lv_obj_t *ui_btnResetNo;
 extern lv_obj_t *ui_Label2;
+extern void ui_event_btnSave1( lv_event_t * e);
+extern lv_obj_t *ui_btnSave1;
 // CUSTOM VARIABLES
 extern lv_obj_t *uic_settingsScreen2;
 extern lv_obj_t *uic_sldBrightness;

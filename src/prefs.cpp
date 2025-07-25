@@ -71,6 +71,12 @@ void loadPrefs() {
 
 void savePrefs() {
 
+    prefs.begin("valmar_screen", false);
+
+    prefs.putFloat("targetRate", seedingRate);
+    prefs.putFloat("workingWidth", workingWidth);
+    prefs.putInt("runs", numberOfRuns);
+    prefs.putInt("brightness", )
 }
 
 void clearPrefs() {

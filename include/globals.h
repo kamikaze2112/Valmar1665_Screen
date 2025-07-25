@@ -34,8 +34,11 @@ extern float actualRate;
 extern bool pairingMode;
 extern bool controllerPaired;
 extern float seedPerRev;
+extern float newSeedPerRev;
+extern bool seedPerRevUpdated;
 extern int numberOfRuns;
 extern float workingWidth;
+extern bool manualSeedUpdate;
 
 #define DEBUG_MODE 1 // toggle 1 for on, and 0 for off
 

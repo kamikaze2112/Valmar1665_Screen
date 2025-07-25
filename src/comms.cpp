@@ -83,6 +83,7 @@ void addPeer(const uint8_t mac[6]) {
           memcpy(&incomingData, incoming, min(len, (int)sizeof(IncomingData)));
           newData = true;  // Flag for main loop
 
+
           // Use live values from globals
           outgoingData.calibrationMode = calibrationMode;
           outgoingData.seedingRate = seedingRate;
@@ -91,8 +92,13 @@ void addPeer(const uint8_t mac[6]) {
           outgoingData.motorTestPWM = motorTestPWM;
           outgoingData.speedTestSwitch = speedTestSwitch;
           outgoingData.speedTestSpeed = speedTestSpeed;
+          outgoingData.newSeedPerRev = newSeedPerRev;
           
           esp_now_send(mac, (uint8_t*)&outgoingData, sizeof(outgoingData));
+
+          if (outgoingData.calcSeedPerRev = true) {
+            outgoingData.calcSeedPerRev = false;
+          }
       }
   }
 }

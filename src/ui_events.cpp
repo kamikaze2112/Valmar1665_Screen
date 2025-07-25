@@ -18,9 +18,9 @@ void calibrationInput(lv_event_t * e)
 	if (text && strlen(text) > 0) {
 		calibrationWeight = atof(text);
 		Serial.printf("Calibration Weight %.3f\n", calibrationWeight);
+		outgoingData.calcSeedPerRev = true;
 		calibrationMode = false;
 		lv_textarea_set_text(uic_txtCalWeight, "");
-		lv_obj_add_state(ui_kbCal1, LV_STATE_DISABLED);
 	}
 }
 
@@ -122,15 +122,20 @@ void seedSwitchToggle(lv_event_t * e) {
 
 void seedPerRevManualSet(lv_event_t * e) {
 
-	const char* text = lv_textarea_get_text(ui_txtSeedPerRev);
-	char* endPtr;
-	seedPerRev = strtof(text, &endPtr);
+    const char* text = lv_textarea_get_text(ui_txtSeedPerRev);
+    float newSeedPerRev = atof(text);
 
-	if (endPtr == text) {
-    	// Conversion failed — not a valid float
-    	Serial.println("Invalid float entered!");
-    	//seedPerRev = 0.0;  // or some fallback value
-	}
+    // Set values in outgoingData
+    outgoingData.newSeedPerRev = newSeedPerRev;
+    outgoingData.manualSeedUpdate = true;
+
+    // Send via ESP-NOW
+    esp_now_send(controllerAddress, (uint8_t *)&outgoingData, sizeof(outgoingData));
+
+	outgoingData.manualSeedUpdate = false;
+
+	lv_textarea_set_text(ui_txtSeedPerRev, "");
+
 }
 
 void pairController(lv_event_t * e)
@@ -153,3 +158,17 @@ void saveSettings(lv_event_t * e)
 	savePrefs();
 }
 
+void resetTextArea(lv_event_t * e)
+{
+	lv_textarea_set_text(ui_txtSeedPerRev, "");
+}
+
+void settingsSnapshot(lv_event_t * e)
+{
+	// Your code here
+}
+
+void compareSettingsToSnapshot(lv_event_t * e)
+{
+	// Your code here
+}

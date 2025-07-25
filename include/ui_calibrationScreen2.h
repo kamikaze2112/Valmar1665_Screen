@@ -14,6 +14,7 @@ extern "C" {
 extern void ui_calibrationScreen2_screen_init(void);
 extern void ui_calibrationScreen2_screen_destroy(void);
 extern lv_obj_t *ui_calibrationScreen2;
+extern lv_obj_t *ui_lblSeedPerRev;
 extern lv_obj_t *ui_Label9;
 extern void ui_event_btnBack4( lv_event_t * e);
 extern lv_obj_t *ui_btnBack4;
@@ -27,6 +28,7 @@ extern void ui_event_swSetSeed( lv_event_t * e);
 extern lv_obj_t *ui_swSetSeed;
 // CUSTOM VARIABLES
 extern lv_obj_t *uic_calibrationScreen2;
+extern lv_obj_t *uic_lblSeedPerRev;
 extern lv_obj_t *uic_btnPage;
 extern lv_obj_t *uic_kbCal2;
 extern lv_obj_t *uic_txtSeedPerRev;

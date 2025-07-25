@@ -24,3 +24,5 @@ float actualRate = 0.0f;
 float workingWidth = 60.0f;
 int numberOfRuns = 8;
 volatile bool newData = false;
+float newSeedPerRev = 0.0f;
+bool manualSeedUpdate = false;

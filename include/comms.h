@@ -1,5 +1,7 @@
 #pragma once
 #include <Arduino.h>
+#include <esp_now.h>
+#include <esp_wifi.h> 
 
 // === Structures ===
 
@@ -15,12 +17,15 @@ struct OutgoingData {
   bool calibrationMode;
   float seedingRate;
   float calibrationWeight;
+  bool calcSeedPerRev;
   bool motorTestSwitch;
   int motorTestPWM;
   bool speedTestSwitch;
   float speedTestSpeed;
   float workingWidth;
   int numberOfRuns;
+  float newSeedPerRev;
+  bool manualSeedUpdate;
 } __attribute__((packed));
 
 struct IncomingData {

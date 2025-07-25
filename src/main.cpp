@@ -402,4 +402,9 @@ void loop() {
       }
   }
 
+  // put the incoming seedPerRev value in to the label on Cal2
+  char buffer[16];
+  snprintf(buffer, sizeof(buffer), "%.2f", incomingData.seedPerRev);  // format with 2 decimal places
+  lv_label_set_text(ui_lblSeedPerRev, buffer);
+
 }

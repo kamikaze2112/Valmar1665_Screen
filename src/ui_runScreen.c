@@ -74,6 +74,7 @@ void ui_event_btnSettings( lv_event_t * e) {
 
 if ( event_code == LV_EVENT_PRESSED) {
       _ui_screen_change( &ui_settingsScreen2, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_settingsScreen2_screen_init);
+      settingsSnapshot( e );
 }
 }
 

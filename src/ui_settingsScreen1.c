@@ -16,6 +16,7 @@ void ui_event_btnBack( lv_event_t * e) {
 
 if ( event_code == LV_EVENT_PRESSED) {
       _ui_screen_change( &ui_runScreen, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_runScreen_screen_init);
+      compareSettingsToSnapshot( e );
 }
 }
 
@@ -25,6 +26,8 @@ void ui_event_btnSave( lv_event_t * e) {
 if ( event_code == LV_EVENT_PRESSED) {
       saveSettings( e );
       _ui_state_modify( ui_btnSave, LV_STATE_DISABLED, _UI_MODIFY_STATE_ADD);
+      _ui_state_modify( ui_btnSave1, LV_STATE_DISABLED, _UI_MODIFY_STATE_ADD);
+      settingsSnapshot( e );
 }
 }
 
@@ -33,6 +36,7 @@ void ui_event_spnWidth( lv_event_t * e) {
 
 if ( event_code == LV_EVENT_VALUE_CHANGED) {
       _ui_state_modify( ui_btnSave, LV_STATE_DISABLED, _UI_MODIFY_STATE_REMOVE);
+      _ui_state_modify( ui_btnSave1, LV_STATE_DISABLED, _UI_MODIFY_STATE_REMOVE);
 }
 }
 
@@ -41,6 +45,7 @@ void ui_event_spnRuns( lv_event_t * e) {
 
 if ( event_code == LV_EVENT_VALUE_CHANGED) {
       _ui_state_modify( ui_btnSave, LV_STATE_DISABLED, _UI_MODIFY_STATE_REMOVE);
+      _ui_state_modify( ui_btnSave1, LV_STATE_DISABLED, _UI_MODIFY_STATE_REMOVE);
 }
 }
 
@@ -125,8 +130,8 @@ lv_obj_set_style_border_width(ui_btnBack, 2, LV_PART_MAIN| LV_STATE_DEFAULT);
 ui_btnSave = lv_button_create(ui_settingsScreen1);
 lv_obj_set_width( ui_btnSave, 50);
 lv_obj_set_height( ui_btnSave, 50);
-lv_obj_set_x( ui_btnSave, -186 );
-lv_obj_set_y( ui_btnSave, 30 );
+lv_obj_set_x( ui_btnSave, 186 );
+lv_obj_set_y( ui_btnSave, -80 );
 lv_obj_set_align( ui_btnSave, LV_ALIGN_CENTER );
 lv_obj_add_state( ui_btnSave, LV_STATE_DISABLED );     /// States
 lv_obj_add_flag( ui_btnSave, LV_OBJ_FLAG_SCROLL_ON_FOCUS );   /// Flags
