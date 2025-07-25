@@ -7,6 +7,7 @@
 #include "ui.h"
 #include "comms.h"
 #include "prefs.h"
+#include "WAVPlayer.h"
 #include <cstdlib>
 
 void calibrationInput(lv_event_t * e)
@@ -110,9 +111,18 @@ void speedTest(lv_event_t * e)
 
 void warningAcknowledge(lv_event_t * e) {
 
+   	warningAck = false;
+   	warningCooldownStart = millis();
+	DBG_PRINTLN("Warning Ack'd");
+
 }
 void stopAcknowlege(lv_event_t * e) {
-	
+	if (incomingData.workSwitch) {
+		player.play("/stop.wav");
+	} else {
+		outgoingData.errorAck = true;
+		lv_obj_add_flag(ui_panelStop, LV_OBJ_FLAG_HIDDEN);
+	}
 }
 
 void seedSwitchToggle(lv_event_t * e) {

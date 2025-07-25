@@ -1,4 +1,13 @@
 #include "globals.h"
+#include "WAVPlayer.h"
+#include "PINS_JC4827W543.h"
+#include <Arduino_GFX_Library.h>
+
+// Actual definitions
+Arduino_DataBus *bus = new Arduino_ESP32QSPI(
+    45 /* cs */, 47 /* sck */, 21 /* d0 */, 48 /* d1 */, 40 /* d2 */, 39 /* d3 */);
+
+Arduino_GFX *gfx = new Arduino_NV3041A(bus, GFX_NOT_DEFINED /* RST */, 0 /* rotation */, true /* IPS */);
 
 // APP VERSION
 
@@ -6,6 +15,9 @@ const char* APP_VERSION = "1.6.0";
 
 // Define the actual variables here
 TAMC_GT911 touchController(TOUCH_SDA, TOUCH_SCL, TOUCH_INT, TOUCH_RST, TOUCH_WIDTH, TOUCH_HEIGHT);
+
+//Define the audio player
+WAVPlayer player(I2S_LRCK, I2S_BCLK, I2S_DOUT);
 
 uint32_t screenWidth = 0;
 uint32_t screenHeight = 0;
@@ -28,3 +40,9 @@ float newSeedPerRev = 0.0f;
 bool manualSeedUpdate = false;
 bool errorRaised = false;
 int errorCode = 0;
+bool errorAck = false;
+bool warningTone = false;
+bool warningAck = false;
+unsigned long warningCooldownStart = 0;
+const unsigned long warningCooldownDuration = 15000;  // 15 seconds
+

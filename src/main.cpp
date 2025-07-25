@@ -12,12 +12,15 @@ github:  https://github.com/kamikaze2112/Valmar1665_Screen
 
 
 #include <Arduino.h>
+#include "FS.h"
+#include "LittleFS.h"
+#include "WAVPlayer.h"
 #include "globals.h"
 #include <WiFi.h>
 #include <esp_now.h>
 #include "ui.h"
 #include <lvgl.h>            // Install "lvgl" with the Library Manager (last tested on v9.2.2)
-#include "PINS_JC4827W543.h" // Install "GFX Library for Arduino" with the Library Manager (last tested on v1.5.6)
+//#include "PINS_JC4827W543.h" // Install "GFX Library for Arduino" with the Library Manager (last tested on v1.5.6)
                              // Install "Dev Device Pins" with the Library Manager (last tested on v0.0.2)
 #include "ui.h"
 #include "comms.h"
@@ -36,95 +39,65 @@ const int backlightFadeDuration = 1000;  // 1 second
 unsigned long lastPairingTime = 0;
 float seedPerRev = 0.00f;
 
-
-
 // ***** AUIDO STUFF *****
 
-#include "driver/i2s.h"
-#include <math.h>
+void setupAudio() {
 
-#define SAMPLE_RATE 44100
-#define I2S_NUM I2S_NUM_0
-#define I2S_BCLK 42
-#define I2S_LRCLK 2
-#define I2S_DOUT 41
-
-#define BUFFER_SIZE 1024  // number of samples per buffer
-
-volatile bool playing = false;
-float toneFreq = 0;
-float phase = 0;
-float phaseIncrement = 0;
-int16_t buffer1[BUFFER_SIZE];
-int16_t buffer2[BUFFER_SIZE];
-volatile bool buf1Ready = false;
-volatile bool buf2Ready = false;
-unsigned long toneStartMillis = 0;
-int toneStage = 0;  // 0 = no tone, 1 = first tone, 2 = second tone, 3 = done
-
-TaskHandle_t i2sTaskHandle = NULL;
-
-void setupI2S() {
-  i2s_config_t i2s_config = {
-    .mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_TX),
-    .sample_rate = SAMPLE_RATE,
-    .bits_per_sample = I2S_BITS_PER_SAMPLE_16BIT,
-    .channel_format = I2S_CHANNEL_FMT_ONLY_LEFT,
-    .communication_format = (i2s_comm_format_t)(I2S_COMM_FORMAT_STAND_MSB),
-    .intr_alloc_flags = ESP_INTR_FLAG_LEVEL1,
-    .dma_buf_count = 8,
-    .dma_buf_len = 128,
-    .use_apll = false
-  };
-
-  i2s_pin_config_t pin_config = {
-    .bck_io_num = I2S_BCLK,
-    .ws_io_num = I2S_LRCLK,
-    .data_out_num = I2S_DOUT,
-    .data_in_num = I2S_PIN_NO_CHANGE
-  };
-
-  i2s_driver_install(I2S_NUM, &i2s_config, 0, NULL);
-  i2s_set_pin(I2S_NUM, &pin_config);
-}
-
-void generateToneBuffer(int16_t* buf, int len) {
-  for (int i = 0; i < len; i++) {
-    buf[i] = (int16_t)(sin(phase) * 12000);
-    phase += phaseIncrement;
-    if (phase > 2 * PI) phase -= 2 * PI;
-  }
-}
-
-void i2sTask(void* parameter) {
-  size_t bytes_written;
-  while (1) {
-    if (playing) {
-      // Fill buffer1
-      generateToneBuffer(buffer1, BUFFER_SIZE);
-      i2s_write(I2S_NUM, buffer1, BUFFER_SIZE * sizeof(int16_t), &bytes_written, portMAX_DELAY);
-
-      // Fill buffer2
-      generateToneBuffer(buffer2, BUFFER_SIZE);
-      i2s_write(I2S_NUM, buffer2, BUFFER_SIZE * sizeof(int16_t), &bytes_written, portMAX_DELAY);
-    } else {
-      // If not playing, send zeros (silence)
-      memset(buffer1, 0, BUFFER_SIZE * sizeof(int16_t));
-      i2s_write(I2S_NUM, buffer1, BUFFER_SIZE * sizeof(int16_t), &bytes_written, portMAX_DELAY);
-      vTaskDelay(10 / portTICK_PERIOD_MS);
+      // Initialize audio player
+    if (!player.begin()) {
+        Serial.println("Failed to initialize audio player");
+        return;
     }
-  }
+    
+    Serial.println("WAV Player Ready!");
+    Serial.println("Commands:");
+    Serial.println("  play <filename> - Play a WAV file");
+    Serial.println("  stop - Stop playback");
+    Serial.println("  status - Check playback status");
+    Serial.println("  list - List available files");
+
 }
 
-void startTone(float freq) {
-  toneFreq = freq;
-  phaseIncrement = 2 * PI * freq / SAMPLE_RATE;
-  phase = 0;
-  playing = true;
-}
+void handleAudio() {
+      if (Serial.available()) {
+        String command = Serial.readStringUntil('\n');
+        command.trim();
+        
+        if (command.startsWith("play ")) {
+            String filename = command.substring(5);
+            if (!filename.startsWith("/")) {
+                filename = "/" + filename;
+            }
+            
+            if (player.play(filename.c_str())) {
+                Serial.printf("Playing: %s\n", filename.c_str());
+            } else {
+                Serial.println("Failed to start playback");
+            }
+        }
+        else if (command == "stop") {
+            player.stop();
+            Serial.println("Playback stopped");
+        }
+        else if (command == "status") {
+            Serial.printf("Status: %s\n", player.playing() ? "Playing" : "Stopped");
+        }
+        else if (command == "list") {
+            Serial.println("Available files:");
+            File root = LittleFS.open("/");
+            File file = root.openNextFile();
+            while (file) {
+                if (String(file.name()).endsWith(".wav")) {
+                    Serial.printf("  %s (%u bytes)\n", file.name(), file.size());
+                }
+                file = root.openNextFile();
+            }
+        }
+        else {
+            Serial.println("Unknown command");
+        }
+    }
 
-void stopTone() {
-  playing = false;
 }
 
 // ***** AUDIO STUFF *****
@@ -193,10 +166,20 @@ void setup() {
 
   while (i < 10) {
     i++; 
-    delay(200);
+    delay(500);
       DBG_PRINTLN(i);
   }
 
+  //init littleFS
+
+  if (!LittleFS.begin(true)) {
+      Serial.println("LittleFS Mount Failed");
+      return;
+  }
+  
+  Serial.printf("Total storage: %u KB\n", LittleFS.totalBytes() / 1024);
+  Serial.printf("Available: %u KB\n", (LittleFS.totalBytes() - LittleFS.usedBytes()) / 1024);
+  
   timer.set(debugPrint, 1000);
 
   loadComms();
@@ -277,9 +260,9 @@ setupBacklight();
 
   lv_label_set_text(ui_lblVersion1, APP_VERSION);
 
-  setupI2S();
+  setupAudio();
 
-  xTaskCreatePinnedToCore(i2sTask, "I2S Task", 4096, NULL, 1, &i2sTaskHandle, 1);
+  player.play("/startup.wav");
 
   DBG_PRINTLN("Setup done");
 }
@@ -288,16 +271,7 @@ void loop() {
 
   timer.update();
 
-  unsigned long elapsed = millis() - toneStartMillis;
-
-  if (toneStage == 1 && elapsed >= 100) {  // after 100 ms first tone
-    startTone(2640.0f);                    // second tone (a 5th above)
-    toneStartMillis = millis();
-    toneStage = 2;
-  } else if (toneStage == 2 && elapsed >= 50) {  // after 50 ms second tone
-    stopTone();
-    toneStage = 3;                               // done playing both tones
-  }
+  handleAudio();
 
   if (backlightFading) {
 
@@ -306,9 +280,7 @@ void loop() {
   if (elapsed >= backlightFadeDuration) {
     ledcWrite(BACKLIGHT_CH, 255);  // Final brightness
     backlightFading = false;
-    //toneStage = 1;
-    //startTone(1760.0f);     // first tone
-    //toneStartMillis = millis();
+
   } else {
     int brightness = map(elapsed, 0, backlightFadeDuration, 0, 255);
     ledcWrite(BACKLIGHT_CH, brightness);
@@ -355,21 +327,41 @@ void loop() {
   if (newData) {
     newData = false;
 
-    if (incomingData.errorRaised) {
-      errorRaised = true;
-      errorCode = incomingData.errorCode;
+if (incomingData.errorRaised) {
+  errorRaised = true;
 
-      if (errorCode == 1) {
-        lv_obj_remove_flag(ui_panelWarning, LV_OBJ_FLAG_HIDDEN);
-        lv_label_set_text(ui_lblWarningMessage, "Minimum PWM\nthreshold.\nRate can not\nbe maintained.");
-      } else if (errorCode == 2) {
-        lv_obj_remove_flag(ui_panelWarning, LV_OBJ_FLAG_HIDDEN);
-        lv_label_set_text(ui_lblWarningMessage, "Maximum PWM\nthreshold.\nRate can not\nbe maintained.");
-      } else if (errorCode == 3) {
-        lv_obj_remove_flag(ui_panelStop, LV_OBJ_FLAG_HIDDEN);
-      }
+  if (incomingData.errorCode != errorCode) {
+    warningAck = false;
+  }
+
+  errorCode = incomingData.errorCode;
+
+  bool cooldownExpired = (millis() - warningCooldownStart >= warningCooldownDuration);
+
+  if (!warningAck && cooldownExpired) {
+    if (errorCode == 1) {
+      lv_obj_remove_flag(ui_panelWarning, LV_OBJ_FLAG_HIDDEN);
+      lv_label_set_text(ui_lblWarningMessage, "Minimum PWM\nthreshold.\nRate can not\nbe maintained.");
+      player.play("/warning.wav");
+    } else if (errorCode == 2) {
+      lv_obj_remove_flag(ui_panelWarning, LV_OBJ_FLAG_HIDDEN);
+      lv_label_set_text(ui_lblWarningMessage, "Maximum PWM\nthreshold.\nRate can not\nbe maintained.");
+      player.play("/warning.wav");
+    } else if (errorCode == 3) {
+      lv_obj_remove_flag(ui_panelStop, LV_OBJ_FLAG_HIDDEN);
+      player.play("/stop.wav");
     }
 
+    warningAck = true;
+  }
+} else {
+  errorRaised = false;
+  warningAck = false;
+  errorAck = false;
+  outgoingData.errorAck = false;
+  
+
+}
 /*     DBG_PRINTLN("=== Received Data ===");
     DBG_PRINT("Fix: "); DBG_PRINTLN(incomingData.fixStatus);
     DBG_PRINT("Sats: "); DBG_PRINTLN(incomingData.numSats);

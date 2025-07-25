@@ -16,9 +16,13 @@
 #define GFX_SUPPORTED
 #include <Arduino_GFX_Library.h>
 #define GFX_BL 1
-Arduino_DataBus *bus = new Arduino_ESP32QSPI(
-    45 /* cs */, 47 /* sck */, 21 /* d0 */, 48 /* d1 */, 40 /* d2 */, 39 /* d3 */);
-Arduino_NV3041A *gfx = new Arduino_NV3041A(bus, GFX_NOT_DEFINED /* RST */, 0 /* rotation */, true /* IPS */);
+//Arduino_DataBus *bus = new Arduino_ESP32QSPI(
+//    45 /* cs */, 47 /* sck */, 21 /* d0 */, 48 /* d1 */, 40 /* d2 */, 39 /* d3 */);
+//Arduino_NV3041A *gfx = new Arduino_NV3041A(bus, GFX_NOT_DEFINED /* RST */, 0 /* rotation */, true /* IPS */);
+
+extern Arduino_DataBus *bus;
+extern Arduino_GFX *gfx;  // use base class for flexibility
+
 #define GFX_SPEED 32000000UL
 #define BACKLIGHT_CH 0
 #define BACKLIGHT_FREQ 5000

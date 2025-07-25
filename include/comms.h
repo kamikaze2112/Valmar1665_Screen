@@ -26,7 +26,8 @@ struct OutgoingData {
   int numberOfRuns;
   float newSeedPerRev;
   bool manualSeedUpdate;
-  bool outgoingAck;
+  //bool outgoingAck;
+  bool errorAck;
 } __attribute__((packed));
 
 struct IncomingData {

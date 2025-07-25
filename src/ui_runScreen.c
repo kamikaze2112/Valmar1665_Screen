@@ -99,7 +99,6 @@ void ui_event_btnOK1( lv_event_t * e) {
     lv_event_code_t event_code = lv_event_get_code(e);
 
 if ( event_code == LV_EVENT_PRESSED) {
-      _ui_flag_modify( ui_panelStop, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
       stopAcknowlege( e );
 }
 }
