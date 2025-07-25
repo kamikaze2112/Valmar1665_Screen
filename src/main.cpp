@@ -355,6 +355,21 @@ void loop() {
   if (newData) {
     newData = false;
 
+    if (incomingData.errorRaised) {
+      errorRaised = true;
+      errorCode = incomingData.errorCode;
+
+      if (errorCode == 1) {
+        lv_obj_remove_flag(ui_panelWarning, LV_OBJ_FLAG_HIDDEN);
+        lv_label_set_text(ui_lblWarningMessage, "Minimum PWM\nthreshold.\nRate can not\nbe maintained.");
+      } else if (errorCode == 2) {
+        lv_obj_remove_flag(ui_panelWarning, LV_OBJ_FLAG_HIDDEN);
+        lv_label_set_text(ui_lblWarningMessage, "Maximum PWM\nthreshold.\nRate can not\nbe maintained.");
+      } else if (errorCode == 3) {
+        lv_obj_remove_flag(ui_panelStop, LV_OBJ_FLAG_HIDDEN);
+      }
+    }
+
 /*     DBG_PRINTLN("=== Received Data ===");
     DBG_PRINT("Fix: "); DBG_PRINTLN(incomingData.fixStatus);
     DBG_PRINT("Sats: "); DBG_PRINTLN(incomingData.numSats);
@@ -406,5 +421,16 @@ void loop() {
   char buffer[16];
   snprintf(buffer, sizeof(buffer), "%.2f", incomingData.seedPerRev);  // format with 2 decimal places
   lv_label_set_text(ui_lblSeedPerRev, buffer);
+
+  // change the rate label to yellow if the rate is out of bounds +/- 25%
+
+  if (incomingData.rateOutOfBounds) {
+    lv_obj_set_style_text_color(ui_lblRate, lv_color_hex(0xffb81d), LV_PART_MAIN);
+  } else {
+    lv_obj_set_style_text_color(ui_lblRate, lv_color_hex(0xffffff), LV_PART_MAIN);
+
+  }
+
+
 
 }

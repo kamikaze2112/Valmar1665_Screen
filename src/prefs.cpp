@@ -3,6 +3,7 @@
 #include "prefs.h"
 #include "globals.h"
 #include "comms.h"
+#include "ui.h"
 
 Preferences prefs;
 
@@ -76,7 +77,7 @@ void savePrefs() {
     prefs.putFloat("targetRate", seedingRate);
     prefs.putFloat("workingWidth", workingWidth);
     prefs.putInt("runs", numberOfRuns);
-    prefs.putInt("brightness", )
+    prefs.putInt("brightness", lv_slider_get_value(ui_sldBrightness));
 }
 
 void clearPrefs() {

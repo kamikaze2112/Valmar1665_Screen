@@ -9,8 +9,6 @@
 #include "prefs.h"
 #include <cstdlib>
 
-//extern IncomingData outgoingData;
-
 void calibrationInput(lv_event_t * e)
 {
 	const char *text = lv_textarea_get_text(ui_txtCalWeight);
@@ -97,11 +95,13 @@ void speedTest(lv_event_t * e)
 	if (lv_obj_has_state(ui_swSpeedTest, LV_STATE_CHECKED)) {
 		speedTestSwitch = true;
 		speedTestSpeed = lv_arc_get_value(ui_arcTestSpeed) / 10.0f;
-		lv_label_set_text(ui_lblMPHBox, "!! MPH !!");	
+		lv_label_set_text(ui_lblMPHBox, "!! MPH !!");
+		lv_obj_set_style_text_color(ui_lblSpeed, lv_color_hex(0xffb81d), LV_PART_MAIN);
+	
 	} else {
 		speedTestSwitch = false;
 		lv_label_set_text(ui_lblMPHBox, "MPH");
-
+		lv_obj_set_style_text_color(ui_lblSpeed, lv_color_hex(0xffffff), LV_PART_MAIN);
 	}
 
 	DBG_PRINT("speedTestSwitch: ");

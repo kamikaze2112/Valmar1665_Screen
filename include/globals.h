@@ -39,6 +39,8 @@ extern bool seedPerRevUpdated;
 extern int numberOfRuns;
 extern float workingWidth;
 extern bool manualSeedUpdate;
+extern bool errorRaised;
+extern int errorCode;
 
 #define DEBUG_MODE 1 // toggle 1 for on, and 0 for off
 

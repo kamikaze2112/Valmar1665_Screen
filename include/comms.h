@@ -26,6 +26,7 @@ struct OutgoingData {
   int numberOfRuns;
   float newSeedPerRev;
   bool manualSeedUpdate;
+  bool outgoingAck;
 } __attribute__((packed));
 
 struct IncomingData {
@@ -42,15 +43,16 @@ struct IncomingData {
   float seedPerRev;
   double shaftRPM;
   int errorCode;
+  bool errorRaised;
   float actualRate;
   char controllerVersion[12];
+  bool rateOutOfBounds;
 } __attribute__((packed));
 
 // === Extern declarations ===
 extern IncomingData incomingData;
 extern OutgoingData outgoingData;
 extern volatile bool newData;
-extern bool calibrationMode;
 
 // === Functions ===
 void setupComms();

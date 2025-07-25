@@ -26,3 +26,5 @@ int numberOfRuns = 8;
 volatile bool newData = false;
 float newSeedPerRev = 0.0f;
 bool manualSeedUpdate = false;
+bool errorRaised = false;
+int errorCode = 0;

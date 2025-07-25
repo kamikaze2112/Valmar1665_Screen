@@ -53,7 +53,7 @@ extern lv_obj_t *ui_Label1;
 extern lv_obj_t *ui_workLED;
 extern lv_obj_t *ui_panelWarning;
 extern lv_obj_t *ui_Image1;
-extern lv_obj_t *ui_Label6;
+extern lv_obj_t *ui_lblWarningMessage;
 extern void ui_event_btnOK( lv_event_t * e);
 extern lv_obj_t *ui_btnOK;
 extern lv_obj_t *ui_Label20;
@@ -77,7 +77,7 @@ extern lv_obj_t *uic_lblSpeed;
 extern lv_obj_t *uic_lblShaftRPM;
 extern lv_obj_t *uic_lblRate;
 extern lv_obj_t *uic_workLED;
-extern lv_obj_t *uic_panelWarning;
+extern lv_obj_t *uic_panelSlowWarning;
 extern lv_obj_t *uic_btnOK;
 extern lv_obj_t *uic_panelStop;
 
