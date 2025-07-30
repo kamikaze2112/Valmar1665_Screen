@@ -41,8 +41,6 @@ bool manualSeedUpdate = false;
 bool errorRaised = false;
 int errorCode = 0;
 bool errorAck = false;
-bool warningTone = false;
-bool warningAck = false;
-unsigned long warningCooldownStart = 0;
-const unsigned long warningCooldownDuration = 15000;  // 15 seconds
+bool fwUpdateStarted = false;
 
+bool workSwitchState = false;

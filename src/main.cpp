@@ -10,26 +10,24 @@ github:  https://github.com/kamikaze2112/Valmar1665_Screen
 
 */
 
-
 #include <Arduino.h>
-#include "FS.h"
-#include "LittleFS.h"
 #include "WAVPlayer.h"
 #include "globals.h"
 #include <WiFi.h>
 #include <esp_now.h>
 #include "ui.h"
 #include <lvgl.h>            // Install "lvgl" with the Library Manager (last tested on v9.2.2)
-//#include "PINS_JC4827W543.h" // Install "GFX Library for Arduino" with the Library Manager (last tested on v1.5.6)
-                             // Install "Dev Device Pins" with the Library Manager (last tested on v0.0.2)
 #include "ui.h"
 #include "comms.h"
 #include "prefs.h"
-#include "nonBlockingTimer.h"
+#include "errorHandler.h"
+#include "nonBlockingTimer.h";
 
 NonBlockingTimer timer;
 
-void debugPrint() {
+void debugPrint(){
+  
+  Serial.printf("incomingData.fwUpdateComplete: %d  fwUpdateStarted: %d\n", incomingData.fwUpdateComplete, fwUpdateStarted);
 
 }
 
@@ -38,118 +36,12 @@ bool backlightFading = true;
 const int backlightFadeDuration = 1000;  // 1 second
 unsigned long lastPairingTime = 0;
 float seedPerRev = 0.00f;
+bool cooldownExpired = false;
 
-// ***** AUIDO STUFF *****
-
-void setupAudio() {
-
-      // Initialize audio player
-    if (!player.begin()) {
-        Serial.println("Failed to initialize audio player");
-        return;
-    }
-    
-    Serial.println("WAV Player Ready!");
-    Serial.println("Commands:");
-    Serial.println("  play <filename> - Play a WAV file");
-    Serial.println("  stop - Stop playback");
-    Serial.println("  status - Check playback status");
-    Serial.println("  list - List available files");
-
-}
-
-void handleAudio() {
-      if (Serial.available()) {
-        String command = Serial.readStringUntil('\n');
-        command.trim();
-        
-        if (command.startsWith("play ")) {
-            String filename = command.substring(5);
-            if (!filename.startsWith("/")) {
-                filename = "/" + filename;
-            }
-            
-            if (player.play(filename.c_str())) {
-                Serial.printf("Playing: %s\n", filename.c_str());
-            } else {
-                Serial.println("Failed to start playback");
-            }
-        }
-        else if (command == "stop") {
-            player.stop();
-            Serial.println("Playback stopped");
-        }
-        else if (command == "status") {
-            Serial.printf("Status: %s\n", player.playing() ? "Playing" : "Stopped");
-        }
-        else if (command == "list") {
-            Serial.println("Available files:");
-            File root = LittleFS.open("/");
-            File file = root.openNextFile();
-            while (file) {
-                if (String(file.name()).endsWith(".wav")) {
-                    Serial.printf("  %s (%u bytes)\n", file.name(), file.size());
-                }
-                file = root.openNextFile();
-            }
-        }
-        else {
-            Serial.println("Unknown command");
-        }
-    }
-
-}
-
-// ***** AUDIO STUFF *****
-
-
-// LVGL calls this function to print log information
-void my_print(lv_log_level_t level, const char *buf)
-{
-  LV_UNUSED(level);
-  DBG_PRINTLN(buf);
-  Serial.flush();
-}
-
-// LVGL calls this function to retrieve elapsed time
-uint32_t millis_cb(void)
-{
-  return millis();
-}
-
-// LVGL calls this function when a rendered image needs to copied to the display
-void my_disp_flush(lv_display_t *disp, const lv_area_t *area, uint8_t *px_map)
-{
-  uint32_t w = lv_area_get_width(area);
-  uint32_t h = lv_area_get_height(area);
-
-  gfx->draw16bitRGBBitmap(area->x1, area->y1, (uint16_t *)px_map, w, h);
-
-  lv_disp_flush_ready(disp);
-}
-
-// LVGL calls this function to read the touchpad
-void my_touchpad_read(lv_indev_t *indev, lv_indev_data_t *data)
-{
-  // Update the touch data from the GT911 touch controller
-  touchController.read();
-
-  // If a touch is detected, update the LVGL data structure with the first point's coordinates.
-  if (touchController.isTouched && touchController.touches > 0)
-  {
-    data->point.x = touchController.points[0].x;
-    data->point.y = touchController.points[0].y;
-    data->state = LV_INDEV_STATE_PRESSED; // Touch is pressed
-  }
-  else
-  {
-    data->state = LV_INDEV_STATE_RELEASED; // No touch detected
-  }
-}
-
-// Slave MAC Address: D8:3B:DA:A3:7A:EC
-uint8_t senderMac[] = { 0xD8, 0x3B, 0xDA, 0xA3, 0x7A, 0xEC };
-
+void my_print(lv_log_level_t level, const char *buf);
+uint32_t millis_cb(void);
+void my_disp_flush(lv_display_t *disp, const lv_area_t *area, uint8_t *px_map);
+void my_touchpad_read(lv_indev_t *indev, lv_indev_data_t *data);
 
 void setupBacklight() {
   ledcSetup(BACKLIGHT_CH, BACKLIGHT_FREQ, BACKLIGHT_RES);
@@ -170,6 +62,8 @@ void setup() {
       DBG_PRINTLN(i);
   }
 
+  timer.set(debugPrint, 1000);
+
   //init littleFS
 
   if (!LittleFS.begin(true)) {
@@ -179,8 +73,6 @@ void setup() {
   
   Serial.printf("Total storage: %u KB\n", LittleFS.totalBytes() / 1024);
   Serial.printf("Available: %u KB\n", (LittleFS.totalBytes() - LittleFS.usedBytes()) / 1024);
-  
-  timer.set(debugPrint, 1000);
 
   loadComms();
 
@@ -253,7 +145,7 @@ setupBacklight();
     lv_indev_set_type(indev, LV_INDEV_TYPE_POINTER);
     lv_indev_set_read_cb(indev, my_touchpad_read);
 
-  // init LVGL
+  // init UI
   ui_init();
   
   }
@@ -267,11 +159,13 @@ setupBacklight();
   DBG_PRINTLN("Setup done");
 }
 
+
+
 void loop() {
 
   timer.update();
-
-  handleAudio();
+  handleAudio();  // Handles tone playing without blocking the loop
+  handleErrorTimer();  // Handles repeating errors if they've been ack'd but still persist
 
   if (backlightFading) {
 
@@ -310,33 +204,159 @@ void loop() {
   
   lv_task_handler(); /* let the GUI do its work */
 
-#ifdef DIRECT_MODE
-#if defined(CANVAS) || defined(RGB_PANEL) || defined(DSI_PANEL)
-  gfx->flush();
-#else  // !(defined(CANVAS) || defined(RGB_PANEL) || defined(DSI_PANEL))
-  gfx->draw16bitRGBBitmap(0, 0, (uint16_t *)disp_draw_buf, screenWidth, screenHeight);
-#endif // !(defined(CANVAS) || defined(RGB_PANEL) || defined(DSI_PANEL))
-#else  // !DIRECT_MODE
-#ifdef CANVAS
-  gfx->flush();
-#endif
-#endif // !DIRECT_MODE
+  #ifdef DIRECT_MODE
+  #if defined(CANVAS) || defined(RGB_PANEL) || defined(DSI_PANEL)
+    gfx->flush();
+  #else  // !(defined(CANVAS) || defined(RGB_PANEL) || defined(DSI_PANEL))
+    gfx->draw16bitRGBBitmap(0, 0, (uint16_t *)disp_draw_buf, screenWidth, screenHeight);
+  #endif // !(defined(CANVAS) || defined(RGB_PANEL) || defined(DSI_PANEL))
+  #else  // !DIRECT_MODE
+  #ifdef CANVAS
+    gfx->flush();
+  #endif
+  #endif // !DIRECT_MODE
 
   delay(5);
 
-  if (newData) {
+if (newData) {
     newData = false;
 
-if (incomingData.errorRaised) {
-  errorRaised = true;
+  // Handle incoming error messages
+  if (incomingData.errorRaised && incomingData.errorCode != 0) {
+    if (!errorRaised || incomingData.errorCode != errorCode) {
+      raiseError(incomingData.errorCode);
+    }
+  } else if (errorRaised) {  // Clear if we had an error but now don't
+    clearError();
+  }
+
+  if (!fwUpdateStarted) {
+      if (!incomingData.fwUpdateComplete) {
+        fwUpdateStarted = true;
+        lv_label_set_text(ui_lblCancelButton, "CLOSE");
+      }
+  }
+
+  if (fwUpdateStarted) {
+      if (incomingData.fwUpdateComplete) {
+          fwUpdateStarted = false;
+          lv_obj_set_state(ui_btnFirmwareCancel, LV_STATE_DISABLED, false);
+      }
+  }
+
+  // process controller version and update label
+  lv_label_set_text(ui_lblVersion, incomingData.controllerVersion);
+
+  // Process time and set ui label
+  if (incomingData.fixStatus != 0) { // no point in updating the clock if there's no fix to get the time from
+    char timeStr[9];  // "HH:MM:SS" + null terminator
+    snprintf(timeStr, sizeof(timeStr), "%02d:%02d:%02d", incomingData.gpsHour, incomingData.gpsMinute, incomingData.gpsSecond);
+    lv_label_set_text(ui_lblTime, timeStr);
+  }
+  // Process fix stats and number of satellites and update labels
+  if (incomingData.fixStatus != 0) {
+
+    lv_obj_clear_flag(ui_imgGPSFix, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(ui_lblNumSats, LV_OBJ_FLAG_HIDDEN);
+
+    char satsBuf[10];  // Make sure this buffer stays in scope as long as you need numSats
+    snprintf(satsBuf, sizeof(satsBuf), "%d", incomingData.numSats);
+    const char* numSats = satsBuf;
+    lv_label_set_text(ui_lblNumSats, numSats);
+  } else {
+
+    lv_obj_add_flag(ui_imgGPSFix, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(ui_lblNumSats, LV_OBJ_FLAG_HIDDEN);
+  }
+  
+  // Process work switch state and update "LED" on screen
+  if (incomingData.workSwitch) {
+    lv_obj_add_state(ui_workLED, LV_STATE_USER_1);
+  } else {
+    lv_obj_clear_state(ui_workLED, LV_STATE_USER_1);
+  }
+
+  // Handle the paring mode, should probably end up in comms.cpp
+  if (pairingMode) {
+      unsigned long now = millis();
+      if (now - lastPairingTime >= 500) {
+          lastPairingTime = now;
+          sendPairingRequest();  // broadcast pairing request
+      }
+  }
+
+  // put the incoming seedPerRev value in to the label on Cal2
+  char buffer[16];
+  snprintf(buffer, sizeof(buffer), "%.2f", incomingData.seedPerRev);  // format with 2 decimal places
+  lv_label_set_text(ui_lblSeedPerRev, buffer);
+
+  // change the rate label to yellow if the rate is out of bounds +/- 25%
+  if (incomingData.rateOutOfBounds) {
+    lv_obj_set_style_text_color(ui_lblRate, lv_color_hex(0xffb81d), LV_PART_MAIN);
+  } else {
+    lv_obj_set_style_text_color(ui_lblRate, lv_color_hex(0xffffff), LV_PART_MAIN);
+  }
+
+  } // end newData
+} // end loop
+
+// LVGL calls this function to print log information
+void my_print(lv_log_level_t level, const char *buf)
+{
+  LV_UNUSED(level);
+  DBG_PRINTLN(buf);
+  Serial.flush();
+}
+
+// LVGL calls this function to retrieve elapsed time
+uint32_t millis_cb(void)
+{
+  return millis();
+}
+
+// LVGL calls this function when a rendered image needs to copied to the display
+void my_disp_flush(lv_display_t *disp, const lv_area_t *area, uint8_t *px_map)
+{
+  uint32_t w = lv_area_get_width(area);
+  uint32_t h = lv_area_get_height(area);
+
+  gfx->draw16bitRGBBitmap(area->x1, area->y1, (uint16_t *)px_map, w, h);
+
+  lv_disp_flush_ready(disp);
+}
+
+// LVGL calls this function to read the touchpad
+void my_touchpad_read(lv_indev_t *indev, lv_indev_data_t *data)
+{
+  // Update the touch data from the GT911 touch controller
+  touchController.read();
+
+  // If a touch is detected, update the LVGL data structure with the first point's coordinates.
+  if (touchController.isTouched && touchController.touches > 0)
+  {
+    data->point.x = touchController.points[0].x;
+    data->point.y = touchController.points[0].y;
+    data->state = LV_INDEV_STATE_PRESSED; // Touch is pressed
+  }
+  else
+  {
+    data->state = LV_INDEV_STATE_RELEASED; // No touch detected
+  }
+}
+
+/* if (incomingData.errorRaised) {
+
 
   if (incomingData.errorCode != errorCode) {
     warningAck = false;
+    DBG_PRINTLN(warningAck);
   }
 
   errorCode = incomingData.errorCode;
+  DBG_PRINT(" errorCode: ");
+  DBG_PRINTLN(errorCode);
 
-  bool cooldownExpired = (millis() - warningCooldownStart >= warningCooldownDuration);
+  cooldownExpired = (millis() - warningCooldownStart >= warningCooldownDuration);
 
   if (!warningAck && cooldownExpired) {
     if (errorCode == 1) {
@@ -353,16 +373,18 @@ if (incomingData.errorRaised) {
     }
 
     warningAck = true;
-  }
+  } 
 } else {
-  errorRaised = false;
+  //errorRaised = false;
   warningAck = false;
   errorAck = false;
   outgoingData.errorAck = false;
+  cooldownExpired = false;
   
+  */
 
-}
-/*     DBG_PRINTLN("=== Received Data ===");
+
+/*  DBG_PRINTLN("=== Received Data ===");
     DBG_PRINT("Fix: "); DBG_PRINTLN(incomingData.fixStatus);
     DBG_PRINT("Sats: "); DBG_PRINTLN(incomingData.numSats);
     DBG_PRINT("Speed: "); DBG_PRINTLN(incomingData.gpsSpeed);
@@ -372,57 +394,3 @@ if (incomingData.errorRaised) {
     DBG_PRINT("Motor: "); DBG_PRINTLN(incomingData.motorActive);
     DBG_PRINT("RPM: "); DBG_PRINTLN(incomingData.shaftRPM);
     DBG_PRINT("Error: "); DBG_PRINTLN(incomingData.errorCode); */
-
-    char timeStr[9];  // "HH:MM:SS" + null terminator
-    snprintf(timeStr, sizeof(timeStr), "%02d:%02d:%02d", incomingData.gpsHour, incomingData.gpsMinute, incomingData.gpsSecond);
-    lv_label_set_text(ui_lblTime, timeStr);
-
-    if (incomingData.fixStatus != 0) {
-
-      lv_obj_clear_flag(ui_imgGPSFix, LV_OBJ_FLAG_HIDDEN);
-      lv_obj_clear_flag(ui_lblNumSats, LV_OBJ_FLAG_HIDDEN);
-
-      char satsBuf[10];  // Make sure this buffer stays in scope as long as you need numSats
-      snprintf(satsBuf, sizeof(satsBuf), "%d", incomingData.numSats);
-      const char* numSats = satsBuf;
-      lv_label_set_text(ui_lblNumSats, numSats);
-    } else {
-
-      lv_obj_add_flag(ui_imgGPSFix, LV_OBJ_FLAG_HIDDEN);
-      lv_obj_add_flag(ui_lblNumSats, LV_OBJ_FLAG_HIDDEN);
-    }
-
-      lv_label_set_text(ui_lblVersion, incomingData.controllerVersion);
-  }
-  
-  if (incomingData.workSwitch) {
-    lv_obj_add_state(ui_workLED, LV_STATE_USER_1);
-  } else {
-    lv_obj_clear_state(ui_workLED, LV_STATE_USER_1);
-  }
-
-  if (pairingMode) {
-      unsigned long now = millis();
-      if (now - lastPairingTime >= 500) {
-          lastPairingTime = now;
-          sendPairingRequest();  // broadcast pairing request
-      }
-  }
-
-  // put the incoming seedPerRev value in to the label on Cal2
-  char buffer[16];
-  snprintf(buffer, sizeof(buffer), "%.2f", incomingData.seedPerRev);  // format with 2 decimal places
-  lv_label_set_text(ui_lblSeedPerRev, buffer);
-
-  // change the rate label to yellow if the rate is out of bounds +/- 25%
-
-  if (incomingData.rateOutOfBounds) {
-    lv_obj_set_style_text_color(ui_lblRate, lv_color_hex(0xffb81d), LV_PART_MAIN);
-  } else {
-    lv_obj_set_style_text_color(ui_lblRate, lv_color_hex(0xffffff), LV_PART_MAIN);
-
-  }
-
-
-
-}

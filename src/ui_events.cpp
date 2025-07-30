@@ -9,6 +9,7 @@
 #include "prefs.h"
 #include "WAVPlayer.h"
 #include <cstdlib>
+#include "errorHandler.h"
 
 void calibrationInput(lv_event_t * e)
 {
@@ -111,18 +112,11 @@ void speedTest(lv_event_t * e)
 
 void warningAcknowledge(lv_event_t * e) {
 
-   	warningAck = false;
-   	warningCooldownStart = millis();
-	DBG_PRINTLN("Warning Ack'd");
-
+	acknowledgeWarning();
 }
 void stopAcknowlege(lv_event_t * e) {
-	if (incomingData.workSwitch) {
-		player.play("/stop.wav");
-	} else {
-		outgoingData.errorAck = true;
-		lv_obj_add_flag(ui_panelStop, LV_OBJ_FLAG_HIDDEN);
-	}
+	
+	acknowledgeWarning();
 }
 
 void seedSwitchToggle(lv_event_t * e) {
@@ -160,7 +154,18 @@ void screenFirmware(lv_event_t * e)
 
 void controllerFirmware(lv_event_t * e)
 {
-	// Your code here
+	DBG_PRINTLN("controllerFirmware");
+
+	outgoingData.fwUpdateMode = true;
+
+	for (int i = 0; i < 3; i++) {
+	outgoingData.type = PACKET_TYPE_DATA;
+	esp_now_send(controllerAddress, (uint8_t *)&outgoingData, sizeof(outgoingData));                
+	delay(5);
+	Serial.printf("Sent %d, %d times.\n", outgoingData.fwUpdateMode, i + 1);
+	}
+
+	outgoingData.fwUpdateMode = false;
 }
 
 void saveSettings(lv_event_t * e)

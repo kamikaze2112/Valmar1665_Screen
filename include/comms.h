@@ -26,8 +26,8 @@ struct OutgoingData {
   int numberOfRuns;
   float newSeedPerRev;
   bool manualSeedUpdate;
-  //bool outgoingAck;
   bool errorAck;
+  bool fwUpdateMode;
 } __attribute__((packed));
 
 struct IncomingData {
@@ -48,6 +48,7 @@ struct IncomingData {
   float actualRate;
   char controllerVersion[12];
   bool rateOutOfBounds;
+  bool fwUpdateComplete;
 } __attribute__((packed));
 
 // === Extern declarations ===

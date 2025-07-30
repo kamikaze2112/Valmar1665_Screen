@@ -14,6 +14,12 @@ extern "C" {
 extern void ui_settingsScreen3_screen_init(void);
 extern void ui_settingsScreen3_screen_destroy(void);
 extern lv_obj_t *ui_settingsScreen3;
+extern void ui_event_btnControllerFirmware( lv_event_t * e);
+extern lv_obj_t *ui_btnControllerFirmware;
+extern lv_obj_t *ui_Label28;
+extern void ui_event_btnReset( lv_event_t * e);
+extern lv_obj_t *ui_btnReset;
+extern lv_obj_t *ui_Label11;
 extern lv_obj_t *ui_Label32;
 extern lv_obj_t *ui_Label10;
 extern lv_obj_t *ui_lblVersion;
@@ -23,32 +29,27 @@ extern lv_obj_t *ui_btnBack3;
 extern void ui_event_btnPairing( lv_event_t * e);
 extern lv_obj_t *ui_btnPairing;
 extern lv_obj_t *ui_Label24;
-extern void ui_event_btnScreenFirmware( lv_event_t * e);
-extern lv_obj_t *ui_btnScreenFirmware;
-extern lv_obj_t *ui_Label27;
-extern void ui_event_btnControllerFirmware( lv_event_t * e);
-extern lv_obj_t *ui_btnControllerFirmware;
-extern lv_obj_t *ui_Label28;
 extern lv_obj_t *ui_Label29;
 extern lv_obj_t *ui_panelFirmware;
 extern lv_obj_t *ui_lblFirmwareWarning;
 extern lv_obj_t *ui_Image6;
-extern void ui_event_btnFirmwareOK( lv_event_t * e);
-extern lv_obj_t *ui_btnFirmwareOK;
-extern lv_obj_t *ui_Label30;
-extern void ui_event_btnReset( lv_event_t * e);
-extern lv_obj_t *ui_btnReset;
-extern lv_obj_t *ui_Label11;
+extern void ui_event_btnFirmwareCancel( lv_event_t * e);
+extern lv_obj_t *ui_btnFirmwareCancel;
+extern lv_obj_t *ui_lblCancelButton;
+extern void ui_event_btnFirmwareUpdate( lv_event_t * e);
+extern lv_obj_t *ui_btnFirmwareUpdate;
+extern lv_obj_t *ui_Label6;
 // CUSTOM VARIABLES
 extern lv_obj_t *uic_settingsScreen3;
+extern lv_obj_t *uic_btnControllerFirmware;
+extern lv_obj_t *uic_btnReset;
 extern lv_obj_t *uic_lblVersion;
 extern lv_obj_t *uic_btnPairing;
-extern lv_obj_t *uic_btnScreenFirmware;
-extern lv_obj_t *uic_btnControllerFirmware;
 extern lv_obj_t *uic_panelFirmware;
 extern lv_obj_t *uic_lblFirmwareWarning;
-extern lv_obj_t *uic_btnFirmwareOK;
-extern lv_obj_t *uic_btnReset;
+extern lv_obj_t *uic_btnFirmwareCancel;
+extern lv_obj_t *uic_lblCancelButton;
+extern lv_obj_t *uic_btnFirmwareUpdate;
 
 #ifdef __cplusplus
 } /*extern "C"*/

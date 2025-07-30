@@ -46,10 +46,7 @@ extern bool manualSeedUpdate;
 extern bool errorRaised;
 extern int errorCode;
 extern bool errorAck;
-extern bool warningTone;
-extern bool warningAck;
-extern unsigned long warningCooldownStart;
-extern const unsigned long warningCooldownDuration;
+extern bool fwUpdateStarted;
 
 
 #define DEBUG_MODE 1 // toggle 1 for on, and 0 for off

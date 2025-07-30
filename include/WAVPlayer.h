@@ -7,6 +7,9 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
+void setupAudio();
+void handleAudio();
+
 // WAV file header structure
 struct WAVHeader {
     char riff[4];

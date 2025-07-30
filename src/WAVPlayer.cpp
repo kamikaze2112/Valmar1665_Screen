@@ -1,4 +1,64 @@
 #include "WAVPlayer.h"
+#include "globals.h"
+
+void setupAudio() {
+
+      // Initialize audio player
+    if (!player.begin()) {
+        Serial.println("Failed to initialize audio player");
+        return;
+    }
+    
+/*  Serial.println("WAV Player Ready!");
+    Serial.println("Commands:");
+    Serial.println("  play <filename> - Play a WAV file");
+    Serial.println("  stop - Stop playback");
+    Serial.println("  status - Check playback status");
+    Serial.println("  list - List available files"); */
+
+}
+
+void handleAudio() {
+      if (Serial.available()) {
+        String command = Serial.readStringUntil('\n');
+        command.trim();
+        
+        if (command.startsWith("play ")) {
+            String filename = command.substring(5);
+            if (!filename.startsWith("/")) {
+                filename = "/" + filename;
+            }
+            
+            if (player.play(filename.c_str())) {
+                Serial.printf("Playing: %s\n", filename.c_str());
+            } else {
+                Serial.println("Failed to start playback");
+            }
+        }
+        else if (command == "stop") {
+            player.stop();
+            //Serial.println("Playback stopped");
+        }
+        else if (command == "status") {
+            //Serial.printf("Status: %s\n", player.playing() ? "Playing" : "Stopped");
+        }
+        else if (command == "list") {
+            Serial.println("Available files:");
+            File root = LittleFS.open("/");
+            File file = root.openNextFile();
+            while (file) {
+                if (String(file.name()).endsWith(".wav")) {
+                    Serial.printf("  %s (%u bytes)\n", file.name(), file.size());
+                }
+                file = root.openNextFile();
+            }
+        }
+        else {
+            Serial.println("Unknown command");
+        }
+    }
+
+}
 
 WAVPlayer::WAVPlayer(int ws_pin, int bck_pin, int do_pin, i2s_port_t port) {
     i2s_ws_pin = ws_pin;
@@ -23,7 +83,7 @@ void WAVPlayer::audioTask() {
         return;
     }
     
-    Serial.println("Audio playback started");
+    //Serial.println("Audio playback started");
     
     while (audioFile.available() && !shouldStop) {
         size_t bytesRead = audioFile.read(buffer, bufferSize);
@@ -48,7 +108,7 @@ void WAVPlayer::audioTask() {
     isPlaying = false;
     shouldStop = false;
     
-    Serial.println("Audio playback finished");
+    //Serial.println("Audio playback finished");
     vTaskDelete(NULL);
 }
 
@@ -72,8 +132,8 @@ bool WAVPlayer::parseWAVHeader(File& file) {
         return false;
     }
     
-    Serial.printf("WAV Info: %dHz, %d channels, %d bits\n", 
-                 header.sampleRate, header.numChannels, header.bitsPerSample);
+    //Serial.printf("WAV Info: %dHz, %d channels, %d bits\n", 
+    //             header.sampleRate, header.numChannels, header.bitsPerSample);
     
     return true;
 }
@@ -84,7 +144,7 @@ bool WAVPlayer::begin() {
         .mode = i2s_mode_t(I2S_MODE_MASTER | I2S_MODE_TX),
         .sample_rate = 44100,  // Will be updated per file
         .bits_per_sample = I2S_BITS_PER_SAMPLE_16BIT,
-        .channel_format = I2S_CHANNEL_FMT_RIGHT_LEFT,
+        .channel_format = I2S_CHANNEL_FMT_ONLY_RIGHT,
         .communication_format = I2S_COMM_FORMAT_STAND_I2S,
         .intr_alloc_flags = ESP_INTR_FLAG_LEVEL1,
         .dma_buf_count = 8,
@@ -120,7 +180,7 @@ bool WAVPlayer::begin() {
 
 bool WAVPlayer::play(const char* filename) {
     if (isPlaying) {
-        Serial.println("Already playing audio");
+        //Serial.println("Already playing audio");
         return false;
     }
     
