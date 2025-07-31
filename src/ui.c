@@ -36,6 +36,7 @@ ui_calibrationScreen2_screen_init();
 ui_settingsScreen1_screen_init();
 ui_settingsScreen2_screen_init();
 ui_settingsScreen3_screen_init();
+ui_settingsScreen4_screen_init();
 ui____initial_actions0 = lv_obj_create(NULL);
 lv_disp_load_scr( ui_splashScreen);
 }
@@ -48,4 +49,5 @@ ui_calibrationScreen2_screen_destroy();
 ui_settingsScreen1_screen_destroy();
 ui_settingsScreen2_screen_destroy();
 ui_settingsScreen3_screen_destroy();
+ui_settingsScreen4_screen_destroy();
 }

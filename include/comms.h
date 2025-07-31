@@ -28,6 +28,8 @@ struct OutgoingData {
   bool manualSeedUpdate;
   bool errorAck;
   bool fwUpdateMode;
+  bool stallProtection;
+  int stallDelay;
 } __attribute__((packed));
 
 struct IncomingData {
@@ -46,9 +48,11 @@ struct IncomingData {
   int errorCode;
   bool errorRaised;
   float actualRate;
-  char controllerVersion[12];
+  char controllerVersion[16];
   bool rateOutOfBounds;
   bool fwUpdateComplete;
+  int heartbeat;
+  bool controllerBooted;
 } __attribute__((packed));
 
 // === Extern declarations ===

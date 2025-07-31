@@ -5,6 +5,7 @@
 
 #include "ui.h"
 
+lv_obj_t *uic_btnAdvancedOptions;
 lv_obj_t *uic_btnFirmwareUpdate;
 lv_obj_t *uic_lblCancelButton;
 lv_obj_t *uic_btnFirmwareCancel;
@@ -15,7 +16,7 @@ lv_obj_t *uic_lblVersion;
 lv_obj_t *uic_btnReset;
 lv_obj_t *uic_btnControllerFirmware;
 lv_obj_t *uic_settingsScreen3;
-lv_obj_t *ui_settingsScreen3 = NULL;lv_obj_t *ui_btnControllerFirmware = NULL;lv_obj_t *ui_Label28 = NULL;lv_obj_t *ui_btnReset = NULL;lv_obj_t *ui_Label11 = NULL;lv_obj_t *ui_Label32 = NULL;lv_obj_t *ui_Label10 = NULL;lv_obj_t *ui_lblVersion = NULL;lv_obj_t *ui_lblVersion1 = NULL;lv_obj_t *ui_btnBack3 = NULL;lv_obj_t *ui_btnPairing = NULL;lv_obj_t *ui_Label24 = NULL;lv_obj_t *ui_Label29 = NULL;lv_obj_t *ui_panelFirmware = NULL;lv_obj_t *ui_lblFirmwareWarning = NULL;lv_obj_t *ui_Image6 = NULL;lv_obj_t *ui_btnFirmwareCancel = NULL;lv_obj_t *ui_lblCancelButton = NULL;lv_obj_t *ui_btnFirmwareUpdate = NULL;lv_obj_t *ui_Label6 = NULL;
+lv_obj_t *ui_settingsScreen3 = NULL;lv_obj_t *ui_btnControllerFirmware = NULL;lv_obj_t *ui_Label28 = NULL;lv_obj_t *ui_btnReset = NULL;lv_obj_t *ui_Label11 = NULL;lv_obj_t *ui_Label32 = NULL;lv_obj_t *ui_Label10 = NULL;lv_obj_t *ui_lblVersion = NULL;lv_obj_t *ui_lblVersion1 = NULL;lv_obj_t *ui_btnBack3 = NULL;lv_obj_t *ui_btnPairing = NULL;lv_obj_t *ui_Label24 = NULL;lv_obj_t *ui_Label29 = NULL;lv_obj_t *ui_panelFirmware = NULL;lv_obj_t *ui_lblFirmwareWarning = NULL;lv_obj_t *ui_Image6 = NULL;lv_obj_t *ui_btnFirmwareCancel = NULL;lv_obj_t *ui_lblCancelButton = NULL;lv_obj_t *ui_btnFirmwareUpdate = NULL;lv_obj_t *ui_Label6 = NULL;lv_obj_t *ui_btnAdvancedOptions = NULL;lv_obj_t *ui_Label36 = NULL;
 // event funtions
 void ui_event_btnControllerFirmware( lv_event_t * e) {
     lv_event_code_t event_code = lv_event_get_code(e);
@@ -37,7 +38,7 @@ if ( event_code == LV_EVENT_PRESSED) {
 void ui_event_btnBack3( lv_event_t * e) {
     lv_event_code_t event_code = lv_event_get_code(e);
 
-if ( event_code == LV_EVENT_PRESSED) {
+if ( event_code == LV_EVENT_CLICKED) {
       _ui_screen_change( &ui_runScreen, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_runScreen_screen_init);
 }
 }
@@ -68,6 +69,14 @@ if ( event_code == LV_EVENT_PRESSED) {
       controllerFirmware( e );
       _ui_state_modify( ui_btnFirmwareUpdate, LV_STATE_DISABLED, _UI_MODIFY_STATE_ADD);
       _ui_state_modify( ui_btnFirmwareCancel, LV_STATE_DISABLED, _UI_MODIFY_STATE_ADD);
+}
+}
+
+void ui_event_btnAdvancedOptions( lv_event_t * e) {
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+if ( event_code == LV_EVENT_PRESSED) {
+      _ui_screen_change( &ui_settingsScreen4, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_settingsScreen4_screen_init);
 }
 }
 
@@ -124,7 +133,7 @@ lv_label_set_text(ui_Label11,"RESET");
 ui_Label32 = lv_label_create(ui_settingsScreen3);
 lv_obj_set_width( ui_Label32, LV_SIZE_CONTENT);  /// 1
 lv_obj_set_height( ui_Label32, LV_SIZE_CONTENT);   /// 1
-lv_obj_set_x( ui_Label32, 110 );
+lv_obj_set_x( ui_Label32, 50 );
 lv_obj_set_y( ui_Label32, 120 );
 lv_obj_set_align( ui_Label32, LV_ALIGN_CENTER );
 lv_label_set_text(ui_Label32,"Controller Ver:");
@@ -132,7 +141,7 @@ lv_label_set_text(ui_Label32,"Controller Ver:");
 ui_Label10 = lv_label_create(ui_settingsScreen3);
 lv_obj_set_width( ui_Label10, LV_SIZE_CONTENT);  /// 1
 lv_obj_set_height( ui_Label10, LV_SIZE_CONTENT);   /// 1
-lv_obj_set_x( ui_Label10, -170 );
+lv_obj_set_x( ui_Label10, -190 );
 lv_obj_set_y( ui_Label10, 120 );
 lv_obj_set_align( ui_Label10, LV_ALIGN_CENTER );
 lv_label_set_text(ui_Label10,"Screen Ver:");
@@ -140,15 +149,15 @@ lv_label_set_text(ui_Label10,"Screen Ver:");
 ui_lblVersion = lv_label_create(ui_settingsScreen3);
 lv_obj_set_width( ui_lblVersion, LV_SIZE_CONTENT);  /// 1
 lv_obj_set_height( ui_lblVersion, LV_SIZE_CONTENT);   /// 1
-lv_obj_set_x( ui_lblVersion, 195 );
+lv_obj_set_x( ui_lblVersion, 170 );
 lv_obj_set_y( ui_lblVersion, 120 );
 lv_obj_set_align( ui_lblVersion, LV_ALIGN_CENTER );
-lv_label_set_text(ui_lblVersion,"0.0.0");
+lv_label_set_text(ui_lblVersion,"00000000000000");
 
 ui_lblVersion1 = lv_label_create(ui_settingsScreen3);
 lv_obj_set_width( ui_lblVersion1, LV_SIZE_CONTENT);  /// 1
 lv_obj_set_height( ui_lblVersion1, LV_SIZE_CONTENT);   /// 1
-lv_obj_set_x( ui_lblVersion1, -100 );
+lv_obj_set_x( ui_lblVersion1, -80 );
 lv_obj_set_y( ui_lblVersion1, 120 );
 lv_obj_set_align( ui_lblVersion1, LV_ALIGN_CENTER );
 lv_label_set_text(ui_lblVersion1,"0.0.0");
@@ -267,12 +276,34 @@ lv_obj_set_height( ui_Label6, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_align( ui_Label6, LV_ALIGN_CENTER );
 lv_label_set_text(ui_Label6,"UPDATE");
 
+ui_btnAdvancedOptions = lv_button_create(ui_settingsScreen3);
+lv_obj_set_width( ui_btnAdvancedOptions, 120);
+lv_obj_set_height( ui_btnAdvancedOptions, 50);
+lv_obj_set_x( ui_btnAdvancedOptions, 170 );
+lv_obj_set_y( ui_btnAdvancedOptions, 20 );
+lv_obj_set_align( ui_btnAdvancedOptions, LV_ALIGN_CENTER );
+lv_obj_add_flag( ui_btnAdvancedOptions, LV_OBJ_FLAG_SCROLL_ON_FOCUS );   /// Flags
+lv_obj_remove_flag( ui_btnAdvancedOptions, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
+lv_obj_set_style_bg_color(ui_btnAdvancedOptions, lv_color_hex(0x7B1008), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_bg_opa(ui_btnAdvancedOptions, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_border_color(ui_btnAdvancedOptions, lv_color_hex(0x293031), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_border_opa(ui_btnAdvancedOptions, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_border_width(ui_btnAdvancedOptions, 2, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_text_align(ui_btnAdvancedOptions, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN| LV_STATE_DEFAULT);
+
+ui_Label36 = lv_label_create(ui_btnAdvancedOptions);
+lv_obj_set_width( ui_Label36, LV_SIZE_CONTENT);  /// 1
+lv_obj_set_height( ui_Label36, LV_SIZE_CONTENT);   /// 1
+lv_obj_set_align( ui_Label36, LV_ALIGN_CENTER );
+lv_label_set_text(ui_Label36,"ADVANCED\nOPTIONS");
+
 lv_obj_add_event_cb(ui_btnControllerFirmware, ui_event_btnControllerFirmware, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_btnReset, ui_event_btnReset, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_btnBack3, ui_event_btnBack3, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_btnPairing, ui_event_btnPairing, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_btnFirmwareCancel, ui_event_btnFirmwareCancel, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_btnFirmwareUpdate, ui_event_btnFirmwareUpdate, LV_EVENT_ALL, NULL);
+lv_obj_add_event_cb(ui_btnAdvancedOptions, ui_event_btnAdvancedOptions, LV_EVENT_ALL, NULL);
 uic_settingsScreen3 = ui_settingsScreen3;
 uic_btnControllerFirmware = ui_btnControllerFirmware;
 uic_btnReset = ui_btnReset;
@@ -283,6 +314,7 @@ uic_lblFirmwareWarning = ui_lblFirmwareWarning;
 uic_btnFirmwareCancel = ui_btnFirmwareCancel;
 uic_lblCancelButton = ui_lblCancelButton;
 uic_btnFirmwareUpdate = ui_btnFirmwareUpdate;
+uic_btnAdvancedOptions = ui_btnAdvancedOptions;
 
 }
 
@@ -321,5 +353,8 @@ ui_lblCancelButton= NULL;
 uic_btnFirmwareUpdate= NULL;
 ui_btnFirmwareUpdate= NULL;
 ui_Label6= NULL;
+uic_btnAdvancedOptions= NULL;
+ui_btnAdvancedOptions= NULL;
+ui_Label36= NULL;
 
 }

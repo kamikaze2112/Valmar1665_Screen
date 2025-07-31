@@ -39,6 +39,9 @@ extern lv_obj_t *ui_lblCancelButton;
 extern void ui_event_btnFirmwareUpdate( lv_event_t * e);
 extern lv_obj_t *ui_btnFirmwareUpdate;
 extern lv_obj_t *ui_Label6;
+extern void ui_event_btnAdvancedOptions( lv_event_t * e);
+extern lv_obj_t *ui_btnAdvancedOptions;
+extern lv_obj_t *ui_Label36;
 // CUSTOM VARIABLES
 extern lv_obj_t *uic_settingsScreen3;
 extern lv_obj_t *uic_btnControllerFirmware;
@@ -50,6 +53,7 @@ extern lv_obj_t *uic_lblFirmwareWarning;
 extern lv_obj_t *uic_btnFirmwareCancel;
 extern lv_obj_t *uic_lblCancelButton;
 extern lv_obj_t *uic_btnFirmwareUpdate;
+extern lv_obj_t *uic_btnAdvancedOptions;
 
 #ifdef __cplusplus
 } /*extern "C"*/

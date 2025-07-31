@@ -13,6 +13,7 @@ extern "C" {
 // SCREEN: ui_settingsScreen1
 extern void ui_settingsScreen1_screen_init(void);
 extern void ui_settingsScreen1_screen_destroy(void);
+extern void ui_event_settingsScreen1( lv_event_t * e);
 extern lv_obj_t *ui_settingsScreen1;
 extern void ui_event_btnBack( lv_event_t * e);
 extern lv_obj_t *ui_btnBack;
@@ -38,11 +39,15 @@ extern lv_obj_t *ui_btnWidthPlus3;
 extern lv_obj_t *ui_Label33;
 extern void ui_event_btnPage1( lv_event_t * e);
 extern lv_obj_t *ui_btnPage1;
+extern lv_obj_t *ui_Label25;
+extern void ui_event_sldBrightness( lv_event_t * e);
+extern lv_obj_t *ui_sldBrightness;
 // CUSTOM VARIABLES
 extern lv_obj_t *uic_settingsScreen1;
 extern lv_obj_t *uic_spnWidth;
 extern lv_obj_t *uic_spnRuns;
 extern lv_obj_t *uic_btnWidthPlus;
+extern lv_obj_t *uic_sldBrightness;
 
 #ifdef __cplusplus
 } /*extern "C"*/

@@ -21,19 +21,34 @@ github:  https://github.com/kamikaze2112/Valmar1665_Screen
 #include "comms.h"
 #include "prefs.h"
 #include "errorHandler.h"
-#include "nonBlockingTimer.h";
+#include "nonBlockingTimer.h"
 
 NonBlockingTimer timer;
+NonBlockingTimer timerHeartbeat;
+int heartBeat = 0;
 
+void heartbeat() {
+
+  heartBeat++;
+
+  if (heartBeat >= 5 && !errorRaised && incomingData.controllerBooted) {
+    raiseError(4);
+  } else if (heartBeat == 0) {
+    clearError();
+  }
+
+}
 void debugPrint(){
   
-  Serial.printf("incomingData.fwUpdateComplete: %d  fwUpdateStarted: %d\n", incomingData.fwUpdateComplete, fwUpdateStarted);
+  //Serial.printf("incomingData.fwUpdateComplete: %d  fwUpdateStarted: %d\n", incomingData.fwUpdateComplete, fwUpdateStarted);
+  Serial.printf("outgoingData.stallProtection: %d  outgoingData.stallDelay %d\n", outgoingData.stallProtection, outgoingData.stallDelay);
+  Serial.printf("incomingData.heartbeat %d  heartBeat %d\n", incomingData.heartbeat, heartBeat);
 
 }
 
 unsigned long backlightStartTime = 0;
 bool backlightFading = true;
-const int backlightFadeDuration = 1000;  // 1 second
+const int backlightFadeDuration = 1500;  // 1 second
 unsigned long lastPairingTime = 0;
 float seedPerRev = 0.00f;
 bool cooldownExpired = false;
@@ -63,6 +78,8 @@ void setup() {
   }
 
   timer.set(debugPrint, 1000);
+  timerHeartbeat.set(heartbeat, 1000);
+  incomingData.controllerBooted = false;
 
   //init littleFS
 
@@ -73,7 +90,7 @@ void setup() {
   
   Serial.printf("Total storage: %u KB\n", LittleFS.totalBytes() / 1024);
   Serial.printf("Available: %u KB\n", (LittleFS.totalBytes() - LittleFS.usedBytes()) / 1024);
-
+  
   loadComms();
 
   setupComms();
@@ -147,6 +164,9 @@ setupBacklight();
 
   // init UI
   ui_init();
+
+  loadPrefs();
+
   
   }
 
@@ -156,6 +176,9 @@ setupBacklight();
 
   player.play("/startup.wav");
 
+  outgoingData.stallProtection = true;
+  outgoingData.stallDelay = 200;
+
   DBG_PRINTLN("Setup done");
 }
 
@@ -164,6 +187,8 @@ setupBacklight();
 void loop() {
 
   timer.update();
+  timerHeartbeat.update();
+
   handleAudio();  // Handles tone playing without blocking the loop
   handleErrorTimer();  // Handles repeating errors if they've been ack'd but still persist
 
@@ -220,6 +245,8 @@ void loop() {
 
 if (newData) {
     newData = false;
+
+    heartBeat = incomingData.heartbeat;
 
   // Handle incoming error messages
   if (incomingData.errorRaised && incomingData.errorCode != 0) {

@@ -11,6 +11,10 @@
 #include <cstdlib>
 #include "errorHandler.h"
 
+int tempWidth = 600;
+int tempRuns = 8;
+int tempBrightness = 200;
+
 void calibrationInput(lv_event_t * e)
 {
 	const char *text = lv_textarea_get_text(ui_txtCalWeight);
@@ -147,11 +151,6 @@ void pairController(lv_event_t * e)
 	pairingMode = true;
 }
 
-void screenFirmware(lv_event_t * e)
-{
-	// Your code here
-}
-
 void controllerFirmware(lv_event_t * e)
 {
 	DBG_PRINTLN("controllerFirmware");
@@ -170,6 +169,8 @@ void controllerFirmware(lv_event_t * e)
 
 void saveSettings(lv_event_t * e)
 {
+	outgoingData.workingWidth = lv_spinbox_get_value(ui_spnWidth) / 10;
+	outgoingData.numberOfRuns = lv_spinbox_get_value(ui_spnRuns);
 	savePrefs();
 }
 
@@ -180,10 +181,31 @@ void resetTextArea(lv_event_t * e)
 
 void settingsSnapshot(lv_event_t * e)
 {
-	// Your code here
+	tempWidth = lv_spinbox_get_value(ui_spnWidth);
+	tempRuns = lv_spinbox_get_value(ui_spnRuns);
+	tempBrightness = lv_slider_get_value(ui_sldBrightness);
 }
 
-void compareSettingsToSnapshot(lv_event_t * e)
+void revertSettings(lv_event_t * e)
 {
-	// Your code here
+	lv_spinbox_set_value(ui_spnWidth, tempWidth);
+	lv_spinbox_set_value(ui_spnRuns, tempRuns);
+	lv_slider_set_value(ui_sldBrightness, tempBrightness, LV_ANIM_OFF);
+
+	lv_obj_set_state(ui_btnSave, LV_STATE_DISABLED, true);
+
+}
+
+void stallProtection(lv_event_t * e)
+{
+	if (lv_obj_has_state(ui_chkStallProtection, LV_STATE_CHECKED)) {
+		outgoingData.stallProtection = true;
+	} else {
+		outgoingData.stallProtection = false;
+	}
+}
+
+void updateStallDelay(lv_event_t * e)
+{
+	outgoingData.stallDelay = (lv_dropdown_get_selected(ui_ddStallDelay) + 2 ) * 100;
 }

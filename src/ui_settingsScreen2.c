@@ -15,32 +15,23 @@ lv_obj_t *uic_lblRPM;
 lv_obj_t *uic_lblPWM;
 lv_obj_t *uic_swMotorTest;
 lv_obj_t *uic_arcMotorPWM;
-lv_obj_t *uic_sldBrightness;
 lv_obj_t *uic_settingsScreen2;
-lv_obj_t *ui_settingsScreen2 = NULL;lv_obj_t *ui_btnPage3 = NULL;lv_obj_t *ui_sldBrightness = NULL;lv_obj_t *ui_Label25 = NULL;lv_obj_t *ui_btnBack1 = NULL;lv_obj_t *ui_arcMotorPWM = NULL;lv_obj_t *ui_Label14 = NULL;lv_obj_t *ui_swMotorTest = NULL;lv_obj_t *ui_lblPWM = NULL;lv_obj_t *ui_lblRPM = NULL;lv_obj_t *ui_Label15 = NULL;lv_obj_t *ui_Label16 = NULL;lv_obj_t *ui_arcTestSpeed = NULL;lv_obj_t *ui_Label19 = NULL;lv_obj_t *ui_swSpeedTest = NULL;lv_obj_t *ui_lblTestSpeed = NULL;lv_obj_t *ui_Label21 = NULL;lv_obj_t *ui_panelReset = NULL;lv_obj_t *ui_Label12 = NULL;lv_obj_t *ui_Image5 = NULL;lv_obj_t *ui_btnResetYes = NULL;lv_obj_t *ui_Label13 = NULL;lv_obj_t *ui_btnResetNo = NULL;lv_obj_t *ui_Label2 = NULL;lv_obj_t *ui_btnSave1 = NULL;
+lv_obj_t *ui_settingsScreen2 = NULL;lv_obj_t *ui_btnPage3 = NULL;lv_obj_t *ui_btnBack1 = NULL;lv_obj_t *ui_arcMotorPWM = NULL;lv_obj_t *ui_Label14 = NULL;lv_obj_t *ui_swMotorTest = NULL;lv_obj_t *ui_lblPWM = NULL;lv_obj_t *ui_lblRPM = NULL;lv_obj_t *ui_Label15 = NULL;lv_obj_t *ui_Label16 = NULL;lv_obj_t *ui_arcTestSpeed = NULL;lv_obj_t *ui_Label19 = NULL;lv_obj_t *ui_swSpeedTest = NULL;lv_obj_t *ui_lblTestSpeed = NULL;lv_obj_t *ui_Label21 = NULL;lv_obj_t *ui_panelReset = NULL;lv_obj_t *ui_Label12 = NULL;lv_obj_t *ui_Image5 = NULL;lv_obj_t *ui_btnResetYes = NULL;lv_obj_t *ui_Label13 = NULL;lv_obj_t *ui_btnResetNo = NULL;lv_obj_t *ui_Label2 = NULL;
 // event funtions
 void ui_event_btnPage3( lv_event_t * e) {
     lv_event_code_t event_code = lv_event_get_code(e);
 
-if ( event_code == LV_EVENT_PRESSED) {
+if ( event_code == LV_EVENT_CLICKED) {
       _ui_screen_change( &ui_settingsScreen1, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_settingsScreen1_screen_init);
-}
-}
-
-void ui_event_sldBrightness( lv_event_t * e) {
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-if ( event_code == LV_EVENT_VALUE_CHANGED) {
-      backlightControl( e );
 }
 }
 
 void ui_event_btnBack1( lv_event_t * e) {
     lv_event_code_t event_code = lv_event_get_code(e);
 
-if ( event_code == LV_EVENT_PRESSED) {
+if ( event_code == LV_EVENT_CLICKED) {
       _ui_screen_change( &ui_runScreen, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_runScreen_screen_init);
-      compareSettingsToSnapshot( e );
+      revertSettings( e );
 }
 }
 
@@ -93,17 +84,6 @@ if ( event_code == LV_EVENT_PRESSED) {
 }
 }
 
-void ui_event_btnSave1( lv_event_t * e) {
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-if ( event_code == LV_EVENT_PRESSED) {
-      saveSettings( e );
-      _ui_state_modify( ui_btnSave1, LV_STATE_DISABLED, _UI_MODIFY_STATE_ADD);
-      _ui_state_modify( ui_btnSave, LV_STATE_DISABLED, _UI_MODIFY_STATE_ADD);
-      settingsSnapshot( e );
-}
-}
-
 // build funtions
 
 void ui_settingsScreen2_screen_init(void)
@@ -129,35 +109,6 @@ ui_object_set_themeable_style_property(ui_btnPage3, LV_PART_MAIN| LV_STATE_DEFAU
 lv_obj_set_style_border_color(ui_btnPage3, lv_color_hex(0x293031), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_border_opa(ui_btnPage3, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_border_width(ui_btnPage3, 2, LV_PART_MAIN| LV_STATE_DEFAULT);
-
-ui_sldBrightness = lv_slider_create(ui_settingsScreen2);
-lv_slider_set_range(ui_sldBrightness, 10,255);
-lv_slider_set_value( ui_sldBrightness, 200, LV_ANIM_OFF);
-if (lv_slider_get_mode(ui_sldBrightness)==LV_SLIDER_MODE_RANGE ) lv_slider_set_left_value( ui_sldBrightness, 0, LV_ANIM_OFF);
-lv_obj_set_width( ui_sldBrightness, 150);
-lv_obj_set_height( ui_sldBrightness, 20);
-lv_obj_set_x( ui_sldBrightness, 0 );
-lv_obj_set_y( ui_sldBrightness, -75 );
-lv_obj_set_align( ui_sldBrightness, LV_ALIGN_CENTER );
-ui_object_set_themeable_style_property(ui_sldBrightness, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_COLOR, _ui_theme_color_ValmarGrey);
-ui_object_set_themeable_style_property(ui_sldBrightness, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_OPA, _ui_theme_alpha_ValmarGrey);
-
-ui_object_set_themeable_style_property(ui_sldBrightness, LV_PART_INDICATOR| LV_STATE_DEFAULT, LV_STYLE_BG_COLOR, _ui_theme_color_ValmarRed);
-ui_object_set_themeable_style_property(ui_sldBrightness, LV_PART_INDICATOR| LV_STATE_DEFAULT, LV_STYLE_BG_OPA, _ui_theme_alpha_ValmarRed);
-
-ui_object_set_themeable_style_property(ui_sldBrightness, LV_PART_KNOB| LV_STATE_DEFAULT, LV_STYLE_BG_COLOR, _ui_theme_color_ValmarRed);
-ui_object_set_themeable_style_property(ui_sldBrightness, LV_PART_KNOB| LV_STATE_DEFAULT, LV_STYLE_BG_OPA, _ui_theme_alpha_ValmarRed);
-
-//Compensating for LVGL9.1 draw crash with bar/slider max value when top-padding is nonzero and right-padding is 0
-if (lv_obj_get_style_pad_top(ui_sldBrightness,LV_PART_MAIN) > 0) lv_obj_set_style_pad_right( ui_sldBrightness, lv_obj_get_style_pad_right(ui_sldBrightness,LV_PART_MAIN) + 1, LV_PART_MAIN );
-ui_Label25 = lv_label_create(ui_settingsScreen2);
-lv_obj_set_width( ui_Label25, LV_SIZE_CONTENT);  /// 1
-lv_obj_set_height( ui_Label25, LV_SIZE_CONTENT);   /// 1
-lv_obj_set_x( ui_Label25, 0 );
-lv_obj_set_y( ui_Label25, -100 );
-lv_obj_set_align( ui_Label25, LV_ALIGN_CENTER );
-lv_label_set_text(ui_Label25,"BRIGHTNESS");
-lv_obj_set_style_text_align(ui_Label25, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 ui_btnBack1 = lv_button_create(ui_settingsScreen2);
 lv_obj_set_width( ui_btnBack1, 50);
@@ -361,26 +312,7 @@ lv_obj_set_height( ui_Label2, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_align( ui_Label2, LV_ALIGN_CENTER );
 lv_label_set_text(ui_Label2,"NO");
 
-ui_btnSave1 = lv_button_create(ui_settingsScreen2);
-lv_obj_set_width( ui_btnSave1, 50);
-lv_obj_set_height( ui_btnSave1, 50);
-lv_obj_set_x( ui_btnSave1, 186 );
-lv_obj_set_y( ui_btnSave1, -80 );
-lv_obj_set_align( ui_btnSave1, LV_ALIGN_CENTER );
-lv_obj_add_state( ui_btnSave1, LV_STATE_DISABLED );     /// States
-lv_obj_add_flag( ui_btnSave1, LV_OBJ_FLAG_SCROLL_ON_FOCUS );   /// Flags
-lv_obj_remove_flag( ui_btnSave1, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
-lv_obj_set_style_bg_color(ui_btnSave1, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
-lv_obj_set_style_bg_opa(ui_btnSave1, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
-lv_obj_set_style_bg_image_src( ui_btnSave1, &ui_img_valmar_save_png, LV_PART_MAIN | LV_STATE_DEFAULT );
-lv_obj_set_style_bg_image_recolor(ui_btnSave1, lv_color_hex(0x78110A), LV_PART_MAIN| LV_STATE_DEFAULT);
-lv_obj_set_style_bg_image_recolor_opa(ui_btnSave1, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
-lv_obj_set_style_border_color(ui_btnSave1, lv_color_hex(0x293031), LV_PART_MAIN | LV_STATE_DEFAULT );
-lv_obj_set_style_border_opa(ui_btnSave1, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
-lv_obj_set_style_border_width(ui_btnSave1, 2, LV_PART_MAIN| LV_STATE_DEFAULT);
-
 lv_obj_add_event_cb(ui_btnPage3, ui_event_btnPage3, LV_EVENT_ALL, NULL);
-lv_obj_add_event_cb(ui_sldBrightness, ui_event_sldBrightness, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_btnBack1, ui_event_btnBack1, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_swMotorTest, ui_event_swMotorTest, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_arcMotorPWM, ui_event_arcMotorPWM, LV_EVENT_ALL, NULL);
@@ -388,9 +320,7 @@ lv_obj_add_event_cb(ui_swSpeedTest, ui_event_swSpeedTest, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_arcTestSpeed, ui_event_arcTestSpeed, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_btnResetYes, ui_event_btnResetYes, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_btnResetNo, ui_event_btnResetNo, LV_EVENT_ALL, NULL);
-lv_obj_add_event_cb(ui_btnSave1, ui_event_btnSave1, LV_EVENT_ALL, NULL);
 uic_settingsScreen2 = ui_settingsScreen2;
-uic_sldBrightness = ui_sldBrightness;
 uic_arcMotorPWM = ui_arcMotorPWM;
 uic_swMotorTest = ui_swMotorTest;
 uic_lblPWM = ui_lblPWM;
@@ -412,9 +342,6 @@ void ui_settingsScreen2_screen_destroy(void)
 uic_settingsScreen2= NULL;
 ui_settingsScreen2= NULL;
 ui_btnPage3= NULL;
-uic_sldBrightness= NULL;
-ui_sldBrightness= NULL;
-ui_Label25= NULL;
 ui_btnBack1= NULL;
 uic_arcMotorPWM= NULL;
 ui_arcMotorPWM= NULL;
@@ -445,6 +372,5 @@ ui_Label13= NULL;
 uic_btnResetNo= NULL;
 ui_btnResetNo= NULL;
 ui_Label2= NULL;
-ui_btnSave1= NULL;
 
 }

@@ -65,6 +65,22 @@ void loadPrefs() {
 
     if (prefsValid) {
 
+        DBG_PRINTLN("Valid prefs found.  loading...");
+        lv_spinbox_set_value(ui_spinboxRate, prefs.getInt("targetRate", 0));
+        lv_spinbox_set_value(ui_spnWidth, prefs.getInt("workingWidth", 600));
+        lv_spinbox_set_value(ui_spnRuns, prefs.getInt("runs", 8));
+        lv_slider_set_value(ui_sldBrightness, prefs.getInt("brightness", 200), LV_ANIM_OFF);
+
+        outgoingData.seedingRate = prefs.getInt("targetRate", 0) / 10;
+        outgoingData.workingWidth = prefs.getInt("workingWidth", 0) / 10;
+        outgoingData.numberOfRuns = prefs.getInt("runs", 0);
+
+        savedBrightness = prefs.getInt("brightness", 200);
+
+        ledcWrite(BACKLIGHT_CH, savedBrightness);
+
+    } else {
+        DBG_PRINTLN("Valid prefs not found.");
     }
 
     prefs.end();
@@ -74,10 +90,14 @@ void savePrefs() {
 
     prefs.begin("valmar_screen", false);
 
-    prefs.putFloat("targetRate", seedingRate);
-    prefs.putFloat("workingWidth", workingWidth);
-    prefs.putInt("runs", numberOfRuns);
+    prefs.putInt("targetRate", lv_spinbox_get_value(ui_spinboxRate));
+    prefs.putInt("workingWidth", lv_spinbox_get_value(ui_spnWidth));
+    prefs.putInt("runs", lv_spinbox_get_value(ui_spnRuns));
     prefs.putInt("brightness", lv_slider_get_value(ui_sldBrightness));
+
+    prefs.putBool("prefsValid", true);
+
+    prefs.end();
 }
 
 void clearPrefs() {

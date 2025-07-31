@@ -42,6 +42,9 @@ DBG_PRINTLN(outgoingData.errorAck);
 
 void displayWarning() {
 
+    lv_screen_load(ui_runScreen);
+    revertSettings(NULL);
+
     if (errorCode == 1) {
         lv_obj_clear_flag(ui_panelWarning, LV_OBJ_FLAG_HIDDEN);
         lv_label_set_text(ui_lblWarningMessage, "Minimum PWM\nthreshold.\nRate can not\nbe maintained.");
@@ -49,6 +52,10 @@ void displayWarning() {
     } else if (errorCode == 2) {
         lv_obj_clear_flag(ui_panelWarning, LV_OBJ_FLAG_HIDDEN);
         lv_label_set_text(ui_lblWarningMessage, "Maximum PWM\nthreshold.\nRate can not\nbe maintained.");
+        player.play("/warning.wav");
+    } else if (errorCode == 4) {
+        lv_obj_clear_flag(ui_panelWarning, LV_OBJ_FLAG_HIDDEN);
+        lv_label_set_text(ui_lblWarningMessage, "Heartbeat lost\nNo communication\nwith controller.");
         player.play("/warning.wav");
     } else if (errorCode == 3) {
         lv_obj_add_flag(ui_panelWarning, LV_OBJ_FLAG_HIDDEN);
@@ -66,7 +73,7 @@ void acknowledgeWarning() {
         lv_obj_add_flag(ui_panelStop, LV_OBJ_FLAG_HIDDEN);
         player.stop();
         errorTimer = false;
-    } else if (errorCode == 1 || errorCode == 2) {
+    } else if (errorCode == 1 || errorCode == 2 || errorCode == 4) {
         lv_obj_add_flag(ui_panelWarning, LV_OBJ_FLAG_HIDDEN);
         lastTime = millis();
         errorTimer = true;
@@ -88,7 +95,7 @@ void acknowledgeWarning() {
 
 void handleErrorTimer() {
 
-    if (errorCode == 1 || errorCode == 2) {
+    if (errorCode == 1 || errorCode == 2 || errorCode == 4) {
     
         if (errorRaised && errorTimer) {
             unsigned long currentTime = millis();

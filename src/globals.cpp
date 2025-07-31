@@ -3,15 +3,16 @@
 #include "PINS_JC4827W543.h"
 #include <Arduino_GFX_Library.h>
 
+//APP VERSION
+const char* APP_VERSION = "20250730192419";
+
 // Actual definitions
 Arduino_DataBus *bus = new Arduino_ESP32QSPI(
     45 /* cs */, 47 /* sck */, 21 /* d0 */, 48 /* d1 */, 40 /* d2 */, 39 /* d3 */);
 
 Arduino_GFX *gfx = new Arduino_NV3041A(bus, GFX_NOT_DEFINED /* RST */, 0 /* rotation */, true /* IPS */);
 
-// APP VERSION
 
-const char* APP_VERSION = "1.6.0";
 
 // Define the actual variables here
 TAMC_GT911 touchController(TOUCH_SDA, TOUCH_SCL, TOUCH_INT, TOUCH_RST, TOUCH_WIDTH, TOUCH_HEIGHT);
@@ -44,3 +45,4 @@ bool errorAck = false;
 bool fwUpdateStarted = false;
 
 bool workSwitchState = false;
+int savedBrightness = 200;

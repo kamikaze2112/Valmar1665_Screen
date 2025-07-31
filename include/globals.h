@@ -47,6 +47,7 @@ extern bool errorRaised;
 extern int errorCode;
 extern bool errorAck;
 extern bool fwUpdateStarted;
+extern int savedBrightness;
 
 
 #define DEBUG_MODE 1 // toggle 1 for on, and 0 for off
