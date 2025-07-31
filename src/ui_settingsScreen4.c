@@ -65,7 +65,7 @@ ui_Label27 = lv_label_create(ui_settingsScreen4);
 lv_obj_set_width( ui_Label27, LV_SIZE_CONTENT);  /// 1
 lv_obj_set_height( ui_Label27, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_x( ui_Label27, -5 );
-lv_obj_set_y( ui_Label27, -120 );
+lv_obj_set_y( ui_Label27, -118 );
 lv_obj_set_align( ui_Label27, LV_ALIGN_CENTER );
 lv_label_set_text(ui_Label27,"ADVANCED OPTIONS.\nTHESE OPTIONS TAKE EFFECT IMMEDIATELY!");
 lv_obj_set_style_text_align(ui_Label27, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN| LV_STATE_DEFAULT);
@@ -81,8 +81,8 @@ lv_obj_remove_flag( ui_btnBack2, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
 lv_obj_set_style_bg_color(ui_btnBack2, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_bg_opa(ui_btnBack2, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_bg_image_src( ui_btnBack2, &ui_img_valmar_back_png, LV_PART_MAIN | LV_STATE_DEFAULT );
-ui_object_set_themeable_style_property(ui_btnBack2, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_IMAGE_RECOLOR, _ui_theme_color_ValmarRed);
-ui_object_set_themeable_style_property(ui_btnBack2, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_IMAGE_RECOLOR_OPA, _ui_theme_alpha_ValmarRed);
+lv_obj_set_style_bg_image_recolor(ui_btnBack2, lv_color_hex(0xFFFFFF), LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_bg_image_recolor_opa(ui_btnBack2, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_border_color(ui_btnBack2, lv_color_hex(0x293031), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_border_opa(ui_btnBack2, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_border_width(ui_btnBack2, 2, LV_PART_MAIN| LV_STATE_DEFAULT);

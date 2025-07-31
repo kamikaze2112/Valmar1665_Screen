@@ -47,8 +47,8 @@ LV_IMG_DECLARE( ui_img_valmar_valmar2_png);   // assets/Valmar/valmar2.png
 LV_IMG_DECLARE( ui_img_valmar_cal_png);   // assets/Valmar/cal.png
 LV_IMG_DECLARE( ui_img_1811295523);   // assets/Valmar/icons8-settings-50.png
 LV_IMG_DECLARE( ui_img_333094844);   // assets/Valmar/icons8-config-50.png
-LV_IMG_DECLARE( ui_img_639977379);   // assets/Valmar/icons8-satellite-25.png
-LV_IMG_DECLARE( ui_img_232107149);   // assets/Valmar/icons8-clock-20.png
+LV_IMG_DECLARE( ui_img_458844958);   // assets/Valmar/icons8-satellite-signal-50.png
+LV_IMG_DECLARE( ui_img_1850280974);   // assets/Valmar/icons8-clock-50.png
 LV_IMG_DECLARE( ui_img_1608339404);   // assets/Valmar/icons8-alert-100.png
 LV_IMG_DECLARE( ui_img_valmar_stop_png);   // assets/Valmar/stop.png
 LV_IMG_DECLARE( ui_img_1504963450);   // assets/Valmar/icons8-page-50_edit.png

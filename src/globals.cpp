@@ -4,7 +4,7 @@
 #include <Arduino_GFX_Library.h>
 
 //APP VERSION
-const char* APP_VERSION = "20250731112435";
+const char* APP_VERSION = "20250731130808";
 
 // Actual definitions
 Arduino_DataBus *bus = new Arduino_ESP32QSPI(

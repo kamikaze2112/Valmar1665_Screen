@@ -137,7 +137,7 @@ lv_obj_remove_flag( ui_btnBack, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
 lv_obj_set_style_bg_color(ui_btnBack, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_bg_opa(ui_btnBack, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_bg_image_src( ui_btnBack, &ui_img_valmar_back_png, LV_PART_MAIN | LV_STATE_DEFAULT );
-lv_obj_set_style_bg_image_recolor(ui_btnBack, lv_color_hex(0x78110A), LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_bg_image_recolor(ui_btnBack, lv_color_hex(0xFFFFFF), LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_bg_image_recolor_opa(ui_btnBack, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_border_color(ui_btnBack, lv_color_hex(0x293031), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_border_opa(ui_btnBack, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
@@ -155,7 +155,7 @@ lv_obj_remove_flag( ui_btnSave, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
 lv_obj_set_style_bg_color(ui_btnSave, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_bg_opa(ui_btnSave, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_bg_image_src( ui_btnSave, &ui_img_valmar_save_png, LV_PART_MAIN | LV_STATE_DEFAULT );
-lv_obj_set_style_bg_image_recolor(ui_btnSave, lv_color_hex(0x78110A), LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_bg_image_recolor(ui_btnSave, lv_color_hex(0xFFFFFF), LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_bg_image_recolor_opa(ui_btnSave, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_border_color(ui_btnSave, lv_color_hex(0x293031), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_border_opa(ui_btnSave, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
@@ -177,7 +177,7 @@ lv_obj_set_style_text_font(ui_spnWidth, &ui_font_ConsolaMono30, LV_PART_MAIN| LV
 
 lv_obj_set_style_bg_color(ui_spnWidth, lv_color_hex(0xFFFFFF), LV_PART_CURSOR | LV_STATE_DEFAULT );
 lv_obj_set_style_bg_opa(ui_spnWidth, 0, LV_PART_CURSOR| LV_STATE_DEFAULT);
-lv_obj_set_style_border_color(ui_spnWidth, lv_color_hex(0x000000), LV_PART_CURSOR | LV_STATE_DEFAULT );
+lv_obj_set_style_border_color(ui_spnWidth, lv_color_hex(0xFFFFFF), LV_PART_CURSOR | LV_STATE_DEFAULT );
 lv_obj_set_style_border_opa(ui_spnWidth, 255, LV_PART_CURSOR| LV_STATE_DEFAULT);
 lv_obj_set_style_border_width(ui_spnWidth, 4, LV_PART_CURSOR| LV_STATE_DEFAULT);
 lv_obj_set_style_border_side(ui_spnWidth, LV_BORDER_SIDE_BOTTOM, LV_PART_CURSOR| LV_STATE_DEFAULT);
@@ -200,7 +200,7 @@ lv_obj_set_style_text_font(ui_spnRuns, &ui_font_ConsolaMono30, LV_PART_MAIN| LV_
 
 lv_obj_set_style_bg_color(ui_spnRuns, lv_color_hex(0xFFFFFF), LV_PART_CURSOR | LV_STATE_DEFAULT );
 lv_obj_set_style_bg_opa(ui_spnRuns, 0, LV_PART_CURSOR| LV_STATE_DEFAULT);
-lv_obj_set_style_border_color(ui_spnRuns, lv_color_hex(0x000000), LV_PART_CURSOR | LV_STATE_DEFAULT );
+lv_obj_set_style_border_color(ui_spnRuns, lv_color_hex(0xFFFFFF), LV_PART_CURSOR | LV_STATE_DEFAULT );
 lv_obj_set_style_border_opa(ui_spnRuns, 255, LV_PART_CURSOR| LV_STATE_DEFAULT);
 lv_obj_set_style_border_width(ui_spnRuns, 4, LV_PART_CURSOR| LV_STATE_DEFAULT);
 lv_obj_set_style_border_side(ui_spnRuns, LV_BORDER_SIDE_BOTTOM, LV_PART_CURSOR| LV_STATE_DEFAULT);
@@ -318,7 +318,7 @@ lv_obj_remove_flag( ui_btnPage1, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
 lv_obj_set_style_bg_color(ui_btnPage1, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_bg_opa(ui_btnPage1, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_bg_image_src( ui_btnPage1, &ui_img_1504963450, LV_PART_MAIN | LV_STATE_DEFAULT );
-lv_obj_set_style_bg_image_recolor(ui_btnPage1, lv_color_hex(0x78110A), LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_bg_image_recolor(ui_btnPage1, lv_color_hex(0xFFFFFF), LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_bg_image_recolor_opa(ui_btnPage1, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_border_color(ui_btnPage1, lv_color_hex(0x293031), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_border_opa(ui_btnPage1, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
@@ -344,12 +344,21 @@ lv_obj_set_y( ui_sldBrightness, 100 );
 lv_obj_set_align( ui_sldBrightness, LV_ALIGN_CENTER );
 ui_object_set_themeable_style_property(ui_sldBrightness, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_COLOR, _ui_theme_color_ValmarGrey);
 ui_object_set_themeable_style_property(ui_sldBrightness, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_OPA, _ui_theme_alpha_ValmarGrey);
+lv_obj_set_style_border_color(ui_sldBrightness, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_border_opa(ui_sldBrightness, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_border_width(ui_sldBrightness, 2, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 ui_object_set_themeable_style_property(ui_sldBrightness, LV_PART_INDICATOR| LV_STATE_DEFAULT, LV_STYLE_BG_COLOR, _ui_theme_color_ValmarRed);
 ui_object_set_themeable_style_property(ui_sldBrightness, LV_PART_INDICATOR| LV_STATE_DEFAULT, LV_STYLE_BG_OPA, _ui_theme_alpha_ValmarRed);
+lv_obj_set_style_border_color(ui_sldBrightness, lv_color_hex(0xFFFFFF), LV_PART_INDICATOR | LV_STATE_DEFAULT );
+lv_obj_set_style_border_opa(ui_sldBrightness, 255, LV_PART_INDICATOR| LV_STATE_DEFAULT);
+lv_obj_set_style_border_width(ui_sldBrightness, 2, LV_PART_INDICATOR| LV_STATE_DEFAULT);
 
 ui_object_set_themeable_style_property(ui_sldBrightness, LV_PART_KNOB| LV_STATE_DEFAULT, LV_STYLE_BG_COLOR, _ui_theme_color_ValmarRed);
 ui_object_set_themeable_style_property(ui_sldBrightness, LV_PART_KNOB| LV_STATE_DEFAULT, LV_STYLE_BG_OPA, _ui_theme_alpha_ValmarRed);
+lv_obj_set_style_border_color(ui_sldBrightness, lv_color_hex(0xFFFFFF), LV_PART_KNOB | LV_STATE_DEFAULT );
+lv_obj_set_style_border_opa(ui_sldBrightness, 255, LV_PART_KNOB| LV_STATE_DEFAULT);
+lv_obj_set_style_border_width(ui_sldBrightness, 2, LV_PART_KNOB| LV_STATE_DEFAULT);
 
 //Compensating for LVGL9.1 draw crash with bar/slider max value when top-padding is nonzero and right-padding is 0
 if (lv_obj_get_style_pad_top(ui_sldBrightness,LV_PART_MAIN) > 0) lv_obj_set_style_pad_right( ui_sldBrightness, lv_obj_get_style_pad_right(ui_sldBrightness,LV_PART_MAIN) + 1, LV_PART_MAIN );
