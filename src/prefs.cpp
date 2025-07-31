@@ -56,6 +56,8 @@ void clearComms() {
 
     prefs.end();
 
+    DBG_PRINTLN("Comms cleared.");
+
 }
 void loadPrefs() {
 
@@ -70,6 +72,8 @@ void loadPrefs() {
         lv_spinbox_set_value(ui_spnWidth, prefs.getInt("workingWidth", 600));
         lv_spinbox_set_value(ui_spnRuns, prefs.getInt("runs", 8));
         lv_slider_set_value(ui_sldBrightness, prefs.getInt("brightness", 200), LV_ANIM_OFF);
+
+        lv_obj_set_style_border_color(ui_spinboxRate, lv_color_hex(0x7B1008), LV_PART_CURSOR | LV_STATE_DEFAULT);
 
         outgoingData.seedingRate = prefs.getInt("targetRate", 0) / 10;
         outgoingData.workingWidth = prefs.getInt("workingWidth", 0) / 10;
@@ -98,8 +102,33 @@ void savePrefs() {
     prefs.putBool("prefsValid", true);
 
     prefs.end();
+    
+    DBG_PRINTLN("Prefs saved.");
+}
+
+void saveRate() {
+
+    prefs.begin("valmar_screen", false);
+
+    if (prefs.getInt("targetRate", 0) != lv_spinbox_get_value(ui_spinboxRate)) {
+        prefs.putInt("targetRate", lv_spinbox_get_value(ui_spinboxRate));
+        DBG_PRINTLN("Rate changed from stored value.  Storing new value.");
+    } else {
+        DBG_PRINTLN("Rate unchanged from saved value.  Not saving.");
+    }
+
+    lv_obj_set_style_border_color(ui_spinboxRate, lv_color_hex(0x7B1008), LV_PART_CURSOR | LV_STATE_DEFAULT);
+    savePending = false;
+
 }
 
 void clearPrefs() {
 
+    prefs.begin("valmar_screen", true);
+
+    prefs.clear();
+
+    prefs.end();
+
+    DBG_PRINTLN("Prefs cleared.");
 }

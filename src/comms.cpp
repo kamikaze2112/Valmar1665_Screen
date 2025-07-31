@@ -61,7 +61,11 @@ void addPeer(const uint8_t mac[6]) {
       printMac(controllerAddress);
       
       // Remove broadcast peer if needed
-      esp_now_del_peer(broadcastAddress);
+      if(esp_now_del_peer(broadcastAddress)) {
+        DBG_PRINTLN("Broadcast Peer deleted");
+      } else {
+        DBG_PRINTLN("Failed to delete broadcast peer.");
+      }
 
       // Add paired controller as a peer
       memcpy(peerInfo.peer_addr, controllerAddress, 6);

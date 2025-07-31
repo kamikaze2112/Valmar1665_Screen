@@ -40,9 +40,9 @@ void heartbeat() {
 }
 void debugPrint(){
   
-  //Serial.printf("incomingData.fwUpdateComplete: %d  fwUpdateStarted: %d\n", incomingData.fwUpdateComplete, fwUpdateStarted);
+/*   Serial.printf("incomingData.fwUpdateComplete: %d  fwUpdateStarted: %d\n", incomingData.fwUpdateComplete, fwUpdateStarted);
   Serial.printf("outgoingData.stallProtection: %d  outgoingData.stallDelay %d\n", outgoingData.stallProtection, outgoingData.stallDelay);
-  Serial.printf("incomingData.heartbeat %d  heartBeat %d\n", incomingData.heartbeat, heartBeat);
+  Serial.printf("incomingData.heartbeat %d  heartBeat %d\n", incomingData.heartbeat, heartBeat); */
 
 }
 
@@ -178,6 +178,7 @@ setupBacklight();
 
   outgoingData.stallProtection = true;
   outgoingData.stallDelay = 200;
+  outgoingData.reset = false;
 
   DBG_PRINTLN("Setup done");
 }
@@ -197,11 +198,11 @@ void loop() {
   unsigned long elapsed = millis() - backlightStartTime;
 
   if (elapsed >= backlightFadeDuration) {
-    ledcWrite(BACKLIGHT_CH, 255);  // Final brightness
+    ledcWrite(BACKLIGHT_CH, savedBrightness);  // Final brightness
     backlightFading = false;
 
   } else {
-    int brightness = map(elapsed, 0, backlightFadeDuration, 0, 255);
+    int brightness = map(elapsed, 0, backlightFadeDuration, 0, savedBrightness);
     ledcWrite(BACKLIGHT_CH, brightness);
   }
 }
@@ -303,15 +304,6 @@ if (newData) {
     lv_obj_clear_state(ui_workLED, LV_STATE_USER_1);
   }
 
-  // Handle the paring mode, should probably end up in comms.cpp
-  if (pairingMode) {
-      unsigned long now = millis();
-      if (now - lastPairingTime >= 500) {
-          lastPairingTime = now;
-          sendPairingRequest();  // broadcast pairing request
-      }
-  }
-
   // put the incoming seedPerRev value in to the label on Cal2
   char buffer[16];
   snprintf(buffer, sizeof(buffer), "%.2f", incomingData.seedPerRev);  // format with 2 decimal places
@@ -325,6 +317,21 @@ if (newData) {
   }
 
   } // end newData
+
+  // Save the current rate if not changed in 30 seconds.
+
+  if ((millis() - lastChangeTime >= saveDelay) && savePending) {
+    saveRate();
+  }
+
+    // Handle the paring mode, should probably end up in comms.cpp
+  if (pairingMode) {
+      unsigned long now = millis();
+      if (now - lastPairingTime >= 500) {
+          lastPairingTime = now;
+          sendPairingRequest();  // broadcast pairing request
+      }
+  }
 } // end loop
 
 // LVGL calls this function to print log information

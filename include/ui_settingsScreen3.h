@@ -14,6 +14,9 @@ extern "C" {
 extern void ui_settingsScreen3_screen_init(void);
 extern void ui_settingsScreen3_screen_destroy(void);
 extern lv_obj_t *ui_settingsScreen3;
+extern void ui_event_btnAdvancedOptions( lv_event_t * e);
+extern lv_obj_t *ui_btnAdvancedOptions;
+extern lv_obj_t *ui_Label36;
 extern void ui_event_btnControllerFirmware( lv_event_t * e);
 extern lv_obj_t *ui_btnControllerFirmware;
 extern lv_obj_t *ui_Label28;
@@ -39,11 +42,18 @@ extern lv_obj_t *ui_lblCancelButton;
 extern void ui_event_btnFirmwareUpdate( lv_event_t * e);
 extern lv_obj_t *ui_btnFirmwareUpdate;
 extern lv_obj_t *ui_Label6;
-extern void ui_event_btnAdvancedOptions( lv_event_t * e);
-extern lv_obj_t *ui_btnAdvancedOptions;
-extern lv_obj_t *ui_Label36;
+extern lv_obj_t *ui_panelReset;
+extern lv_obj_t *ui_Label12;
+extern lv_obj_t *ui_Image5;
+extern void ui_event_btnResetYes( lv_event_t * e);
+extern lv_obj_t *ui_btnResetYes;
+extern lv_obj_t *ui_Label13;
+extern void ui_event_btnResetNo( lv_event_t * e);
+extern lv_obj_t *ui_btnResetNo;
+extern lv_obj_t *ui_Label2;
 // CUSTOM VARIABLES
 extern lv_obj_t *uic_settingsScreen3;
+extern lv_obj_t *uic_btnAdvancedOptions;
 extern lv_obj_t *uic_btnControllerFirmware;
 extern lv_obj_t *uic_btnReset;
 extern lv_obj_t *uic_lblVersion;
@@ -53,7 +63,9 @@ extern lv_obj_t *uic_lblFirmwareWarning;
 extern lv_obj_t *uic_btnFirmwareCancel;
 extern lv_obj_t *uic_lblCancelButton;
 extern lv_obj_t *uic_btnFirmwareUpdate;
-extern lv_obj_t *uic_btnAdvancedOptions;
+extern lv_obj_t *uic_panelReset;
+extern lv_obj_t *uic_btnResetYes;
+extern lv_obj_t *uic_btnResetNo;
 
 #ifdef __cplusplus
 } /*extern "C"*/

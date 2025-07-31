@@ -48,6 +48,9 @@ extern int errorCode;
 extern bool errorAck;
 extern bool fwUpdateStarted;
 extern int savedBrightness;
+extern unsigned long lastChangeTime;
+extern const unsigned long saveDelay;
+extern bool savePending;
 
 
 #define DEBUG_MODE 1 // toggle 1 for on, and 0 for off

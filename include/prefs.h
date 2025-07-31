@@ -10,6 +10,7 @@ void clearComms();
 
 void loadPrefs();
 void savePrefs();
+void saveRate();
 void clearPrefs();
 
 #endif

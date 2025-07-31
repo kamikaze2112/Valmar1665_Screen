@@ -48,17 +48,38 @@ void rateChange(lv_event_t * e)
 	int seedingRateRawValue = lv_spinbox_get_value(ui_spinboxRate);
 	seedingRate = seedingRateRawValue / 10.0f;
 
+	lv_obj_set_style_border_color(ui_spinboxRate, lv_color_hex(0xffb81d), LV_PART_CURSOR | LV_STATE_DEFAULT);
+	lastChangeTime = millis();
+	savePending = true;
+
 	Serial.printf("Seeding Rate: %.1f\n", seedingRate);
 }
 
 void backlightControl(lv_event_t * e)
 {
 	int backlightVal = lv_slider_get_value(ui_sldBrightness);
-	ledcWrite(0, backlightVal);  // 50% brightness
+	ledcWrite(0, backlightVal);
 }
 void initReset(lv_event_t * e)
 {
+	//Send reset command to the rate controller
+
+	outgoingData.reset = true;
+
+	for (int i = 0; i < 3; i++) {
+	outgoingData.type = PACKET_TYPE_DATA;
+	esp_now_send(controllerAddress, (uint8_t *)&outgoingData, sizeof(outgoingData));                
+	delay(5);
+	}
+
+	clearPrefs();
+	delay(100);
+	clearComms();
+	delay(100);
+	DBG_PRINTLN("Reset complete.  Rebooting...");
+
 	ESP.restart();
+
 }
 
 void motorTest(lv_event_t * e)
@@ -148,6 +169,7 @@ void seedPerRevManualSet(lv_event_t * e) {
 
 void pairController(lv_event_t * e)
 {
+	addPeer(broadcastAddress);
 	pairingMode = true;
 }
 

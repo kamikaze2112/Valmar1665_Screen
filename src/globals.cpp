@@ -4,7 +4,7 @@
 #include <Arduino_GFX_Library.h>
 
 //APP VERSION
-const char* APP_VERSION = "20250730192419";
+const char* APP_VERSION = "20250731112435";
 
 // Actual definitions
 Arduino_DataBus *bus = new Arduino_ESP32QSPI(
@@ -46,3 +46,7 @@ bool fwUpdateStarted = false;
 
 bool workSwitchState = false;
 int savedBrightness = 200;
+
+unsigned long lastChangeTime = 0;
+const unsigned long saveDelay = 30000;
+bool savePending = false;

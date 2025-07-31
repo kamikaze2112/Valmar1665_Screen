@@ -5,9 +5,6 @@
 
 #include "ui.h"
 
-lv_obj_t *uic_btnResetNo;
-lv_obj_t *uic_btnResetYes;
-lv_obj_t *uic_panelReset;
 lv_obj_t *uic_lblTestSpeed;
 lv_obj_t *uic_swSpeedTest;
 lv_obj_t *uic_arcTestSpeed;
@@ -16,7 +13,7 @@ lv_obj_t *uic_lblPWM;
 lv_obj_t *uic_swMotorTest;
 lv_obj_t *uic_arcMotorPWM;
 lv_obj_t *uic_settingsScreen2;
-lv_obj_t *ui_settingsScreen2 = NULL;lv_obj_t *ui_btnPage3 = NULL;lv_obj_t *ui_btnBack1 = NULL;lv_obj_t *ui_arcMotorPWM = NULL;lv_obj_t *ui_Label14 = NULL;lv_obj_t *ui_swMotorTest = NULL;lv_obj_t *ui_lblPWM = NULL;lv_obj_t *ui_lblRPM = NULL;lv_obj_t *ui_Label15 = NULL;lv_obj_t *ui_Label16 = NULL;lv_obj_t *ui_arcTestSpeed = NULL;lv_obj_t *ui_Label19 = NULL;lv_obj_t *ui_swSpeedTest = NULL;lv_obj_t *ui_lblTestSpeed = NULL;lv_obj_t *ui_Label21 = NULL;lv_obj_t *ui_panelReset = NULL;lv_obj_t *ui_Label12 = NULL;lv_obj_t *ui_Image5 = NULL;lv_obj_t *ui_btnResetYes = NULL;lv_obj_t *ui_Label13 = NULL;lv_obj_t *ui_btnResetNo = NULL;lv_obj_t *ui_Label2 = NULL;
+lv_obj_t *ui_settingsScreen2 = NULL;lv_obj_t *ui_btnPage3 = NULL;lv_obj_t *ui_btnBack1 = NULL;lv_obj_t *ui_arcMotorPWM = NULL;lv_obj_t *ui_Label14 = NULL;lv_obj_t *ui_swMotorTest = NULL;lv_obj_t *ui_lblPWM = NULL;lv_obj_t *ui_lblRPM = NULL;lv_obj_t *ui_Label15 = NULL;lv_obj_t *ui_Label16 = NULL;lv_obj_t *ui_arcTestSpeed = NULL;lv_obj_t *ui_Label19 = NULL;lv_obj_t *ui_swSpeedTest = NULL;lv_obj_t *ui_lblTestSpeed = NULL;lv_obj_t *ui_Label21 = NULL;
 // event funtions
 void ui_event_btnPage3( lv_event_t * e) {
     lv_event_code_t event_code = lv_event_get_code(e);
@@ -65,22 +62,6 @@ void ui_event_swSpeedTest( lv_event_t * e) {
 
 if ( event_code == LV_EVENT_VALUE_CHANGED) {
       speedTest( e );
-}
-}
-
-void ui_event_btnResetYes( lv_event_t * e) {
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-if ( event_code == LV_EVENT_PRESSED) {
-      initReset( e );
-}
-}
-
-void ui_event_btnResetNo( lv_event_t * e) {
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-if ( event_code == LV_EVENT_PRESSED) {
-      _ui_flag_modify( ui_panelReset, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
 }
 }
 
@@ -249,77 +230,12 @@ lv_obj_set_align( ui_Label21, LV_ALIGN_CENTER );
 lv_label_set_text(ui_Label21,"MPH");
 lv_obj_set_style_text_align(ui_Label21, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN| LV_STATE_DEFAULT);
 
-ui_panelReset = lv_obj_create(ui_settingsScreen2);
-lv_obj_set_width( ui_panelReset, 480);
-lv_obj_set_height( ui_panelReset, 272);
-lv_obj_set_align( ui_panelReset, LV_ALIGN_CENTER );
-lv_obj_add_flag( ui_panelReset, LV_OBJ_FLAG_HIDDEN );   /// Flags
-lv_obj_remove_flag( ui_panelReset, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
-lv_obj_set_style_bg_color(ui_panelReset, lv_color_hex(0x78110A), LV_PART_MAIN | LV_STATE_DEFAULT );
-lv_obj_set_style_bg_opa(ui_panelReset, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
-lv_obj_set_style_border_color(ui_panelReset, lv_color_hex(0x293031), LV_PART_MAIN | LV_STATE_DEFAULT );
-lv_obj_set_style_border_opa(ui_panelReset, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
-lv_obj_set_style_border_width(ui_panelReset, 10, LV_PART_MAIN| LV_STATE_DEFAULT);
-
-ui_Label12 = lv_label_create(ui_panelReset);
-lv_obj_set_width( ui_Label12, LV_SIZE_CONTENT);  /// 1
-lv_obj_set_height( ui_Label12, LV_SIZE_CONTENT);   /// 1
-lv_obj_set_align( ui_Label12, LV_ALIGN_CENTER );
-lv_label_set_text(ui_Label12,"Are you sure you want to reset to defaults?\nThis will erase all saved settings including calibration\nand can not be undone.");
-lv_obj_set_style_text_align(ui_Label12, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN| LV_STATE_DEFAULT);
-
-ui_Image5 = lv_image_create(ui_panelReset);
-lv_image_set_src(ui_Image5, &ui_img_1608339404);
-lv_obj_set_width( ui_Image5, LV_SIZE_CONTENT);  /// 1
-lv_obj_set_height( ui_Image5, LV_SIZE_CONTENT);   /// 1
-lv_obj_set_x( ui_Image5, 0 );
-lv_obj_set_y( ui_Image5, -75 );
-lv_obj_set_align( ui_Image5, LV_ALIGN_CENTER );
-lv_obj_add_flag( ui_Image5, LV_OBJ_FLAG_CLICKABLE );   /// Flags
-lv_obj_remove_flag( ui_Image5, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
-
-ui_btnResetYes = lv_button_create(ui_panelReset);
-lv_obj_set_width( ui_btnResetYes, 100);
-lv_obj_set_height( ui_btnResetYes, 50);
-lv_obj_set_x( ui_btnResetYes, 75 );
-lv_obj_set_y( ui_btnResetYes, 75 );
-lv_obj_set_align( ui_btnResetYes, LV_ALIGN_CENTER );
-lv_obj_add_flag( ui_btnResetYes, LV_OBJ_FLAG_SCROLL_ON_FOCUS );   /// Flags
-lv_obj_remove_flag( ui_btnResetYes, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
-lv_obj_set_style_bg_color(ui_btnResetYes, lv_color_hex(0x293031), LV_PART_MAIN | LV_STATE_DEFAULT );
-lv_obj_set_style_bg_opa(ui_btnResetYes, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
-
-ui_Label13 = lv_label_create(ui_btnResetYes);
-lv_obj_set_width( ui_Label13, LV_SIZE_CONTENT);  /// 1
-lv_obj_set_height( ui_Label13, LV_SIZE_CONTENT);   /// 1
-lv_obj_set_align( ui_Label13, LV_ALIGN_CENTER );
-lv_label_set_text(ui_Label13,"YES");
-
-ui_btnResetNo = lv_button_create(ui_panelReset);
-lv_obj_set_width( ui_btnResetNo, 100);
-lv_obj_set_height( ui_btnResetNo, 50);
-lv_obj_set_x( ui_btnResetNo, -75 );
-lv_obj_set_y( ui_btnResetNo, 75 );
-lv_obj_set_align( ui_btnResetNo, LV_ALIGN_CENTER );
-lv_obj_add_flag( ui_btnResetNo, LV_OBJ_FLAG_SCROLL_ON_FOCUS );   /// Flags
-lv_obj_remove_flag( ui_btnResetNo, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
-lv_obj_set_style_bg_color(ui_btnResetNo, lv_color_hex(0x293031), LV_PART_MAIN | LV_STATE_DEFAULT );
-lv_obj_set_style_bg_opa(ui_btnResetNo, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
-
-ui_Label2 = lv_label_create(ui_btnResetNo);
-lv_obj_set_width( ui_Label2, LV_SIZE_CONTENT);  /// 1
-lv_obj_set_height( ui_Label2, LV_SIZE_CONTENT);   /// 1
-lv_obj_set_align( ui_Label2, LV_ALIGN_CENTER );
-lv_label_set_text(ui_Label2,"NO");
-
 lv_obj_add_event_cb(ui_btnPage3, ui_event_btnPage3, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_btnBack1, ui_event_btnBack1, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_swMotorTest, ui_event_swMotorTest, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_arcMotorPWM, ui_event_arcMotorPWM, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_swSpeedTest, ui_event_swSpeedTest, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_arcTestSpeed, ui_event_arcTestSpeed, LV_EVENT_ALL, NULL);
-lv_obj_add_event_cb(ui_btnResetYes, ui_event_btnResetYes, LV_EVENT_ALL, NULL);
-lv_obj_add_event_cb(ui_btnResetNo, ui_event_btnResetNo, LV_EVENT_ALL, NULL);
 uic_settingsScreen2 = ui_settingsScreen2;
 uic_arcMotorPWM = ui_arcMotorPWM;
 uic_swMotorTest = ui_swMotorTest;
@@ -328,9 +244,6 @@ uic_lblRPM = ui_lblRPM;
 uic_arcTestSpeed = ui_arcTestSpeed;
 uic_swSpeedTest = ui_swSpeedTest;
 uic_lblTestSpeed = ui_lblTestSpeed;
-uic_panelReset = ui_panelReset;
-uic_btnResetYes = ui_btnResetYes;
-uic_btnResetNo = ui_btnResetNo;
 
 }
 
@@ -362,15 +275,5 @@ ui_swSpeedTest= NULL;
 uic_lblTestSpeed= NULL;
 ui_lblTestSpeed= NULL;
 ui_Label21= NULL;
-uic_panelReset= NULL;
-ui_panelReset= NULL;
-ui_Label12= NULL;
-ui_Image5= NULL;
-uic_btnResetYes= NULL;
-ui_btnResetYes= NULL;
-ui_Label13= NULL;
-uic_btnResetNo= NULL;
-ui_btnResetNo= NULL;
-ui_Label2= NULL;
 
 }

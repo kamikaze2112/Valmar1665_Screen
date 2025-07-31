@@ -26,9 +26,9 @@ void motorTestUpdatePWM(lv_event_t * e);
 void motorTest(lv_event_t * e);
 void speedTestUpdateSpeed(lv_event_t * e);
 void speedTest(lv_event_t * e);
-void initReset(lv_event_t * e);
 void pairController(lv_event_t * e);
 void controllerFirmware(lv_event_t * e);
+void initReset(lv_event_t * e);
 void stallProtection(lv_event_t * e);
 void updateStallDelay(lv_event_t * e);
 
